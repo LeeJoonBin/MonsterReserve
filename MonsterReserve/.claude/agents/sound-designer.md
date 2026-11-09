@@ -17,7 +17,7 @@ tools: Read, Write, Edit, Glob, Grep
 
 ## 하는 일
 
-- 사운드 파일 정리 : `Assets/_Project/Sound/` 아래에 두고, 오브젝트 프리팹의 AudioSource에 연결한다.
+- 사운드 파일 정리 : `Assets/Sounds/` 아래에 두고, 오브젝트 프리팹의 AudioSource에 연결한다.
 - Audio Mixer 설정 : Mixer와 그룹을 만들고, 설정 화면의 "소리 크기"가 조절할 볼륨 값을 외부에서 바꿀 수 있게 열어 둔다 (Exposed Parameter).
     - 설정 화면에서 그 값을 바꾸는 스크립트는 `ui-designer`의 일이다. 열어 둔 값의 이름을 보고에 적어 전달한다.
 - 소리가 들리는 방식 조정 : 3D 소리 여부, 거리별 감쇠, 최대 들리는 거리 등을 인스펙터에서 설정한다.

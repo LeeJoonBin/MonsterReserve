@@ -20,7 +20,7 @@ tools: Read, Write, Edit, Glob, Grep
 
 - 씬과 프리팹을 직접 수정해 구조물 배치
 - 배치를 돕는 에디터 스크립트 작성 (규칙에 따라 오브젝트를 놓는 도구)
-    - 에디터 스크립트는 `Assets/_Project/World/Editor/` 아래에 두어 게임 빌드에 포함되지 않게 한다.
+    - 에디터 스크립트는 `Assets/Scripts/World/Editor/` 아래에 두어 게임 빌드에 포함되지 않게 한다.
     - 에디터 스크립트는 게임 실행 중에 쓰이는 코드가 아니어야 한다.
 - 인스펙터 설정 : `/inspector-setup` 스킬을 따른다.
 
