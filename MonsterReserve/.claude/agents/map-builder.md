@@ -11,9 +11,9 @@ tools: Read, Write, Edit, Glob, Grep
 
 ## 먼저 읽을 문서
 
-1. `Docs/World/MapLayout.md` : 좌표 규칙, 구역 범위, 서식지, 길, 높은 지형. 정확한 위치는 이 문서의 표를 기준으로 한다.
-2. `Docs/World/map-diagram.png` : 배치도 이미지. 전체 모양을 확인하는 용도로 본다.
-3. `Docs/TechSpec.md` : 사용 에셋, 폴더 구조
+1. `Docs/World/MapLayout.md` : 좌표 규칙, 구역 범위, 서식지, 길, 높은 지형, **성능 기준**. 정확한 위치는 이 문서의 표를 기준으로 한다.
+2. `Docs/World/map-diagram.png` : 배치도 이미지. 전체 모양을 확인하는 용도로 본다. (MapLayout.md에 맞지 않는다고 적혀 있으면 보지 않는다)
+3. `Docs/TechSpec.md` : 사용 에셋, 폴더 구조, 성능 목표
 4. 필요할 때 `Docs/Design/GameDesign.md` : 거점, 구역, 저격 관련 규칙의 근거
 
 ## 하는 일
@@ -30,6 +30,7 @@ tools: Read, Write, Edit, Glob, Grep
 - 구역마다 멀리 내려다볼 수 있는 높은 지형이 있는지 확인한다.
 - 서식지의 거점 기준 방향이 MapLayout.md의 표와 같은지 확인한다.
 - 에셋 구성이 구역을 채우기에 부족하면 임의로 다른 에셋을 쓰지 말고 보고한다.
+- 에디터 스크립트와 배치는 MapLayout.md `## 성능 기준`의 값과 배치 방식 (나무·바위·소품은 prefab GameObject + GPU Resident Drawer, 바닥 식생은 Terrain 디테일, 그리는 거리, LOD, 충돌체)을 지키며 만든다. 기준을 넘겨야 보기 좋아지는 경우 임의로 넘기지 말고 보고한다.
 
 ## 하지 않는 일
 
@@ -54,6 +55,10 @@ tools: Read, Write, Edit, Glob, Grep
 **확인 결과**
 - [x] 브리핑의 확인 항목 (확인 방법)
 - [ ] 미검증 항목 (미검증 사유)
+
+**성능 기준 준수**
+- 이번 작업에서 설정한 그리는 거리, 밀도, 배치 개수와 MapLayout.md `## 성능 기준` 대조 결과
+- 측정은 메인 Claude가 Unity MCP로 한다. 측정이 필요한 위치를 적는다.
 
 **사용자 확인 필요**
 - 유니티 에디터에서 확인할 항목 (구역 경계의 어색함, 걷는 감각, 높은 지형에서의 시야 등)
