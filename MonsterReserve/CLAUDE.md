@@ -41,7 +41,7 @@
 
 ### 맵 구조물 배치 작업 시
 
-`@Docs/World/MapLayout.md` (작성 예정, 사용자가 제공하는 맵 도식 포함)
+`@Docs/World/MapLayout.md` (배치도 이미지 `Docs/World/map-diagram.png` 포함)
 
 ### 사운드 관련 작업 시
 
