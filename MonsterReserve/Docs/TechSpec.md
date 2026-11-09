@@ -13,7 +13,7 @@
 
 ## Unity 환경
 
-- 버전 : Unity 6 (정확한 버전 번호는 확인 필요)
+- 버전 : 6000.3.9f1(Unity 6.3)
 - 랜더 파이프라인 : URP
 - 빌드 플랫폼 : Windows
 - 그래픽 에셋 : POLYGON Western Frontier, Adventure, Knights (Synty), Low Poly Swamp Nature (ModulaCraft PRO), Low Poly Cemetery Environment Kit: NecroPOLY Lite
@@ -71,6 +71,7 @@ Assets/_Project/
   UI/
   Save/
   World/     맵 구조물
+  Sound/     사운드 파일, Audio Mixer
   Scenes/
 ```
 
