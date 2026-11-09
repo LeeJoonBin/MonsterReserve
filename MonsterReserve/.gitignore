@@ -107,3 +107,7 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Custom Ignore - User Imports Folder
+/[Aa]ssets/[Ii]mports/
+/[Aa]ssets/[Ii]mports.meta
