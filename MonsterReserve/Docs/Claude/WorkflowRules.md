@@ -50,8 +50,8 @@ flowchart TD
 
 - 개발, 버그수정 업무 중 이슈로 등록할 필요가 있다고 판단되면 사용자에게 이슈 작성을 권유한다.
 - 사용자가 승인하면, 실질적인 작성은 Claude가 수행한다.
-- 이슈 등록 권유부터 등록까지의 절차는 `/github-issue` 스킬(`.claude/skills/github-issue/SKILL.md`, 작성 예정)을 호출해 수행한다.
-- 작성 양식은 `Docs/Template/Issues Template.md`, 섹션별 작성 규칙은 `Docs/Documentation/Github Issue Rule.md`를 따른다. (작성 예정)
+- 이슈 등록 권유부터 등록까지의 절차는 `/github-issue` 스킬(`.claude/skills/github-issue/SKILL.md`)을 호출해 수행한다.
+- 작성 양식은 `Docs/Template/Issues Template.md`, 섹션별 작성 규칙은 `Docs/Documentation/Github Issue Rule.md`를 따른다.
 - 이슈 등록 전, 작성한 내용을 사용자에게 먼저 보여주고 승인을 받는다.
 - 등록이 완료되면 이슈 번호를 사용자에게 알리고, 이후 PR에서 이 번호를 사용한다.
 - 사용자가 이슈 등록을 원하지 않으면, 이슈 없이 `3. 브리핑`으로 넘어간다.
@@ -150,8 +150,8 @@ flowchart TD
 ## 9. PR
 
 - Push가 완료되면 PR을 작성한다. 실질적인 작성은 Claude가 수행한다.
-- PR 작성 절차는 `/github-pr` 스킬(작성 예정)을 호출해 수행한다.
-- 작성 양식은 `Docs/Template/Pull Request Template.md`를 따른다. (작성 예정)
+- PR 작성 절차는 `/github-pr` 스킬(`.claude/skills/github-pr/SKILL.md`)을 호출해 수행한다.
+- 작성 양식은 `Docs/Template/Pull Request Template.md`를 따른다.
 - 이슈가 있는 경우, PR 본문에 이슈를 태그로 연결한다.
 - 이슈 기반 업무인 경우, PR이 승인되어 머지될 때 `Closes #00`를 사용해 관련 이슈를 Closed 처리한다.
 - PR 등록 전, 작성한 내용을 사용자에게 먼저 보여주고 승인을 받는다.
@@ -178,9 +178,9 @@ flowchart TD
 | 영역 | 담당 |
 | --- | --- |
 | 게임 로직 스크립트 (1인칭 컨트롤러 포함) | 사용자가 직접 작성 |
-| UI/UX (HUD, 조준경, 메뉴, 팝업) | `ui-designer` |
-| 맵 구조물 배치 (거점, 구역, 지형 요소) | `map-builder` |
-| 사운드 (맡을 범위는 미정) | `sound-designer` |
+| UI/UX (HUD, 조준경, 메뉴, 팝업). UI 스크립트는 초안을 작성하고 사용자가 확인 후 반영 | `ui-designer` |
+| 맵 구조물 배치 (거점, 구역, 지형 요소). 배치용 에디터 스크립트 작성 허용 | `map-builder` |
+| 사운드 파일 정리와 연결, Audio Mixer, 소리 감쇠 등 인스펙터 조정 (사운드 재생 코드는 사용자) | `sound-designer` |
 | 인스펙터 설정 (컴포넌트, 참조 연결, 값) | 각 서브에이전트가 `/inspector-setup` 스킬을 사용 |
 | 문서 작성, 검수, 문서 반영 | 메인 Claude |
 
@@ -192,9 +192,9 @@ flowchart TD
 
 | 에이전트 | 투입 시점 | 하는 일 | 먼저 읽을 문서 | 쓰는 스킬 |
 |---|---|---|---|---|
-| `ui-designer` | `4. 업무 수행` (UI 영역) | 화면, HUD, 팝업, 메뉴 구성 | `Docs/UI/UI.md` | `/inspector-setup` |
-| `map-builder` | `4. 업무 수행` (맵 영역) | 맵 도식에 따른 구조물과 구역 배치 | `Docs/World/MapLayout.md` | `/inspector-setup` |
-| `sound-designer` | `4. 업무 수행` (사운드 영역) | 미정 | `Docs/Sound/Sound.md` | `/inspector-setup` |
+| `ui-designer` | `4. 업무 수행` (UI 영역) | 화면, HUD, 팝업, 메뉴 구성, UI 스크립트 초안 | `Docs/UI/UI.md` | `/inspector-setup` |
+| `map-builder` | `4. 업무 수행` (맵 영역) | 배치도에 따른 구조물과 구역 배치, 배치용 에디터 스크립트 | `Docs/World/MapLayout.md` | `/inspector-setup` |
+| `sound-designer` | `4. 업무 수행` (사운드 영역) | 사운드 파일 정리와 연결, Audio Mixer 설정, 소리 감쇠 조정 | `Docs/Sound/Sound.md` | `/inspector-setup` |
 
 - 메인 Claude는 에이전트를 호출하고, 각 에이전트의 산출물을 검수한 뒤 사용자에게 전달한다.
 - 작업이 어느 에이전트의 일인지 애매하면 사용자에게 먼저 묻는다.
