@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
-// 메뉴 3 : 중앙 지역(B2~C3)에 나무와 바위, 소품을 Terrain 나무 기능으로 흩뿌린다.
-// 중앙 지역 안의 나무 인스턴스만 지우고 다시 놓으므로 여러 번 실행해도 결과가 같고, 바깥 구역은 그대로 남는다.
+// 메뉴 3 : 중앙 지역(B2~C3)에 나무와 바위, 소품을 prefab 인스턴스(GameObject)로 흩뿌린다.
+// Terrain 나무 기능은 LODGroup prefab을 인스턴싱하지 못하고 자식 MeshCollider도 쓰지 못해 GameObject로 둔다.
+// 씬 루트 Center 아래 Trees, Rocks의 자식을 모두 지우고 다시 만든다. seed가 고정이라 여러 번 실행해도 결과가 같다.
 public static class MapTreeScatter
 {
     public enum FieldZone
@@ -25,18 +27,27 @@ public static class MapTreeScatter
     private class ScatterContext
     {
         public Terrain Terrain;
-        public List<TreeInstance> Instances;
         public System.Random Random;
         public int[] TreeKindCounts = new int[3];
         public int RockCount;
+        public int ColliderCount;
     }
 
-    // 같은 크기 범위로 놓는 prefab 묶음 (Terrain 나무 프로토타입 번호 목록)
+    // 같은 크기 범위로 같은 부모 아래 놓는 prefab 묶음
     private class InstanceGroup
     {
-        public int[] PrototypeIndices;
+        public GameObject[] Prefabs;
+        public Transform Parent;
         public float ScaleMin;
         public float ScaleMax;
+    }
+
+    // 원본 prefab에 충돌체가 없는 나무에 붙일 CapsuleCollider 모양 (루트 기준, 세로 방향)
+    private struct CapsuleShape
+    {
+        public Vector3 Center;
+        public float Radius;
+        public float Height;
     }
 
     public const float BaseClearRadius = 40f;
@@ -70,6 +81,10 @@ public static class MapTreeScatter
     private const float RockScaleMin = 0.5f;
     private const float RockScaleMax = 1.1f;
 
+    // 씬 루트 Center 아래에 만드는 부모 이름
+    private const string TreeParentName = "Trees";
+    private const string RockParentName = "Rocks";
+
     private const string PrefabFolder = "Assets/Imports/Polyart/PolyartStudio/DreamscapeMountains/Prefabs/";
 
     private static readonly string[] MainTreePaths =
@@ -90,6 +105,20 @@ public static class MapTreeScatter
         "Objects/Prefab_Stump", "Objects/Prefab_HollowTrunk"
     };
 
+    // 충돌체가 없는 나무의 CapsuleCollider (임시값).
+    // Prefab_Conifer_01(높이 16.1m, 반지름 0.55m, 중심은 높이의 약 절반)의 비율을 참고해 각 나무 크기에 맞췄다
+    private static readonly Dictionary<string, CapsuleShape> CapsuleColliderShapes = new Dictionary<string, CapsuleShape>
+    {
+        { "Prefab_Conifer_03", new CapsuleShape { Center = new Vector3(0f, 9.4f, 0f), Radius = 0.55f, Height = 20.4f } },
+        { "Prefab_Conifer_06", new CapsuleShape { Center = new Vector3(0f, 20.7f, 0f), Radius = 1.2f, Height = 44.1f } }
+    };
+
+    // 충돌체가 없는 바위, 소품. LOD0 메시로 convex MeshCollider를 붙인다
+    private static readonly HashSet<string> MeshColliderPrefabNames = new HashSet<string>
+    {
+        "Prefab_SmallRock_01", "Prefab_SmallRock_02", "Prefab_HollowTrunk"
+    };
+
     // 노이즈 값의 영역 경계 [드문드문 시작, 숲 시작]. 중앙 지역을 표본 조사해 면적 비율이 맞도록 한 번만 계산한다
     private static readonly float[] ZoneThresholds = CalculateZoneThresholds();
 
@@ -108,25 +137,32 @@ public static class MapTreeScatter
         Terrain terrain = MapTerrainSetup.FindSceneTerrain();
         if (terrain == null) return;
 
-        TerrainData data = terrain.terrainData;
-        var prototypes = new List<TreePrototype>(data.treePrototypes);
+        GameObject centerRoot = terrain.gameObject.scene.GetRootGameObjects()
+            .FirstOrDefault(root => root.name == MapTerrainSetup.CenterRegionName);
+        if (centerRoot == null)
+        {
+            Debug.LogError("씬 루트에 Center가 없습니다. 먼저 'Tools/Map/1. 지형과 구역 부모 생성'을 실행하세요.");
+            return;
+        }
+
+        ClearTerrainTrees(terrain.terrainData);
+        Transform treeParent = ResetParent(centerRoot.transform, TreeParentName);
+        Transform rockParent = ResetParent(centerRoot.transform, RockParentName);
+
         InstanceGroup[] treeGroups =
         {
-            CreateGroup(prototypes, MainTreePaths, TreeScaleMin, TreeScaleMax),
-            CreateGroup(prototypes, DeadTreePaths, TreeScaleMin, TreeScaleMax),
-            CreateGroup(prototypes, GiantTreePaths, TreeScaleMin, TreeScaleMax)
+            CreateGroup(MainTreePaths, treeParent, TreeScaleMin, TreeScaleMax),
+            CreateGroup(DeadTreePaths, treeParent, TreeScaleMin, TreeScaleMax),
+            CreateGroup(GiantTreePaths, treeParent, TreeScaleMin, TreeScaleMax)
         };
-        InstanceGroup rockGroup = CreateGroup(prototypes, RockPaths, RockScaleMin, RockScaleMax);
-        data.treePrototypes = prototypes.ToArray();
+        InstanceGroup rockGroup = CreateGroup(RockPaths, rockParent, RockScaleMin, RockScaleMax);
 
         Rect center = MapGrid.GetRangeBounds(MapTerrainSetup.CenterFromCell, MapTerrainSetup.CenterToCell);
         var context = new ScatterContext
         {
             Terrain = terrain,
-            Instances = KeepInstancesOutside(terrain, center),
             Random = new System.Random(Seed)
         };
-        int keptCount = context.Instances.Count;
         var zoneCellCounts = new int[3];
 
         foreach (Vector2 cellMin in EnumerateCells(center))
@@ -137,10 +173,31 @@ public static class MapTreeScatter
             ScatterRocks(context, cellMin, zone, rockGroup);
         }
 
-        data.SetTreeInstances(context.Instances.ToArray(), true);
+        EditorSceneManager.MarkSceneDirty(terrain.gameObject.scene);
+        LogResult(context, zoneCellCounts);
+    }
+
+    // 이전 방식(Terrain 나무 기능)으로 심은 인스턴스와 프로토타입을 모두 지운다
+    private static void ClearTerrainTrees(TerrainData data)
+    {
+        data.SetTreeInstances(new TreeInstance[0], false);
+        data.treePrototypes = new TreePrototype[0];
         EditorUtility.SetDirty(data);
         AssetDatabase.SaveAssets();
-        LogResult(context, keptCount, zoneCellCounts);
+    }
+
+    // 부모가 없으면 만들고, 있으면 자식을 모두 지운다
+    private static Transform ResetParent(Transform root, string name)
+    {
+        Transform parent = root.Find(name);
+        if (parent == null)
+        {
+            parent = new GameObject(name).transform;
+            parent.SetParent(root, false);
+        }
+        for (int i = parent.childCount - 1; i >= 0; i--)
+            Object.DestroyImmediate(parent.GetChild(i).gameObject);
+        return parent;
     }
 
     private static float SampleZoneNoise(Vector2 worldXZ)
@@ -169,33 +226,12 @@ public static class MapTreeScatter
         return new[] { sparseStart, forestStart };
     }
 
-    // 이미 등록된 prefab은 그 번호를 쓰고, 없으면 뒤에 추가한다 (기존 인스턴스의 번호가 밀리지 않게)
-    private static InstanceGroup CreateGroup(List<TreePrototype> prototypes, string[] paths, float scaleMin, float scaleMax)
+    private static InstanceGroup CreateGroup(string[] paths, Transform parent, float scaleMin, float scaleMax)
     {
-        var indices = new int[paths.Length];
-        for (int i = 0; i < paths.Length; i++)
-        {
-            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabFolder + paths[i] + ".prefab");
-            int index = prototypes.FindIndex(prototype => prototype.prefab == prefab);
-            if (index < 0)
-            {
-                prototypes.Add(new TreePrototype { prefab = prefab });
-                index = prototypes.Count - 1;
-            }
-            indices[i] = index;
-        }
-        return new InstanceGroup { PrototypeIndices = indices, ScaleMin = scaleMin, ScaleMax = scaleMax };
-    }
-
-    private static List<TreeInstance> KeepInstancesOutside(Terrain terrain, Rect worldRect)
-    {
-        Vector3 position = terrain.transform.position;
-        Vector3 size = terrain.terrainData.size;
-        return terrain.terrainData.treeInstances
-            .Where(instance => !worldRect.Contains(new Vector2(
-                position.x + instance.position.x * size.x,
-                position.z + instance.position.z * size.z)))
-            .ToList();
+        GameObject[] prefabs = paths
+            .Select(path => AssetDatabase.LoadAssetAtPath<GameObject>(PrefabFolder + path + ".prefab"))
+            .ToArray();
+        return new InstanceGroup { Prefabs = prefabs, Parent = parent, ScaleMin = scaleMin, ScaleMax = scaleMax };
     }
 
     private static IEnumerable<Vector2> EnumerateCells(Rect worldRect)
@@ -256,30 +292,55 @@ public static class MapTreeScatter
         var world = new Vector2(
             cellMin.x + RandomRange(random, 0f, ScatterCellSize),
             cellMin.y + RandomRange(random, 0f, ScatterCellSize));
-        int prototypeIndex = group.PrototypeIndices[random.Next(group.PrototypeIndices.Length)];
+        GameObject prefab = group.Prefabs[random.Next(group.Prefabs.Length)];
         float scale = RandomRange(random, group.ScaleMin, group.ScaleMax);
         float rotation = RandomRange(random, 0f, Mathf.PI * 2f);
 
         if (world.magnitude < BaseClearRadius) return false;
 
-        Vector3 position = context.Terrain.transform.position;
-        Vector3 size = context.Terrain.terrainData.size;
-        float normalizedX = (world.x - position.x) / size.x;
-        float normalizedZ = (world.y - position.z) / size.z;
-        if (context.Terrain.terrainData.GetSteepness(normalizedX, normalizedZ) > MaxSlope) return false;
+        Terrain terrain = context.Terrain;
+        Vector3 terrainPosition = terrain.transform.position;
+        Vector3 size = terrain.terrainData.size;
+        float normalizedX = (world.x - terrainPosition.x) / size.x;
+        float normalizedZ = (world.y - terrainPosition.z) / size.z;
+        if (terrain.terrainData.GetSteepness(normalizedX, normalizedZ) > MaxSlope) return false;
 
-        // 높이(y)는 SetTreeInstances에서 지면에 붙인다
-        context.Instances.Add(new TreeInstance
-        {
-            position = new Vector3(normalizedX, 0f, normalizedZ),
-            widthScale = scale,
-            heightScale = scale,
-            rotation = rotation,
-            color = Color.white,
-            lightmapColor = Color.white,
-            prototypeIndex = prototypeIndex
-        });
+        // SampleHeight는 Terrain 기준 높이라 Terrain의 y를 더해 지면에 붙인다
+        var position = new Vector3(world.x, 0f, world.y);
+        position.y = terrain.SampleHeight(position) + terrainPosition.y;
+
+        // prefab 연결을 유지한 채 놓는다. Static 플래그는 켜지 않는다 (GPU Resident Drawer로 그림)
+        var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, group.Parent);
+        instance.transform.SetPositionAndRotation(position, Quaternion.Euler(0f, rotation * Mathf.Rad2Deg, 0f));
+        instance.transform.localScale = Vector3.one * scale;
+
+        if (AddMissingCollider(instance, prefab.name)) context.ColliderCount++;
         return true;
+    }
+
+    // 원본 prefab에 충돌체가 없는 종류만 씬 인스턴스의 루트에 충돌체를 붙인다 (원본 prefab은 고치지 않는다)
+    private static bool AddMissingCollider(GameObject instance, string prefabName)
+    {
+        if (CapsuleColliderShapes.TryGetValue(prefabName, out CapsuleShape shape))
+        {
+            var capsule = instance.AddComponent<CapsuleCollider>();
+            capsule.center = shape.Center;
+            capsule.radius = shape.Radius;
+            capsule.height = shape.Height;
+            capsule.direction = 1;
+            return true;
+        }
+
+        if (MeshColliderPrefabNames.Contains(prefabName))
+        {
+            Renderer lod0Renderer = instance.GetComponent<LODGroup>().GetLODs()[0].renderers[0];
+            var meshCollider = instance.AddComponent<MeshCollider>();
+            meshCollider.sharedMesh = lod0Renderer.GetComponent<MeshFilter>().sharedMesh;
+            meshCollider.convex = true;
+            return true;
+        }
+
+        return false;
     }
 
     private static float RandomRange(System.Random random, float min, float max)
@@ -287,13 +348,13 @@ public static class MapTreeScatter
         return min + (float)random.NextDouble() * (max - min);
     }
 
-    private static void LogResult(ScatterContext context, int keptCount, int[] zoneCellCounts)
+    private static void LogResult(ScatterContext context, int[] zoneCellCounts)
     {
         int[] treeKindCounts = context.TreeKindCounts;
         float totalCells = zoneCellCounts.Sum();
         Debug.Log($"[MapTreeScatter] 중앙 나무 {treeKindCounts.Sum()}그루 " +
                   $"(주력 {treeKindCounts[(int)TreeKind.Main]}, 고사목 {treeKindCounts[(int)TreeKind.Dead]}, 거대목 {treeKindCounts[(int)TreeKind.Giant]}), " +
-                  $"바위·소품 {context.RockCount}개, 바깥 보존 {keptCount}개 / 영역 비율 " +
+                  $"바위·소품 {context.RockCount}개, 충돌체 추가 {context.ColliderCount}개 / 영역 비율 " +
                   $"숲 {zoneCellCounts[(int)FieldZone.Forest] / totalCells:P1}, " +
                   $"드문드문 {zoneCellCounts[(int)FieldZone.Sparse] / totalCells:P1}, " +
                   $"개활지 {zoneCellCounts[(int)FieldZone.Open] / totalCells:P1}");

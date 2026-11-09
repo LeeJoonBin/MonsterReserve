@@ -25,7 +25,8 @@
 
 - 목표 : 빌드 기준 60FPS (Windows)
 - 측정 : Game 뷰의 Stats (FPS, Batches, Tris)와 Profiler. 에디터 수치는 빌드보다 낮게 나오므로 참고값으로 보고, 확정은 빌드에서 한다.
-- 맵 작업의 성능 기준값은 `Docs/World/MapLayout.md`의 "성능 기준"을 따른다.
+- 맵 작업의 성능 기준값과 오브젝트 배치 방식은 `Docs/World/MapLayout.md`의 "성능 기준"을 따른다.
+- 렌더링 설정 : Forward+, SRP Batcher, GPU Resident Drawer (Instanced Drawing), BatchRendererGroup Variants = Keep All. 이유와 되돌리는 조건은 MapLayout.md에 있다.
 
 ## 유저 입력 시스템
 

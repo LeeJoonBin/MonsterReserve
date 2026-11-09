@@ -36,6 +36,15 @@ public static class MapDetailPainter
         new[] { "Prefab_Terrain_Groundleaf_01" },
         new[] { "Prefab_FlowerGroup_White_Detail", "Prefab_FlowerGroup_Yellow_Detail", "Prefab_FlowerSingle_Purple_Detail", "Prefab_FlowerSingle_Red_Detail" }
     };
+    // 그룹 안에서 각 prefab이 뽑히는 비중. GroupPrefabNames와 같은 순서이며, 그룹마다 합이 1이 아니어도 된다
+    // 풀 : 연한 풀(Small01)이 너무 눈에 띄어 15%로 줄이고, 나머지를 Medium 3종에 고르게 나눴다
+    private static readonly float[][] GroupPrefabWeights =
+    {
+        new[] { 0.85f / 3f, 0.85f / 3f, 0.85f / 3f, 0.15f },
+        new[] { 1f, 1f },
+        new[] { 1f },
+        new[] { 1f, 1f, 1f, 1f }
+    };
     private static readonly float[] GroupScaleMin = { 0.8f, 0.4f, 0.5f, 0.8f };
     private static readonly float[] GroupScaleMax = { 1.1f, 0.7f, 0.8f, 1.1f };
 
@@ -200,12 +209,23 @@ public static class MapDetailPainter
         }
     }
 
-    // 그룹 안에서 prefab 하나를 무작위로 골라 그 칸의 개수를 더한다
+    // 그룹 안에서 prefab 하나를 비중대로 골라 그 칸의 개수를 더한다
     private static void AddDetail(PaintContext context, int x, int z, DetailGroup group, int count)
     {
         int[] indices = context.GroupPrototypeIndices[(int)group];
-        int prototypeIndex = indices[context.Random.Next(indices.Length)];
+        int prototypeIndex = indices[PickWeightedIndex(context.Random, GroupPrefabWeights[(int)group])];
         context.Layers[prototypeIndex][z, x] += count;
+    }
+
+    private static int PickWeightedIndex(System.Random random, float[] weights)
+    {
+        double roll = random.NextDouble() * weights.Sum();
+        for (int i = 0; i < weights.Length - 1; i++)
+        {
+            roll -= weights[i];
+            if (roll < 0) return i;
+        }
+        return weights.Length - 1;
     }
 
     private static float SampleFlowerNoise(Vector2 world)
