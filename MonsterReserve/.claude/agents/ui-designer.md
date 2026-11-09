@@ -12,14 +12,14 @@ tools: Read, Write, Edit, Glob, Grep
 ## 먼저 읽을 문서
 
 1. `Docs/UI/UI.md` : UI 구조, 화면 목록, 화면별 동작 (게임 진행 여부, 커서, 조작 제한)
-2. `Docs/TechSpec.md` : 입력 시스템 규칙, 폴더 구조
-3. `Docs/Code/code-convention.md` : 이름 규칙, 이벤트 구독 규칙 (작성 전이면 메인 Claude에 보고)
+2. `Docs/TechSpec.md` : 폴더 구조
+3. `Docs/Code/code-convention.md` : 이름 규칙, 이벤트 구독 규칙, 입력 규칙
 4. 필요할 때 `Docs/Design/GameDesign.md` : 화면에 보여 줄 게임 정보의 근거
 
 ## 하는 일
 
 - Window, Popup, HUD, 메뉴의 화면 구성 (Canvas, 레이아웃, 버튼, 텍스트, 이미지)
-- UI 프리팹 생성과 `Assets/_Project/UI/` 아래 배치
+- UI 프리팹 생성과 `Assets/Prefabs/UI/` 아래 배치 (UI 스크립트는 `Assets/Scripts/UI/`)
 - UI 스크립트 초안 작성 (Window, Popup 클래스 등)
 - 인스펙터 설정 : `/inspector-setup` 스킬을 따른다.
 

@@ -22,10 +22,7 @@
 
 ## 유저 입력 시스템
 
-- new InputSystem
-    - 구 `InputManager`는 사용하지 않는다.
-- 특정 입력에 대한 기능 구현 시 `InputActionReference`를 사용해 InputAction을 참조하는 형태로 구현한다.
-- OnEnable에서 InputAction에 대한 Enable(), OnDisable에서 Disable()을 사용한다.
+- 입력 코드 작성 규칙은 `Docs/Code/code-convention.md`의 "입력"을 따른다.
 
 ### 조작 키
 
@@ -59,20 +56,28 @@
 
 ## 폴더 구조
 
-직접 만든 파일은 모두 `Assets/_Project/` 아래에 두고, 에셋 스토어에서 가져온 폴더와 섞지 않는다. 기능 폴더 안에 그 기능의 스크립트와 프리팹 등을 함께 둔다.
+직접 만든 파일은 종류별 폴더에 두고, 그 안을 기능 폴더로 나눈다. 에셋 스토어에서 가져온 폴더와 섞지 않는다.
 
 ```
-Assets/_Project/
-  Player/    이동, 체력, 스킬
-  Weapons/
-  Monsters/
-  Quests/
-  Base/      상점, 의뢰 게시판, 회복 지점
-  UI/
-  Save/
-  World/     맵 구조물
-  Sound/     사운드 파일, Audio Mixer
-  Scenes/
+Assets/
+  Scripts/<기능>/     스크립트 (에디터 전용 코드는 <기능>/Editor/)
+  Materials/<기능>/   머티리얼
+  Prefabs/<기능>/     프리팹
+  Scenes/             씬
+  Sounds/             사운드 파일, Audio Mixer
+```
+
+기능 폴더
+
+```
+Player/    이동, 체력, 스킬
+Weapons/
+Monsters/
+Quests/
+Base/      상점, 의뢰 게시판, 회복 지점
+UI/
+Save/
+World/     맵 구조물
 ```
 
 ## 수치 관리
