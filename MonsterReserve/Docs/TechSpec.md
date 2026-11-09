@@ -16,9 +16,17 @@
 - 버전 : 6000.3.9f1(Unity 6.3)
 - 랜더 파이프라인 : URP
 - 빌드 플랫폼 : Windows
-- 그래픽 에셋 : POLYGON Western Frontier, Adventure, Knights (Synty), Low Poly Swamp Nature (ModulaCraft PRO), Low Poly Cemetery Environment Kit: NecroPOLY Lite
-    - 모든 에셋의 URP 지원 여부를 프로젝트에 넣기 전에 확인한다.
+- 그래픽 에셋 : Dreamscape Nature Mountains - Stylized Open World Environment (Polyart Studio) 하나만 사용
+    - 위치 : `Assets/Imports/Polyart/PolyartStudio/`
+    - 에셋의 URP 지원 여부를 프로젝트에 넣기 전에 확인한다.
 - 사운드 에셋 : 미정
+
+## 성능
+
+- 목표 : 빌드 기준 60FPS (Windows)
+- 측정 : Game 뷰의 Stats (FPS, Batches, Tris)와 Profiler. 에디터 수치는 빌드보다 낮게 나오므로 참고값으로 보고, 확정은 빌드에서 한다.
+- 맵 작업의 성능 기준값과 오브젝트 배치 방식은 `Docs/World/MapLayout.md`의 "성능 기준"을 따른다.
+- 렌더링 설정 : Forward+, SRP Batcher, GPU Resident Drawer (Instanced Drawing), BatchRendererGroup Variants = Keep All. 이유와 되돌리는 조건은 MapLayout.md에 있다.
 
 ## 유저 입력 시스템
 

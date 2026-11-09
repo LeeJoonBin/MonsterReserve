@@ -1,50 +1,45 @@
 using System;
 using UnityEngine;
 
-// 배치도의 칸 좌표 (예: "E2")를 월드 좌표로 바꾼다. 좌표 규칙은 Docs/World/MapLayout.md의 "좌표 규칙"을 따른다.
+// 맵 격자 좌표 규칙 (Docs/World/MapLayout.md "좌표 규칙").
+// 칸 크기는 임시값이므로 여기 한 곳에만 정의하고, 다른 도구는 모두 이 값을 따른다.
 public static class MapGrid
 {
-    // 한 칸 크기 (임시값). 맵 전체 크기는 이 값 하나로 따라간다.
     public const float CellSize = 500f;
-    public const int GridCount = 10;
+    public const int GridCount = 4;
     public const float MapSize = CellSize * GridCount;
 
-    // 월드 원점이 거점 중심 (E5, F5, E6, F6이 만나는 점)이 되도록 격자의 절반만큼 옮긴다.
-    private const float HalfGridCount = GridCount / 2f;
-    private const char FirstColumn = 'A';
-
-    // 칸 중심의 월드 좌표 (y = 0). 열은 서 -> 동 (+X), 행은 북 -> 남 (-Z).
-    public static Vector3 GetCellCenter(string cellName)
+    // "B2" 같은 칸 이름을 받아 칸 중심의 월드 XZ 좌표를 돌려준다. (x = 월드 X, y = 월드 Z)
+    public static Vector2 GetCellCenter(string cellName)
     {
-        ParseCell(cellName, out int columnIndex, out int rowIndex);
-
-        float x = (columnIndex - HalfGridCount + 0.5f) * CellSize;
-        float z = (HalfGridCount - rowIndex - 0.5f) * CellSize;
-        return new Vector3(x, 0f, z);
+        ParseCell(cellName, out int column, out int row);
+        float half = GridCount / 2f;
+        float x = (column - half + 0.5f) * CellSize;
+        float z = (half - row - 0.5f) * CellSize;
+        return new Vector2(x, z);
     }
 
-    // 두 모서리 칸 (예: "D1", "G3")으로 정한 범위의 월드 중심과 크기 (y = 0).
-    public static Bounds GetRangeBounds(string firstCellName, string lastCellName)
+    // 두 칸을 꼭짓점으로 하는 직사각형 범위의 월드 XZ 영역. 예: ("B2", "C3") = 중앙 지역
+    public static Rect GetRangeBounds(string fromCell, string toCell)
     {
-        ParseCell(firstCellName, out int firstColumn, out int firstRow);
-        ParseCell(lastCellName, out int lastColumn, out int lastRow);
-
-        Vector3 center = (GetCellCenter(firstCellName) + GetCellCenter(lastCellName)) / 2f;
-        float sizeX = (Mathf.Abs(lastColumn - firstColumn) + 1) * CellSize;
-        float sizeZ = (Mathf.Abs(lastRow - firstRow) + 1) * CellSize;
-        return new Bounds(center, new Vector3(sizeX, 0f, sizeZ));
+        Vector2 from = GetCellCenter(fromCell);
+        Vector2 to = GetCellCenter(toCell);
+        float halfCell = CellSize / 2f;
+        float xMin = Mathf.Min(from.x, to.x) - halfCell;
+        float xMax = Mathf.Max(from.x, to.x) + halfCell;
+        float zMin = Mathf.Min(from.y, to.y) - halfCell;
+        float zMax = Mathf.Max(from.y, to.y) + halfCell;
+        return Rect.MinMaxRect(xMin, zMin, xMax, zMax);
     }
 
-    // "E2" -> 열 인덱스 4, 행 인덱스 1 (A열, 1행이 0)
-    private static void ParseCell(string cellName, out int columnIndex, out int rowIndex)
+    // 열 A~D는 서→동 (0~3), 행 1~4는 북→남 (0~3)
+    private static void ParseCell(string cellName, out int column, out int row)
     {
-        columnIndex = char.ToUpperInvariant(cellName[0]) - FirstColumn;
-        bool hasRow = int.TryParse(cellName.Substring(1), out int rowNumber);
-        rowIndex = rowNumber - 1;
+        column = char.ToUpperInvariant(cellName[0]) - 'A';
+        row = int.Parse(cellName.Substring(1)) - 1;
 
-        // 잘못된 칸 이름은 엉뚱한 위치에 배치되기 전에 바로 알린다.
-        bool isInside = columnIndex >= 0 && columnIndex < GridCount && rowIndex >= 0 && rowIndex < GridCount;
-        if (!hasRow || !isInside)
-            throw new ArgumentException($"잘못된 칸 이름입니다: {cellName}");
+        // 칸 이름 오타는 배치가 엉뚱한 곳에 되므로 바로 오류를 낸다
+        if (column < 0 || column >= GridCount || row < 0 || row >= GridCount)
+            throw new ArgumentException($"맵 범위를 벗어난 칸 이름: {cellName}");
     }
 }
