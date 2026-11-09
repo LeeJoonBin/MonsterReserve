@@ -129,7 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 100362533}
   m_Layer: 0
-  m_Name: "\uC911\uC559"
+  m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,7 +160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 205585226}
   m_Layer: 0
-  m_Name: "\uBD81"
+  m_Name: North
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -411,7 +411,7 @@ GameObject:
   m_Component:
   - component: {fileID: 941275729}
   m_Layer: 0
-  m_Name: "\uB0A8"
+  m_Name: South
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -442,7 +442,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1120803328}
   m_Layer: 0
-  m_Name: "\uB3D9"
+  m_Name: East
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -473,7 +473,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1295548741}
   m_Layer: 0
-  m_Name: "\uC11C"
+  m_Name: West
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -504,7 +504,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1388649844}
   m_Layer: 0
-  m_Name: "\uBD81\uB3D9"
+  m_Name: Northeast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -627,7 +627,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1505413237}
   m_Layer: 0
-  m_Name: "\uB0A8\uC11C"
+  m_Name: Southwest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -658,7 +658,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1747551185}
   m_Layer: 0
-  m_Name: "\uB0A8\uB3D9"
+  m_Name: Southeast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -689,7 +689,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1772857507}
   m_Layer: 0
-  m_Name: "\uBD81\uC11C"
+  m_Name: Northwest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

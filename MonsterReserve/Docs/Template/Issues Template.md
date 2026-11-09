@@ -1,33 +1,34 @@
 # Issue Template
 
 > GitHub 이슈 작성 양식. 각 섹션의 작성 규칙은 `Docs/Documentation/Github Issue Rule.md`를 따른다.
+> 이슈의 제목, 라벨, 본문은 모두 영어로 쓴다.
 
 ```markdown
-## 유형
-개발 / 버그수정
+## Type
+Feature / BugFix
 
-## 담당 영역
-UI / 맵 / 사운드 / 인스펙터
+## Area
+UI / Map / Sound / Inspector
 
-## 배경 (As-is)
-지금 상태와 이 이슈가 필요한 이유
+## Background (As-is)
+Current state and why this issue is needed
 
-## 목표 (To-be)
-이 이슈가 끝났을 때의 상태
+## Goal (To-be)
+State after this issue is done
 
-## 작업 내용
-- [ ] 작업 1
-- [ ] 작업 2
+## Tasks
+- [ ] Task 1
+- [ ] Task 2
 
-## 완료조건 (DoD)
-- [ ] 확인할 수 있는 조건 1
-- [ ] 확인할 수 있는 조건 2
+## Definition of Done
+- [ ] Verifiable condition 1
+- [ ] Verifiable condition 2
 
-## 버그 정보 (버그수정일 때만)
-- 재현 방법 :
-- 실제 동작 :
-- 기대 동작 :
+## Bug Info (BugFix only)
+- Steps to reproduce :
+- Actual behavior :
+- Expected behavior :
 
-## 참고 문서
+## References
 - Docs/...
 ```
