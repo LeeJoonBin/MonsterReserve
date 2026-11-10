@@ -19,6 +19,10 @@ Captures a screenshot from a camera and returns it as an image. If no camera is 
 
 Allocates a temporary `RenderTexture`, swaps it onto the chosen camera, calls `Camera.Render`, reads back via `Texture2D.ReadPixels`, encodes as PNG, and restores the camera's prior `targetTexture`. Returns a `ResponseCallTool.Image` with `image/png` MIME and a descriptive caption.
 
+## Saving a file
+
+`savePath`: Optional file to also write the PNG to, for when the user wants the picture as a file: the image result itself exists only in this conversation. Relative to the project root (or absolute under it): 'Screenshots/shot.png' stays a plain file; a path under 'Assets/' becomes a Unity asset, imported at once with a .meta file. Missing folders are created and .png is added when there is no extension. Refused: anything outside the project, Unity's own folders (Library, Temp, Logs, obj, Packages, ProjectSettings, UserSettings), a name other than .png, an existing file (it never overwrites). Without it nothing is written. The image is still returned and the text says `Saved to <absolute path>`.
+
 ## How to Call
 
 ```powershell
@@ -26,7 +30,8 @@ Allocates a temporary `RenderTexture`, swaps it onto the chosen camera, calls `C
 {
   "cameraRef": "string_value",
   "width": 0,
-  "height": 0
+  "height": 0,
+  "savePath": "string_value"
 }
 '@)
 unity-mcp-cli.cmd run-tool screenshot-camera --input-file args.json
@@ -42,6 +47,7 @@ unity-mcp-cli.cmd run-tool screenshot-camera --input-file args.json
 | `cameraRef` | `string` | No | Reference to the camera GameObject. If not specified, uses the Main Camera. RQL: GameObjectRef |
 | `width` | `integer` | No | Width of the screenshot in pixels. |
 | `height` | `integer` | No | Height of the screenshot in pixels. |
+| `savePath` | `string` | No | Optional file to also write the PNG to, for when the user wants the picture as a file: the image result itself exists only in this conversation. Relative to the project root (or absolute under it): 'Screenshots/shot.png' stays a plain file; a path under 'Assets/' becomes a Unity asset, imported at once with a .meta file. Missing folders are created and .png is added when there is no extension. Refused: anything outside the project, Unity's own folders (Library, Temp, Logs, obj, Packages, ProjectSettings, UserSettings), a name other than .png, an existing file (it never overwrites). Without it nothing is written. |
 
 ### Input JSON Schema
 
@@ -57,6 +63,9 @@ unity-mcp-cli.cmd run-tool screenshot-camera --input-file args.json
     },
     "height": {
       "type": "integer"
+    },
+    "savePath": {
+      "type": "string"
     }
   }
 }
