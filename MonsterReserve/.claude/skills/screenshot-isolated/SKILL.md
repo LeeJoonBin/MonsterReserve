@@ -28,6 +28,10 @@ Renders a screenshot of a target GameObject with configurable isolation, backgro
 
 Isolation temporarily activates inactive child GameObjects so their renderers participate in the cull. Activation state is restored in `finally`, but OnEnable-triggered side effects (audio, networking, animation events) are not rewindable. Set `isolated=false` if your scene contains scripts that must not fire OnEnable during the capture.
 
+## Saving a file
+
+`savePath`: Optional file to also write the PNG to, for when the user wants the picture as a file: the image result itself exists only in this conversation. Relative to the project root (or absolute under it): 'Screenshots/shot.png' stays a plain file; a path under 'Assets/' becomes a Unity asset, imported at once with a .meta file. Missing folders are created and .png is added when there is no extension. Refused: anything outside the project, Unity's own folders (Library, Temp, Logs, obj, Packages, ProjectSettings, UserSettings), a name other than .png, an existing file (it never overwrites). Without it nothing is written. The image is still returned and the text says `Saved to <absolute path>`.
+
 ## How to Call
 
 ```powershell
@@ -44,7 +48,8 @@ Isolation temporarily activates inactive child GameObjects so their renderers pa
   "farClipPlane": 0,
   "padding": 0,
   "lights": "string_value",
-  "resolution": 0
+  "resolution": 0,
+  "savePath": "string_value"
 }
 '@)
 unity-mcp-cli.cmd run-tool screenshot-isolated --input-file args.json
@@ -69,6 +74,7 @@ unity-mcp-cli.cmd run-tool screenshot-isolated --input-file args.json
 | `padding` | `number` | No | Framing multiplier around the object. 1.0 = tight fit, 1.5 = 50% extra space. Default: 1.2. |
 | `lights` | `string` | No | JSON array of light configurations. Each object defines type, color, intensity, rotation, position, range, spotAngle, shadows, etc. When null, a default white directional light at rotation (50,-30,0) is used. Example: [{"type":"Directional","color":"#FFF4E5","intensity":1.2,"rotation":[45,-45,0]}] |
 | `resolution` | `integer` | No | Output image resolution in pixels (width = height). Default: 512. |
+| `savePath` | `string` | No | Optional file to also write the PNG to, for when the user wants the picture as a file: the image result itself exists only in this conversation. Relative to the project root (or absolute under it): 'Screenshots/shot.png' stays a plain file; a path under 'Assets/' becomes a Unity asset, imported at once with a .meta file. Missing folders are created and .png is added when there is no extension. Refused: anything outside the project, Unity's own folders (Library, Temp, Logs, obj, Packages, ProjectSettings, UserSettings), a name other than .png, an existing file (it never overwrites). Without it nothing is written. |
 
 ### Input JSON Schema
 
@@ -125,6 +131,9 @@ unity-mcp-cli.cmd run-tool screenshot-isolated --input-file args.json
     },
     "resolution": {
       "type": "integer"
+    },
+    "savePath": {
+      "type": "string"
     }
   },
   "required": [
