@@ -1,0 +1,63 @@
+{
+    "version": 1,
+    "name": "PlayerInputActions",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "a583e377-5a7f-4a9e-83ed-e1700379cc47",
+            "actions": [
+                { "name": "Move", "type": "Value", "id": "d3bdf999-6680-4268-a0ae-6b0ca515fad8", "expectedControlType": "Vector2", "processors": "", "interactions": "", "initialStateCheck": true },
+                { "name": "Look", "type": "Value", "id": "20cc4d54-3e64-4fa3-8d48-0f6bcc512f8f", "expectedControlType": "Vector2", "processors": "", "interactions": "", "initialStateCheck": true },
+                { "name": "Sprint", "type": "Button", "id": "89b09784-7168-4b1c-a5d3-a95f817ba8d6", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Jump", "type": "Button", "id": "e38438f6-fc04-4030-91f4-87380ff6ce75", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "CastMagic", "type": "Button", "id": "05e29ea5-33ef-4f1c-a7a7-0d1577095cbb", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Aim", "type": "Button", "id": "8ca30f4f-aec1-4edd-a6c6-80f150f26320", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Meditate", "type": "Button", "id": "ffe24216-b81b-49a9-848e-fae9d0fa3f39", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "SelectMagic1", "type": "Button", "id": "eae63dac-4def-4264-8a23-f13214b4bb32", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "SelectMagic2", "type": "Button", "id": "bc21d7b4-ceff-4e7b-a179-8123868006b8", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "SelectMagic3", "type": "Button", "id": "9c5e5db7-b587-435d-8341-e0275fb213e0", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "SelectMagic4", "type": "Button", "id": "4830f240-ed0d-474a-abd3-f21f854086c7", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "SelectMagic5", "type": "Button", "id": "2db7de7a-8d96-47f0-bd8c-990c71a0bbe1", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Interact", "type": "Button", "id": "91a7ac43-537c-4623-be35-3b98e81229ca", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Heal", "type": "Button", "id": "0b27daea-9421-4c28-b8c5-cbd0e195f752", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Detect", "type": "Button", "id": "eb4be91e-8cb3-4c1b-8d43-087161ebde4a", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false }
+            ],
+            "bindings": [
+                { "name": "WASD", "id": "fe441850-7f4a-4002-a6b0-14878b3399b6", "path": "2DVector", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": true, "isPartOfComposite": false },
+                { "name": "up", "id": "17263e64-f046-4514-91fb-a8bfee35bd85", "path": "<Keyboard>/w", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": false, "isPartOfComposite": true },
+                { "name": "down", "id": "2f8e2cac-07c6-4dda-9d8a-8d9304d1323f", "path": "<Keyboard>/s", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": false, "isPartOfComposite": true },
+                { "name": "left", "id": "d40d16ff-11b7-4162-9f6d-cf515c9e7c5b", "path": "<Keyboard>/a", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": false, "isPartOfComposite": true },
+                { "name": "right", "id": "887a2c4a-0884-44f3-8d96-ab6e33287776", "path": "<Keyboard>/d", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": false, "isPartOfComposite": true },
+                { "name": "", "id": "15497d5f-a120-43b9-92f4-28d18e3dcdee", "path": "<Mouse>/delta", "interactions": "", "processors": "", "groups": "", "action": "Look", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "f63bb1d3-6789-4342-b9c4-f3d802935484", "path": "<Keyboard>/leftShift", "interactions": "", "processors": "", "groups": "", "action": "Sprint", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "506d5721-817d-42c7-8959-4a7e6720f532", "path": "<Keyboard>/space", "interactions": "", "processors": "", "groups": "", "action": "Jump", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "7aff5d94-7110-4f91-a38e-9756a61c5eac", "path": "<Mouse>/leftButton", "interactions": "", "processors": "", "groups": "", "action": "CastMagic", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "d34c61d6-a6e2-4d05-b929-c3e60705792f", "path": "<Mouse>/rightButton", "interactions": "", "processors": "", "groups": "", "action": "Aim", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "de860449-0fa4-42db-a1b1-912b8d2201fe", "path": "<Keyboard>/r", "interactions": "", "processors": "", "groups": "", "action": "Meditate", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "9fd9fc19-5440-48bb-af83-0296c38eaf5e", "path": "<Keyboard>/1", "interactions": "", "processors": "", "groups": "", "action": "SelectMagic1", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "41c89138-82c2-4c6c-bcf2-e84aef40f45b", "path": "<Keyboard>/2", "interactions": "", "processors": "", "groups": "", "action": "SelectMagic2", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "7d71d78b-b50e-4c13-a5d1-9255554f1a4c", "path": "<Keyboard>/3", "interactions": "", "processors": "", "groups": "", "action": "SelectMagic3", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "dfa2fbe0-5825-46ca-b14f-d6651ae0fe03", "path": "<Keyboard>/4", "interactions": "", "processors": "", "groups": "", "action": "SelectMagic4", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "180774ca-ab8e-47f4-a91a-2692e24637b7", "path": "<Keyboard>/5", "interactions": "", "processors": "", "groups": "", "action": "SelectMagic5", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "c56a49e6-2c0b-4792-955b-53b97d7e6feb", "path": "<Keyboard>/e", "interactions": "", "processors": "", "groups": "", "action": "Interact", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "17b0dbf3-8690-4d7e-a43e-b5537601427d", "path": "<Keyboard>/g", "interactions": "", "processors": "", "groups": "", "action": "Heal", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "52fd4c60-8207-40b7-8a92-c1acd7d269b2", "path": "<Keyboard>/q", "interactions": "", "processors": "", "groups": "", "action": "Detect", "isComposite": false, "isPartOfComposite": false }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "ffc2318c-9653-4252-8937-ecf52ac5d68c",
+            "actions": [
+                { "name": "Pause", "type": "Button", "id": "470a1836-f7ef-4a06-b313-c581ec8a0836", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Map", "type": "Button", "id": "0b1658a3-646f-473a-868c-1afc7f659db7", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "QuestInfo", "type": "Button", "id": "051ba995-1a3c-426c-a904-304e49612be3", "expectedControlType": "", "processors": "", "interactions": "", "initialStateCheck": false }
+            ],
+            "bindings": [
+                { "name": "", "id": "ab77e2c3-0500-4ae6-9cd0-01120883c0f0", "path": "<Keyboard>/escape", "interactions": "", "processors": "", "groups": "", "action": "Pause", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "b5618383-3579-438f-9c97-f6792d83784e", "path": "<Keyboard>/m", "interactions": "", "processors": "", "groups": "", "action": "Map", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "88e449e1-b72c-45c4-a3a6-905686adf056", "path": "<Keyboard>/j", "interactions": "", "processors": "", "groups": "", "action": "QuestInfo", "isComposite": false, "isPartOfComposite": false }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
