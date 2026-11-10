@@ -182,6 +182,7 @@ flowchart TD
 | 맵 구조물 배치 (거점, 구역, 지형 요소). 배치용 에디터 스크립트 작성 허용 | `map-builder` |
 | 사운드 파일 정리와 연결, Audio Mixer, 소리 감쇠 등 인스펙터 조정 (사운드 재생 코드는 사용자) | `sound-designer` |
 | 인스펙터 설정 (컴포넌트, 참조 연결, 값) | 각 서브에이전트가 `/inspector-setup` 스킬을 사용 |
+| 입력 에셋 (.inputactions) | 메인 Claude (서브에이전트 없이) |
 | 문서 작성, 검수, 문서 반영 | 메인 Claude |
 
 ---
