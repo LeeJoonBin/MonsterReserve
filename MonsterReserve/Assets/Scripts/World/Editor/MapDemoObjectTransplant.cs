@@ -124,6 +124,7 @@ public static class MapDemoObjectTransplant
         public Dictionary<Shader, bool> GpuDrivenSupport = new Dictionary<Shader, bool>();
         public Dictionary<string, int> NoColliderCounts = new Dictionary<string, int>();
         public int ColliderCount;
+        public int RemovedLodGroupCount;
         public List<string> LandmarkNotes = new List<string>();
     }
 
@@ -163,6 +164,9 @@ public static class MapDemoObjectTransplant
     private const float TreeChangedHeight = 1f;
     // 쓰지 않기로 한 prefab (렌더러 없음, MapLayout.md "배치할 때 확인할 것")
     private const string ExcludedPrefabPrefix = "Prefab_Mushroom";
+    // 루트 LODGroup의 렌더러가 자식 LODGroup 10개에도 등록되어 있어 경고가 난다 (원본 에셋 문제).
+    // 원본은 고치지 않고, 놓은 인스턴스에서 루트 LODGroup만 지운다 (자식 LODGroup은 남긴다)
+    private const string OverlappedLodPrefabName = "Prefab_WallRuin";
 
     // 룬 돌 (랜드마크). MapNorthScatter와 같은 키 큰 선돌 목록이다
     private static readonly string[] LandmarkPaths =
@@ -581,6 +585,17 @@ public static class MapDemoObjectTransplant
         {
             context.NoColliderCounts.TryGetValue(prefabName, out int count);
             context.NoColliderCounts[prefabName] = count + 1;
+        }
+
+        // 루트에 붙은 것만 지운다. prefab 인스턴스에는 '제거된 컴포넌트' 오버라이드로 남는다
+        if (prefabName == OverlappedLodPrefabName)
+        {
+            LODGroup rootLodGroup = instance.GetComponent<LODGroup>();
+            if (rootLodGroup != null)
+            {
+                Object.DestroyImmediate(rootLodGroup);
+                context.RemovedLodGroupCount++;
+            }
         }
 
         // Static Batching과 섞지 않는다 (MapLayout.md 성능 기준). 데모 오버라이드에 Static이 있어도 끈다
@@ -1047,6 +1062,7 @@ public static class MapDemoObjectTransplant
         LogShaders(context);
         Debug.Log($"[MapDemoObjectTransplant] 충돌체 추가 {context.ColliderCount}개. 충돌체 없이 놓인 prefab (이름 : 개수) :\n" +
                   string.Join("\n", context.NoColliderCounts.OrderByDescending(pair => pair.Value).Select(pair => $"{pair.Key} : {pair.Value}")));
+        Debug.Log($"[MapDemoObjectTransplant] 겹친 LODGroup 제거 {context.RemovedLodGroupCount}개 ({OverlappedLodPrefabName} 루트)");
         LogPlacementCheck(context);
     }
 
