@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-// 메뉴 2 : 중앙 지역(B2~C3)에만 완만한 언덕을 만든다.
+// 메뉴 2 : 중앙 지역(B2)에만 완만한 언덕을 만든다.
 // 거점 주변은 평지로 두고, 중앙 지역 경계로 갈수록 기준 높이로 돌아가 바깥 구역과 끊기지 않게 한다.
 public static class MapHeightShaper
 {
