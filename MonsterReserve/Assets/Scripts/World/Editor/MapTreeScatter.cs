@@ -4,9 +4,11 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-// 메뉴 3 : 중앙 지역(B2~C3)에 나무와 바위, 소품을 prefab 인스턴스(GameObject)로 흩뿌린다.
+// 메뉴 3 : 중앙 지역(B2)에 나무와 바위, 소품을 prefab 인스턴스(GameObject)로 흩뿌린다.
 // Terrain 나무 기능은 LODGroup prefab을 인스턴싱하지 못하고 자식 MeshCollider도 쓰지 못해 GameObject로 둔다.
 // 씬 루트 Center 아래 Trees, Rocks의 자식을 모두 지우고 다시 만든다. seed가 고정이라 여러 번 실행해도 결과가 같다.
+// 강(메뉴 7)과 깎인 강둑, 등산로(메뉴 7-1) 위에는 놓지 않으므로 메뉴 7-1 다음에 실행한다.
+// 나무, 바위 목록과 비율, 크기, 충돌체 규칙은 북쪽 배치(메뉴 8)도 함께 쓴다.
 public static class MapTreeScatter
 {
     public enum FieldZone
@@ -31,6 +33,11 @@ public static class MapTreeScatter
         public int[] TreeKindCounts = new int[3];
         public int RockCount;
         public int ColliderCount;
+        public List<Vector2> RiverPath;
+        public int RiverSkipCount;
+        // 메뉴 7-1이 저장한 등산로 (없으면 null이고 길 피하기를 하지 않는다)
+        public List<List<Vector2>> Trails;
+        public int TrailSkipCount;
     }
 
     // 같은 크기 범위로 같은 부모 아래 놓는 prefab 묶음
@@ -52,6 +59,12 @@ public static class MapTreeScatter
 
     public const float BaseClearRadius = 40f;
     public const float MaxSlope = 35f;
+    // 강 중심선에서 (물 반폭 6m + 이 값) 안에는 놓지 않는다 (임시값). 강둑(물가 밖 2m)과 그 밖의 깎은/메운 비탈 앞부분까지 덮는다.
+    // 비탈이 더 길게 이어지는 곳이 남으면 사용자가 에디터에서 보고 늘린다
+    public const float RiverClearMargin = 12f;
+    // 등산로 중심선에서 (길 폭의 반 2m + 이 값) 안에는 나무, 바위를 놓지 않는다 (임시값). 줄기, 바위가 길 가장자리에 걸치지 않게 한다.
+    // 북쪽 데모 나무 이식(메뉴 8-1)도 같은 값을 쓴다
+    public const float TrailClearMargin = 3f;
 
     private const int Seed = 20261109;
 
@@ -73,30 +86,30 @@ public static class MapTreeScatter
     private static readonly float[] RockDensityMax = { 3f, 3f, 20f };
 
     // 나무 종류 비율. 고사목은 모든 영역, 거대목은 숲에서만 나온다
-    private const float DeadTreeRatio = 0.05f;
-    private const float GiantTreeRatio = 0.01f;
+    public const float DeadTreeRatio = 0.05f;
+    public const float GiantTreeRatio = 0.01f;
 
-    private const float TreeScaleMin = 0.85f;
-    private const float TreeScaleMax = 1.2f;
-    private const float RockScaleMin = 0.5f;
-    private const float RockScaleMax = 1.1f;
+    public const float TreeScaleMin = 0.85f;
+    public const float TreeScaleMax = 1.2f;
+    public const float RockScaleMin = 0.5f;
+    public const float RockScaleMax = 1.1f;
 
     // 씬 루트 Center 아래에 만드는 부모 이름
     private const string TreeParentName = "Trees";
     private const string RockParentName = "Rocks";
 
-    private const string PrefabFolder = "Assets/Imports/Polyart/PolyartStudio/DreamscapeMountains/Prefabs/";
+    public const string PrefabFolder = "Assets/Imports/Polyart/PolyartStudio/DreamscapeMountains/Prefabs/";
 
-    private static readonly string[] MainTreePaths =
+    public static readonly string[] MainTreePaths =
     {
         "Trees/Prefab_Conifer_01", "Trees/Prefab_Conifer_02", "Trees/Prefab_Conifer_03", "Trees/Prefab_Conifer_04",
         "Trees/Prefab_Conifer_05", "Trees/Prefab_Conifer_10", "Trees/Prefab_Conifer_11"
     };
-    private static readonly string[] DeadTreePaths = { "Trees/Prefab_Conifer_08", "Trees/Prefab_Conifer_09" };
-    private static readonly string[] GiantTreePaths = { "Trees/Prefab_Conifer_06", "Trees/Prefab_Conifer_07" };
+    public static readonly string[] DeadTreePaths = { "Trees/Prefab_Conifer_08", "Trees/Prefab_Conifer_09" };
+    public static readonly string[] GiantTreePaths = { "Trees/Prefab_Conifer_06", "Trees/Prefab_Conifer_07" };
 
     // Prefab_Cliff_*(셰이더 깨짐), Prefab_Mushroom_*(렌더러 없음)은 쓰지 않는다
-    private static readonly string[] RockPaths =
+    public static readonly string[] RockPaths =
     {
         "Stones/Prefab_Rock_01", "Stones/Prefab_Rock_02", "Stones/Prefab_Rock_03", "Stones/Prefab_Rock_04",
         "Stones/Prefab_Rock_05", "Stones/Prefab_Rock_06", "Stones/Prefab_Rock_07", "Stones/Prefab_Rock_08",
@@ -161,20 +174,30 @@ public static class MapTreeScatter
         var context = new ScatterContext
         {
             Terrain = terrain,
-            Random = new System.Random(Seed)
+            Random = new System.Random(Seed),
+            RiverPath = MapRiverBuilder.GetPath(terrain),
+            Trails = MapTrailBuilder.GetTrails()
         };
+        if (context.Trails == null) Debug.LogWarning("[MapTreeScatter] 등산로 저장 파일이 없어 길 피하기 없이 배치합니다. 'Tools/Map/7-1. 등산로 만들기' 다음에 다시 실행하세요.");
         var zoneCellCounts = new int[3];
+        int riverCellCount = 0;
 
         foreach (Vector2 cellMin in EnumerateCells(center))
         {
-            FieldZone zone = GetFieldZone(cellMin + Vector2.one * (ScatterCellSize / 2f));
+            Vector2 cellCenter = cellMin + Vector2.one * (ScatterCellSize / 2f);
+            FieldZone zone = GetFieldZone(cellCenter);
             zoneCellCounts[(int)zone]++;
+            // 로그용 : 칸 중심이 강 둘레에 든 칸. 실제 건너뛰기는 인스턴스마다 TryAddInstance에서 한다
+            // (칸을 통째로 건너뛰면 무작위 값 순서가 강 경로에 따라 바뀌어 다른 칸의 결과까지 달라진다)
+            if (MapRiverBuilder.IsNearRiver(context.RiverPath, new Vector3(cellCenter.x, 0f, cellCenter.y), RiverClearMargin)) riverCellCount++;
             ScatterTrees(context, cellMin, zone, treeGroups);
             ScatterRocks(context, cellMin, zone, rockGroup);
         }
 
         EditorSceneManager.MarkSceneDirty(terrain.gameObject.scene);
         LogResult(context, zoneCellCounts);
+        LogRiver(context, riverCellCount, new[] { treeParent, rockParent });
+        LogTrail(context, new[] { treeParent, rockParent });
     }
 
     // 이전 방식(Terrain 나무 기능)으로 심은 인스턴스와 프로토타입을 모두 지운다
@@ -285,7 +308,7 @@ public static class MapTreeScatter
         return roll < DeadTreeRatio ? TreeKind.Dead : TreeKind.Main;
     }
 
-    // 거점 반경 안이나 급경사면 놓지 않는다. 무작위 값은 조건과 상관없이 같은 순서로 뽑아 결과가 항상 같게 한다
+    // 거점 반경 안, 강 둘레, 급경사면 놓지 않는다. 무작위 값은 조건과 상관없이 같은 순서로 뽑아 결과가 항상 같게 한다
     private static bool TryAddInstance(ScatterContext context, Vector2 cellMin, InstanceGroup group)
     {
         System.Random random = context.Random;
@@ -297,6 +320,16 @@ public static class MapTreeScatter
         float rotation = RandomRange(random, 0f, Mathf.PI * 2f);
 
         if (world.magnitude < BaseClearRadius) return false;
+        if (MapRiverBuilder.IsNearRiver(context.RiverPath, new Vector3(world.x, 0f, world.y), RiverClearMargin))
+        {
+            context.RiverSkipCount++;
+            return false;
+        }
+        if (context.Trails != null && MapTrailBuilder.IsNearTrail(context.Trails, new Vector3(world.x, 0f, world.y), TrailClearMargin))
+        {
+            context.TrailSkipCount++;
+            return false;
+        }
 
         Terrain terrain = context.Terrain;
         Vector3 terrainPosition = terrain.transform.position;
@@ -319,7 +352,7 @@ public static class MapTreeScatter
     }
 
     // 원본 prefab에 충돌체가 없는 종류만 씬 인스턴스의 루트에 충돌체를 붙인다 (원본 prefab은 고치지 않는다)
-    private static bool AddMissingCollider(GameObject instance, string prefabName)
+    public static bool AddMissingCollider(GameObject instance, string prefabName)
     {
         if (CapsuleColliderShapes.TryGetValue(prefabName, out CapsuleShape shape))
         {
@@ -358,5 +391,32 @@ public static class MapTreeScatter
                   $"숲 {zoneCellCounts[(int)FieldZone.Forest] / totalCells:P1}, " +
                   $"드문드문 {zoneCellCounts[(int)FieldZone.Sparse] / totalCells:P1}, " +
                   $"개활지 {zoneCellCounts[(int)FieldZone.Open] / totalCells:P1}");
+    }
+
+    // 검수(강을 피했는지, 성능 측정용 배치 수)에 쓰는 값이라 로그를 남긴다.
+    // 물 위 검사는 놓인 오브젝트의 위치를 다시 읽어 물 폭(여유 없이) 안에 든 것을 센다. 0이어야 한다
+    private static void LogRiver(ScatterContext context, int riverCellCount, Transform[] parents)
+    {
+        int totalCount = 0;
+        int inWaterCount = 0;
+        foreach (Transform parent in parents)
+        {
+            foreach (Transform child in parent)
+            {
+                totalCount++;
+                if (MapRiverBuilder.IsNearRiver(context.RiverPath, child.position, 0f)) inWaterCount++;
+            }
+        }
+        Debug.Log($"[MapTreeScatter] 강 둘레(물가 밖 {RiverClearMargin}m까지)에 중심이 든 칸 {riverCellCount}개, 강 때문에 건너뛴 나무·바위 {context.RiverSkipCount}개");
+        Debug.Log($"[MapTreeScatter] 물 위에 놓인 오브젝트 {inWaterCount}개 (0이어야 한다). Center 배치 GameObject 총 {totalCount}개");
+    }
+
+    // 검수(길을 피했는지)에 쓰는 값이라 로그를 남긴다. 놓인 오브젝트의 위치를 다시 읽어 길 폭(여유 없이) 안에 든 것을 센다. 0이어야 한다
+    private static void LogTrail(ScatterContext context, Transform[] parents)
+    {
+        if (context.Trails == null) return;
+
+        int onTrailCount = parents.Sum(parent => parent.Cast<Transform>().Count(child => MapTrailBuilder.IsNearTrail(context.Trails, child.position, 0f)));
+        Debug.Log($"[MapTreeScatter] 등산로 때문에 건너뛴 나무·바위 {context.TrailSkipCount}개 (길 가장자리 밖 {TrailClearMargin}m까지), 길 위에 놓인 오브젝트 {onTrailCount}개 (0이어야 한다)");
     }
 }
