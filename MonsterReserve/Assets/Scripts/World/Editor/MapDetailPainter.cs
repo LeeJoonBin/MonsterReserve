@@ -3,9 +3,11 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-// 메뉴 4 : 중앙 지역(B2~C3)의 바닥 식생(Terrain 디테일)과 지면 레이어를 칠한다.
+// 메뉴 4 : 중앙 지역(B2)의 바닥 식생(Terrain 디테일)과 지면 레이어를 칠한다.
 // 영역 구분은 MapTreeScatter.GetFieldZone을 그대로 써서 나무 분포와 맞춘다.
 // 중앙 지역만 덮어쓰므로 여러 번 실행해도 결과가 같고, 바깥 구역은 그대로 남는다.
+// 강과 강둑은 메뉴 9와 같은 물가 규칙(MapGroundPainter)으로 물가 레이어를 칠하고 바닥 식생을 두지 않는다 (물 속 풀 방지).
+// 프로토타입 등록과 칸 하나를 칠하는 규칙은 북쪽 산 칠하기(메뉴 9)도 함께 쓴다.
 public static class MapDetailPainter
 {
     private enum DetailGroup
@@ -17,7 +19,7 @@ public static class MapDetailPainter
     }
 
     // 한 번 실행하는 동안 함께 쓰는 값 묶음
-    private class PaintContext
+    public class PaintContext
     {
         public Dictionary<int, int[,]> Layers;
         public int[][] GroupPrototypeIndices;
@@ -78,9 +80,10 @@ public static class MapDetailPainter
             data.SetDetailScatterMode(DetailScatterMode.InstanceCountMode);
 
         Rect center = MapGrid.GetRangeBounds(MapTerrainSetup.CenterFromCell, MapTerrainSetup.CenterToCell);
+        MapGroundPainter.WaterSource water = MapGroundPainter.CreateWaterSource(terrain);
         int[][] groupPrototypeIndices = RegisterPrototypes(data);
-        PaintAlphamaps(terrain, center);
-        Dictionary<int, int[,]> layers = PaintDetails(terrain, center, groupPrototypeIndices);
+        PaintAlphamaps(terrain, center, water);
+        Dictionary<int, int[,]> layers = PaintDetails(terrain, center, groupPrototypeIndices, water);
 
         EditorUtility.SetDirty(data);
         AssetDatabase.SaveAssets();
@@ -88,7 +91,7 @@ public static class MapDetailPainter
     }
 
     // 이미 등록된 prefab은 그 번호를 쓰고, 없으면 뒤에 추가한다. 크기와 그리기 설정은 매번 위 표대로 다시 넣는다
-    private static int[][] RegisterPrototypes(TerrainData data)
+    public static int[][] RegisterPrototypes(TerrainData data)
     {
         var prototypes = new List<DetailPrototype>(data.detailPrototypes);
         var groupPrototypeIndices = new int[GroupPrefabNames.Length][];
@@ -125,12 +128,13 @@ public static class MapDetailPainter
         prototype.maxHeight = GroupScaleMax[group];
     }
 
-    // 지면 레이어 : 기본 풀, 숲은 숲 바닥, 경사면은 돌로 섞고, 거점 반경은 흙
-    private static void PaintAlphamaps(Terrain terrain, Rect center)
+    // 지면 레이어 : 기본 풀, 숲은 숲 바닥, 경사면은 돌로 섞고, 거점 반경은 흙. 그 위에 강과 강둑을 물가로 덮는다
+    private static void PaintAlphamaps(Terrain terrain, Rect center, MapGroundPainter.WaterSource water)
     {
         TerrainData data = terrain.terrainData;
         int resolution = data.alphamapResolution;
         RectInt range = MapTerrainSetup.ToIndexRange(terrain, center, resolution);
+        float[,] waterDistances = MapGroundPainter.CreateWaterDistances(water, terrain, range, resolution);
         var weights = new float[range.height, range.width, data.alphamapLayers];
 
         for (int z = 0; z < range.height; z++)
@@ -151,23 +155,19 @@ public static class MapDetailPainter
                 float stoneWeight = Mathf.InverseLerp(StoneBlendStartSlope, MapTreeScatter.MaxSlope, slope);
                 weights[z, x, groundLayer] = 1f - stoneWeight;
                 weights[z, x, MapTerrainSetup.StoneLayer] += stoneWeight;
+                MapGroundPainter.BlendShore(weights, z, x, MapGroundPainter.GetShoreWeight(waterDistances[z, x], world));
             }
         }
         data.SetAlphamaps(range.x, range.y, weights);
     }
 
-    private static Dictionary<int, int[,]> PaintDetails(Terrain terrain, Rect center, int[][] groupPrototypeIndices)
+    private static Dictionary<int, int[,]> PaintDetails(Terrain terrain, Rect center, int[][] groupPrototypeIndices, MapGroundPainter.WaterSource water)
     {
         TerrainData data = terrain.terrainData;
         int resolution = data.detailResolution;
         RectInt range = MapTerrainSetup.ToIndexRange(terrain, center, resolution);
-        var context = new PaintContext
-        {
-            Layers = groupPrototypeIndices.SelectMany(indices => indices)
-                .ToDictionary(index => index, index => new int[range.height, range.width]),
-            GroupPrototypeIndices = groupPrototypeIndices,
-            Random = new System.Random(Seed)
-        };
+        float[,] waterDistances = MapGroundPainter.CreateWaterDistances(water, terrain, range, resolution);
+        PaintContext context = CreateContext(groupPrototypeIndices, range, Seed);
 
         for (int z = 0; z < range.height; z++)
         {
@@ -178,8 +178,9 @@ public static class MapDetailPainter
 
                 float slope = data.GetSteepness((range.x + x + 0.5f) / resolution, (range.y + z + 0.5f) / resolution);
                 if (slope >= MapTreeScatter.MaxSlope) continue;
+                if (MapGroundPainter.GetShoreWeight(waterDistances[z, x], world) > 0f) continue;
 
-                PaintDetailCell(context, x, z, world);
+                PaintDetailCell(context, x, z, world, MapTreeScatter.GetFieldZone(world));
             }
         }
 
@@ -188,10 +189,23 @@ public static class MapDetailPainter
         return context.Layers;
     }
 
-    private static void PaintDetailCell(PaintContext context, int x, int z, Vector2 world)
+    // range 크기의 빈 디테일 층을 프로토타입마다 하나씩 만든다
+    public static PaintContext CreateContext(int[][] groupPrototypeIndices, RectInt range, int seed)
+    {
+        return new PaintContext
+        {
+            Layers = groupPrototypeIndices.SelectMany(indices => indices)
+                .ToDictionary(index => index, index => new int[range.height, range.width]),
+            GroupPrototypeIndices = groupPrototypeIndices,
+            Random = new System.Random(seed)
+        };
+    }
+
+    // 칸 하나에 zone의 규칙(숲 : 고사리·낙엽, 드문드문 : 풀·가끔 고사리, 개활지 : 풀·꽃 무리)으로 바닥 식생을 놓는다
+    public static void PaintDetailCell(PaintContext context, int x, int z, Vector2 world, MapTreeScatter.FieldZone zone)
     {
         System.Random random = context.Random;
-        switch (MapTreeScatter.GetFieldZone(world))
+        switch (zone)
         {
             case MapTreeScatter.FieldZone.Forest:
                 AddDetail(context, x, z, DetailGroup.Fern, random.Next(0, ForestFernMax + 1));
