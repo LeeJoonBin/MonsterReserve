@@ -271,8 +271,8 @@ public static class MapSouthEastScatter
     private const string RockParentName = "Rocks";
     private const string LandmarkParentName = "Landmarks";
     private const string HabitatName = "Habitat";
-    private const string CampLabel = "버려진 어부 야영지";
-    private const string BridgeLabel = "쓰러진 고사목 다리";
+    private const string CampLabel = "AbandonedFisherCamp";
+    private const string BridgeLabel = "DeadwoodBridge";
     private const string BridgeColliderName = "BridgeWalkCollider";
     // 쓰지 않는 prefab. 로그에서 0개인지 센다
     private const string WallRuinName = "Prefab_WallRuin";

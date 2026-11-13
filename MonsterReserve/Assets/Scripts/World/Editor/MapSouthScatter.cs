@@ -550,7 +550,7 @@ public static class MapSouthScatter
     // 칸이 무너져 터 대신 흩어진 조각만 남을 확률, 형태별 비중 (LotKind 순서)
     private const float CollapseRatio = 0.15f;
     private static readonly float[] LotKindWeights = { 0.35f, 0.25f, 0.2f, 0.2f };
-    private static readonly string[] LotKindLabels = { "작은 집", "큰 집", "탑 터", "기둥 회랑" };
+    private static readonly string[] LotKindLabels = { "SmallHouse", "LargeHouse", "TowerRuin", "Colonnade" };
     private static readonly string[] SiteFailureLabels = { "없음", "도시 범위 밖", "다른 구조물과 겹침", "강 보호 구역", "서식지", "경사", "뜸·묻힘" };
     // 건물 터 바닥 경사 상한 (도). 조각마다 바닥 가운데에서 잰다
     private const float BuildingMaxSlope = 20f;
@@ -636,9 +636,9 @@ public static class MapSouthScatter
     // 놓는 순서대로. 자리가 정해진 감시탑 터를 먼저, 강가 자리를 찾는 다리 터, 선착장 터를 그다음에 놓는다. 도시는 그 뒤에 만든다
     private static readonly LandmarkSpec[] LandmarkSpecs =
     {
-        new LandmarkSpec { Label = "언덕 위 감시탑 터", ApproxRadius = 12f, Placement = LandmarkPlacement.Hilltop, Pieces = WatchtowerPieces },
-        new LandmarkSpec { Label = "무너진 다리 터", ApproxRadius = 18f, Placement = LandmarkPlacement.RiverBridge, Pieces = BridgePieces },
-        new LandmarkSpec { Label = "강가 선착장 터", ApproxRadius = 12f, Placement = LandmarkPlacement.RiverBank, Pieces = PierPieces }
+        new LandmarkSpec { Label = "HillWatchtowerRuin", ApproxRadius = 12f, Placement = LandmarkPlacement.Hilltop, Pieces = WatchtowerPieces },
+        new LandmarkSpec { Label = "BridgeRuin", ApproxRadius = 18f, Placement = LandmarkPlacement.RiverBridge, Pieces = BridgePieces },
+        new LandmarkSpec { Label = "PierRuin", ApproxRadius = 12f, Placement = LandmarkPlacement.RiverBank, Pieces = PierPieces }
     };
 
     // ---------- 도시 배치도 (임시값, 1.5배 크기 기준 좌표, 입구가 -z) ----------
@@ -1274,7 +1274,7 @@ public static class MapSouthScatter
 
         foreach (District district in districts)
         {
-            district.Group = CreateChild(city, $"구역 {district.Index + 1}");
+            district.Group = CreateChild(city, $"District {district.Index + 1}");
             district.Group.position = ToWorld(district.Center, GetGroundHeight(context.Terrain, district.Center));
             if (plazaDistricts.Contains(district)) PlacePlaza(context, district);
             for (int lot = 0; lot < district.Lots.Count; lot++)
@@ -1513,7 +1513,7 @@ public static class MapSouthScatter
             .OrderBy(lot => Vector2.Distance(district.Lots[lot], district.Center));
         foreach (int lot in candidates)
         {
-            LandmarkBuild build = BuildGroup(context, $"광장 {context.City.PlazaCount + 1}", CreatePlazaPieces(), district.Group);
+            LandmarkBuild build = BuildGroup(context, $"Plaza {context.City.PlazaCount + 1}", CreatePlazaPieces(), district.Group);
             if (build == null) return;
 
             LandmarkFit? fit = FitStructure(context, build, district.Lots[lot], district.Yaw, out SiteFailure failure);
@@ -1829,7 +1829,7 @@ public static class MapSouthScatter
     private static void PlaceWallRun(LandmarkContext context, WallRun run, Transform parent, int index)
     {
         PieceSpec[] runPieces = WallRunPieces.Skip(run.FirstPiece).Take(run.PieceCount).ToArray();
-        LandmarkBuild build = BuildGroup(context, $"담장 줄 {index + 1}", runPieces, parent);
+        LandmarkBuild build = BuildGroup(context, $"WallRun {index + 1}", runPieces, parent);
         if (build == null) return;
 
         CityStats city = context.City;

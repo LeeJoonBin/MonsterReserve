@@ -248,11 +248,11 @@ public static class MapSouthWestScatter
     {
         new LandmarkSpec
         {
-            Label = "언덕 꼭대기 룬 돌 무리", GroupYaw = 0f, SinkRatio = StructureSinkRatio, ApproxRadius = 10f,
+            Label = "HilltopRuneStones", GroupYaw = 0f, SinkRatio = StructureSinkRatio, ApproxRadius = 10f,
             IsHilltop = true, Pieces = HilltopStonePieces
         },
         // 바닥 반지름은 첫 실행에서 잰 23.6m를 사용자가 그대로 승인했다 (구성안은 약 15m)
-        new LandmarkSpec { Label = "바위 노두", GroupYaw = 30f, SinkRatio = BigRockSinkRatio, ApproxRadius = 23.6f, Pieces = OutcropPieces }
+        new LandmarkSpec { Label = "RockOutcrop", GroupYaw = 30f, SinkRatio = BigRockSinkRatio, ApproxRadius = 23.6f, Pieces = OutcropPieces }
     };
 
     // 렌더러 범위 둘레 8곳은 AABB보다 FootprintInset만큼 안쪽을 본다 (서쪽 배치와 같은 값)
