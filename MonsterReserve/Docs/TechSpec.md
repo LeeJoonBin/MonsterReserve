@@ -16,9 +16,17 @@
 - 버전 : 6000.3.9f1(Unity 6.3)
 - 랜더 파이프라인 : URP
 - 빌드 플랫폼 : Windows
-- 그래픽 에셋 : Dreamscape Nature Mountains - Stylized Open World Environment (Polyart Studio) 하나만 사용
-    - 위치 : `Assets/Imports/Polyart/PolyartStudio/`
-    - 에셋의 URP 지원 여부를 프로젝트에 넣기 전에 확인한다.
+- 그래픽 에셋 (모두 `Assets/Imports/` 아래). 에셋의 URP 지원 여부를 프로젝트에 넣기 전에 확인한다.
+
+| 용도 | 에셋 | 위치 | 비고 |
+| --- | --- | --- | --- |
+| 배경 (맵) | Dreamscape Nature Mountains - Stylized Open World Environment (Polyart Studio) | `Polyart/PolyartStudio/` | |
+| 메인 플레이어 모델 | PicoChan (Picola) | `Picola/PicoChan/` | Unity Toon Shader (`com.unity.toonshader` 0.16.1-preview) 필요 |
+| 애니메이션 | Karate / Mage Warrior Mecanim Animation Pack (ExplosiveLLC) | `ExplosiveLLC/` | 애니메이션만 쓴다. 모델, 머티리얼 (Built-in Standard), 데모 스크립트와 씬은 쓰지 않는다 |
+| 애니메이션 | Human Animations (Kevin Iglesias) | `Kevin Iglesias/Human Animations/` | |
+| 마법 투사체 모양 | LowPoly Planets Pack (iPoly3D) | `iPoly3D/LowPoly Planets Pack/` | URP용 머티리얼을 쓴다 (`BuildIn` 폴더는 쓰지 않는다) |
+
+- 가져온 에셋 수정 : `ExplosiveLLC/SuperCharacterController/.../Core/SuperCharacterController.cs`의 struct `Ground`에 붙은 `[SerializeField]`를 지웠다 (CS0592 컴파일 오류, 2026-11-13). 에셋을 다시 가져오면 다시 지운다.
 - 사운드 에셋 : 미정
 
 ## 성능
