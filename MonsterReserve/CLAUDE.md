@@ -33,6 +33,7 @@
 ### 사용자의 소스코드를 읽거나 코드 관련 안내를 할 때
 
 `@Docs/Code/code-convention.md`
+`@Docs/Code/ScriptStructure.md` (스크립트 구조 초안)
 
 ### UI 관련 작업 시
 
