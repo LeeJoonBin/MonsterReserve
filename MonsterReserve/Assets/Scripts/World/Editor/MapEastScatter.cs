@@ -284,9 +284,9 @@ public static class MapEastScatter
     private const string RockParentName = "Rocks";
     private const string LandmarkParentName = "Landmarks";
     private const string HabitatName = "Habitat";
-    private const string RoadLabel = "버려진 수레길";
-    private const string ShrineLabel = "숲속 작은 사당";
-    private const string FallenLabel = "쓰러진 나무 지대";
+    private const string RoadLabel = "AbandonedCartRoad";
+    private const string ShrineLabel = "ForestShrine";
+    private const string FallenLabel = "FallenTreeArea";
     // 쓰지 않는 prefab. 로그에서 0개인지 센다
     private const string WallRuinName = "Prefab_WallRuin";
 
