@@ -4614,7 +4614,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8104129}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC9D1 7"
+  m_Name: SmallHouse 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23190,7 +23190,7 @@ GameObject:
   m_Component:
   - component: {fileID: 38599423}
   m_Layer: 0
-  m_Name: "\uB2F4\uC7A5 \uC904 15"
+  m_Name: WallRun 15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28183,7 +28183,7 @@ GameObject:
   m_Component:
   - component: {fileID: 45956499}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC9D1 6"
+  m_Name: SmallHouse 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67782,7 +67782,7 @@ GameObject:
   m_Component:
   - component: {fileID: 107117811}
   m_Layer: 0
-  m_Name: "\uB2F4\uC7A5 \uC904 7"
+  m_Name: WallRun 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109346,7 +109346,7 @@ GameObject:
   m_Component:
   - component: {fileID: 167025000}
   m_Layer: 0
-  m_Name: "\uB2F4\uC7A5 \uC904 20"
+  m_Name: WallRun 20
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -137084,7 +137084,7 @@ GameObject:
   m_Component:
   - component: {fileID: 210221741}
   m_Layer: 0
-  m_Name: "\uD070 \uC9D1 8"
+  m_Name: LargeHouse 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -145983,7 +145983,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224769445}
   m_Layer: 0
-  m_Name: "\uD070 \uC9D1 5"
+  m_Name: LargeHouse 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146023,7 +146023,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224811499}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC9D1 9"
+  m_Name: SmallHouse 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152623,7 +152623,7 @@ GameObject:
   m_Component:
   - component: {fileID: 234470159}
   m_Layer: 0
-  m_Name: "\uBC84\uB824\uC9C4 \uC218\uB808\uAE38"
+  m_Name: AbandonedCartRoad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -197022,7 +197022,7 @@ GameObject:
   m_Component:
   - component: {fileID: 302899804}
   m_Layer: 0
-  m_Name: "\uD070 \uC9D1 1"
+  m_Name: LargeHouse 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -204859,7 +204859,7 @@ GameObject:
   m_Component:
   - component: {fileID: 315382509}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC9D1 2"
+  m_Name: SmallHouse 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -220404,7 +220404,7 @@ GameObject:
   m_Component:
   - component: {fileID: 343680434}
   m_Layer: 0
-  m_Name: "\uAE30\uB465 \uD68C\uB791 4"
+  m_Name: Colonnade 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -221762,7 +221762,7 @@ GameObject:
   m_Component:
   - component: {fileID: 345202438}
   m_Layer: 0
-  m_Name: "\uAD6C\uC5ED 5"
+  m_Name: District 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -223041,7 +223041,7 @@ GameObject:
   m_Component:
   - component: {fileID: 346907973}
   m_Layer: 0
-  m_Name: "\uAD11\uC7A5 1"
+  m_Name: Plaza 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -227379,7 +227379,7 @@ GameObject:
   m_Component:
   - component: {fileID: 354276501}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC9D1 4"
+  m_Name: SmallHouse 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -239371,7 +239371,7 @@ GameObject:
   m_Component:
   - component: {fileID: 373533697}
   m_Layer: 0
-  m_Name: "\uAE30\uB465 \uD68C\uB791 3"
+  m_Name: Colonnade 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -251910,7 +251910,7 @@ GameObject:
   m_Component:
   - component: {fileID: 391659523}
   m_Layer: 0
-  m_Name: "\uB2F4\uC7A5 \uC904 3"
+  m_Name: WallRun 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -260849,7 +260849,7 @@ GameObject:
   m_Component:
   - component: {fileID: 405647039}
   m_Layer: 0
-  m_Name: "\uC4F0\uB7EC\uC9C4 \uACE0\uC0AC\uBAA9 \uB2E4\uB9AC 1"
+  m_Name: DeadwoodBridge 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -293330,7 +293330,7 @@ GameObject:
   m_Component:
   - component: {fileID: 460259997}
   m_Layer: 0
-  m_Name: "\uD0D1 \uD130 1"
+  m_Name: TowerRuin 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -302223,7 +302223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 474124419}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC9D1 3"
+  m_Name: SmallHouse 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -306226,7 +306226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 479100782}
   m_Layer: 0
-  m_Name: "\uD070 \uC9D1 1"
+  m_Name: LargeHouse 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -319844,7 +319844,7 @@ GameObject:
   m_Component:
   - component: {fileID: 500184862}
   m_Layer: 0
-  m_Name: "\uAD11\uC7A5 2"
+  m_Name: Plaza 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -322757,7 +322757,7 @@ GameObject:
   m_Component:
   - component: {fileID: 507099139}
   m_Layer: 0
-  m_Name: "\uBB34\uB108\uC9C4 \uB2E4\uB9AC \uD130"
+  m_Name: BridgeRuin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -337446,7 +337446,7 @@ GameObject:
   m_Component:
   - component: {fileID: 528869502}
   m_Layer: 0
-  m_Name: "\uAD6C\uC5ED 4"
+  m_Name: District 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -385646,7 +385646,7 @@ GameObject:
   m_Component:
   - component: {fileID: 609714337}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC9D1 3"
+  m_Name: SmallHouse 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -399264,7 +399264,7 @@ GameObject:
   m_Component:
   - component: {fileID: 631224693}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC9D1 5"
+  m_Name: SmallHouse 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -438391,7 +438391,7 @@ GameObject:
   m_Component:
   - component: {fileID: 687811826}
   m_Layer: 0
-  m_Name: "\uB2F4\uC7A5 \uC904 4"
+  m_Name: WallRun 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -477612,7 +477612,7 @@ GameObject:
   m_Component:
   - component: {fileID: 747415363}
   m_Layer: 0
-  m_Name: "\uBC84\uB824\uC9C4 \uC5B4\uBD80 \uC57C\uC601\uC9C0"
+  m_Name: AbandonedFisherCamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -508229,7 +508229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 794462851}
   m_Layer: 0
-  m_Name: "\uAE30\uB465 \uD68C\uB791 1"
+  m_Name: Colonnade 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -541362,7 +541362,7 @@ GameObject:
   m_Component:
   - component: {fileID: 846945412}
   m_Layer: 0
-  m_Name: "\uAE30\uB465 \uD68C\uB791 2"
+  m_Name: Colonnade 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -585808,7 +585808,7 @@ GameObject:
   m_Component:
   - component: {fileID: 911420100}
   m_Layer: 0
-  m_Name: "\uD0D1 \uD130 2"
+  m_Name: TowerRuin 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -599696,7 +599696,7 @@ GameObject:
   m_Component:
   - component: {fileID: 933929331}
   m_Layer: 0
-  m_Name: "\uD070 \uC9D1 9"
+  m_Name: LargeHouse 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -632490,7 +632490,7 @@ GameObject:
   m_Component:
   - component: {fileID: 988671091}
   m_Layer: 0
-  m_Name: "\uAD6C\uC5ED 1"
+  m_Name: District 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -641972,7 +641972,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1007069588}
   m_Layer: 0
-  m_Name: "\uAD6C\uC5ED 6"
+  m_Name: District 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -646153,7 +646153,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1013331409}
   m_Layer: 0
-  m_Name: "\uAE30\uB465 \uD68C\uB791 2"
+  m_Name: Colonnade 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -666710,7 +666710,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1045983808}
   m_Layer: 0
-  m_Name: "\uC4F0\uB7EC\uC9C4 \uB098\uBB34 \uC9C0\uB300"
+  m_Name: FallenTreeArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -675875,7 +675875,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1062213918}
   m_Layer: 0
-  m_Name: "\uB2F4\uC7A5 \uC904 9"
+  m_Name: WallRun 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -677095,7 +677095,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1063575709}
   m_Layer: 0
-  m_Name: "\uAD6C\uC5ED 3"
+  m_Name: District 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -705623,7 +705623,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1111676092}
   m_Layer: 0
-  m_Name: "\uB2F4\uC7A5 \uC904 11"
+  m_Name: WallRun 11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -720368,7 +720368,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1133097264}
   m_Layer: 0
-  m_Name: "\uAE30\uB465 \uD68C\uB791 6"
+  m_Name: Colonnade 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -733652,7 +733652,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1152093157}
   m_Layer: 0
-  m_Name: "\uB2F4\uC7A5 \uC904 17"
+  m_Name: WallRun 17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -747901,7 +747901,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1173202093}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC9D1 4"
+  m_Name: SmallHouse 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -761379,7 +761379,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1195476562}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC9D1 6"
+  m_Name: SmallHouse 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -779401,7 +779401,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1228873220}
   m_Layer: 0
-  m_Name: "\uB2F4\uC7A5 \uC904 1"
+  m_Name: WallRun 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -795345,7 +795345,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1254098393}
   m_Layer: 0
-  m_Name: "\uD070 \uC9D1 1"
+  m_Name: LargeHouse 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -807066,7 +807066,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1271151042}
   m_Layer: 0
-  m_Name: "\uD070 \uBC14\uC704 \uBB34\uB9AC"
+  m_Name: BigRockCluster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -808356,7 +808356,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1273121228}
   m_Layer: 0
-  m_Name: "\uC5B8\uB355 \uC704 \uAC10\uC2DC\uD0D1 \uD130"
+  m_Name: HillWatchtowerRuin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -821781,7 +821781,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1295921168}
   m_Layer: 0
-  m_Name: "\uBC84\uB824\uC9C4 \uC0AC\uB0E5\uAFBC \uC57C\uC601\uC9C0"
+  m_Name: AbandonedHunterCamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -829634,7 +829634,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1309596120}
   m_Layer: 0
-  m_Name: "\uC5B8\uB355 \uAF2D\uB300\uAE30 \uB8EC \uB3CC \uBB34\uB9AC"
+  m_Name: HilltopRuneStones
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -833469,7 +833469,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1315729323}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC9D1 5"
+  m_Name: SmallHouse 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -843802,7 +843802,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1331835227}
   m_Layer: 0
-  m_Name: "\uC120\uB3CC \uC6D0"
+  m_Name: StoneCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -862280,7 +862280,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1365412968}
   m_Layer: 0
-  m_Name: "\uAE30\uB465 \uD68C\uB791 7"
+  m_Name: Colonnade 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -866524,7 +866524,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1373108293}
   m_Layer: 0
-  m_Name: "\uAE30\uB465 \uD68C\uB791 8"
+  m_Name: Colonnade 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -871864,7 +871864,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1381080336}
   m_Layer: 0
-  m_Name: "\uB2F4\uC7A5 \uC904 8"
+  m_Name: WallRun 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -939456,7 +939456,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1491812373}
   m_Layer: 0
-  m_Name: "\uAE30\uB465 \uD68C\uB791 8"
+  m_Name: Colonnade 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -956693,7 +956693,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1521390525}
   m_Layer: 0
-  m_Name: "\uB2F4\uC7A5 \uC904 10"
+  m_Name: WallRun 10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1023848,7 +1023848,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1630934593}
   m_Layer: 0
-  m_Name: "\uBC14\uC704 \uB178\uB450"
+  m_Name: RockOutcrop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1039496,7 +1039496,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1654957688}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC9D1 9"
+  m_Name: SmallHouse 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1046118,7 +1046118,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1666945289}
   m_Layer: 0
-  m_Name: "\uAC15\uAC00 \uC120\uCC29\uC7A5 \uD130"
+  m_Name: PierRuin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1091810,7 +1091810,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1741463837}
   m_Layer: 0
-  m_Name: "\uAD6C\uC5ED 2"
+  m_Name: District 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1107859,7 +1107859,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1763017229}
   m_Layer: 0
-  m_Name: "\uD0D1 \uD130 6"
+  m_Name: TowerRuin 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1109377,7 +1109377,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1766716400}
   m_Layer: 0
-  m_Name: "\uBB34\uB108\uC9C4 \uC2E0\uC804 \uD130"
+  m_Name: TempleRuin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1118213,7 +1118213,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1781122726}
   m_Layer: 0
-  m_Name: "\uD070 \uC9D1 7"
+  m_Name: LargeHouse 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1181815,7 +1181815,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1875920776}
   m_Layer: 0
-  m_Name: "\uB2F4\uC7A5 \uC904 12"
+  m_Name: WallRun 12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1182576,7 +1182576,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1877067591}
   m_Layer: 0
-  m_Name: "\uD0D1 \uD130 8"
+  m_Name: TowerRuin 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1200334,7 +1200334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1903871621}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC9D1 4"
+  m_Name: SmallHouse 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1219804,7 +1219804,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1937729854}
   m_Layer: 0
-  m_Name: "\uD0D1 \uD130 7"
+  m_Name: TowerRuin 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1220507,7 +1220507,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1939067744}
   m_Layer: 0
-  m_Name: "\uD0D1 \uD130 3"
+  m_Name: TowerRuin 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1221975,7 +1221975,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1940836321}
   m_Layer: 0
-  m_Name: "\uC232\uC18D \uC791\uC740 \uC0AC\uB2F9"
+  m_Name: ForestShrine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1247366,7 +1247366,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1985838115}
   m_Layer: 0
-  m_Name: "\uD0D1 \uD130 6"
+  m_Name: TowerRuin 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1262637,7 +1262637,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2011055733}
   m_Layer: 0
-  m_Name: "\uD070 \uC9D1 3"
+  m_Name: LargeHouse 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1263448,7 +1263448,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2012360779}
   m_Layer: 0
-  m_Name: "\uD070 \uC9D1 9"
+  m_Name: LargeHouse 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1265770,7 +1265770,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2016964252}
   m_Layer: 0
-  m_Name: "\uD0D1 \uD130 4"
+  m_Name: TowerRuin 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1269993,7 +1269993,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2022878333}
   m_Layer: 0
-  m_Name: "\uB2F4\uC7A5 \uC904 21"
+  m_Name: WallRun 21
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1275862,7 +1275862,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2033652035}
   m_Layer: 0
-  m_Name: "\uD070 \uC9D1 2"
+  m_Name: LargeHouse 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1333438,7 +1333438,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2127081915}
   m_Layer: 0
-  m_Name: "\uAE30\uB465 \uD68C\uB791 6"
+  m_Name: Colonnade 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
