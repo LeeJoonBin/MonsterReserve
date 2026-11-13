@@ -342,15 +342,15 @@ public static class MapWestScatter
     {
         new LandmarkSpec
         {
-            Label = "무너진 신전 터", GroupYaw = 20f, SinkRatio = StructureSinkRatio, ApproxRadius = 15f,
+            Label = "TempleRuin", GroupYaw = 20f, SinkRatio = StructureSinkRatio, ApproxRadius = 15f,
             Zones = new[] { MapTreeScatter.FieldZone.Forest }, Pieces = TemplePieces
         },
-        new LandmarkSpec { Label = "큰 바위 무리", GroupYaw = 135f, SinkRatio = BigRockSinkRatio, ApproxRadius = 20f, Pieces = BigRockPieces },
-        new LandmarkSpec { Label = "선돌 원", GroupYaw = 0f, SinkRatio = StructureSinkRatio, ApproxRadius = 13f, Pieces = StoneCirclePieces },
+        new LandmarkSpec { Label = "BigRockCluster", GroupYaw = 135f, SinkRatio = BigRockSinkRatio, ApproxRadius = 20f, Pieces = BigRockPieces },
+        new LandmarkSpec { Label = "StoneCircle", GroupYaw = 0f, SinkRatio = StructureSinkRatio, ApproxRadius = 13f, Pieces = StoneCirclePieces },
         new LandmarkSpec
         {
             // 40 × 40m 사각형의 반 대각선이 약 28m
-            Label = "버려진 사냥꾼 야영지", GroupYaw = 250f, SinkRatio = StructureSinkRatio, ApproxRadius = 28f, AreaSize = CampAreaSize,
+            Label = "AbandonedHunterCamp", GroupYaw = 250f, SinkRatio = StructureSinkRatio, ApproxRadius = 28f, AreaSize = CampAreaSize,
             Zones = new[] { MapTreeScatter.FieldZone.Sparse, MapTreeScatter.FieldZone.Open }, Pieces = CampPieces
         }
     };
