@@ -312,7 +312,7 @@ flowchart TD
 
 | 날짜 | 질문 번호 | 결정 | 이유 |
 |---|---|---|---|
-|  |  |  |  |
+| 2026-11-14 | Player 기능 나누기 | `PlayerInputHandler`는 키 입력값만 저장, `PlayerMover`는 Rigidbody 이동, `PlayerAnimController`는 애니메이션 실행, `PlayerController`는 허브(값 없이 연결만). 체력과 마나는 별도 스크립트 | 기능마다 고칠 곳을 나누고, Controller가 커지는 것을 막기 위해 |
 
 ---
 
