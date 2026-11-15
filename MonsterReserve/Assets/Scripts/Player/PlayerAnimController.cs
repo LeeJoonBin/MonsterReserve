@@ -6,12 +6,20 @@ public class PlayerAnimController : MonoBehaviour
     private static readonly int MoveXHash = Animator.StringToHash("MoveX");
     private static readonly int MoveYHash = Animator.StringToHash("MoveY");
     private static readonly int IsRunningHash = Animator.StringToHash("IsRunning");
+    private static readonly int IsMeditatingHash = Animator.StringToHash("IsMeditating");
 
     // 모델(PicoChan)에 붙은 Animator를 연결한다
     [SerializeField] private Animator _animator;
     [SerializeField] private PlayerInputHandler _inputHandler;
+    [SerializeField] private PlayerMana _playerMana;
 
-    private void Update() => UpdateLocomotion();
+    private void Update() => UpdateAnimatorParameters();
+
+    private void UpdateAnimatorParameters()
+    {
+        UpdateLocomotion();
+        UpdateMeditation();
+    }
 
     // 값을 받는 길은 세 가지다 : 입력에게 직접 묻기, PlayerMover가 이벤트로 알리기, PlayerController가 전달하기.
     // 여기서는 "직접 묻기"를 골랐다. 매 프레임 바뀌는 값이라 이벤트로 알려도 매 프레임 불리기 때문이다.
@@ -25,5 +33,9 @@ public class PlayerAnimController : MonoBehaviour
         _animator.SetBool(IsRunningHash, _inputHandler.IsSprinting && input != Vector2.zero);
     }
 
-    // TODO: 점프, 공중 애니메이션은 Animator에 점프 상태를 만든 뒤 작성 (PlayerMover.IsGrounded 사용)
+    // R키 입력이 아니라 PlayerMana에게 묻는다. "명상 중인가"를 정하는 곳은 PlayerMana 한 곳이다 (PlayerMover도 같은 값을 읽는다)
+    private void UpdateMeditation()
+    {
+        _animator.SetBool(IsMeditatingHash, _playerMana.IsMeditating);
+    }
 }

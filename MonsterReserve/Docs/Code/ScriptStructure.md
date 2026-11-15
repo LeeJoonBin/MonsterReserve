@@ -2,7 +2,7 @@
 
 > 작성 : 2026-11-12. 상세화 : 2026-11-13 (폴더별 의존 관계, 패턴 후보, 알고리즘 메모 추가).
 > 게임 로직 스크립트를 짜기 전에 참고하는 **초안**이다. 정답이 아니라 출발점이다.
-> 스크립트는 사용자가 직접 작성하므로, 이 문서의 이름, 나눈 방식, 연결 방식은 사용자가 따져 보고 고친다.
+> 
 > 정해진 규칙은 `Docs/TechSpec.md`(폴더 구조, 연결 원칙, 수치 관리), `Docs/Code/code-convention.md`(이름, 작성 규칙), `Docs/Design/GameDesign.md`(게임 규칙)에 있다. 이 문서는 그 규칙을 다시 적지 않는다.
 
 ### 이 문서를 읽는 법
@@ -68,7 +68,7 @@ flowchart TD
 
 | 스크립트 | 아는 것 (참조) | 알리는 것 (이벤트) |
 |---|---|---|
-| `PlayerMover` | 입력, 몸 Transform | 없음 (애니메이션이 이동 속도를 읽어 갈 수 있다) |
+| `PlayerMover` | 입력, 몸 Transform, `PlayerMana` (명상 중인가) | 없음 (애니메이션이 이동 속도를 읽어 갈 수 있다) |
 | `PlayerLook` | 입력, 카메라 | 없음 |
 | `PlayerHealth` | 없음 | 체력 바뀜, 사망 |
 | `PlayerMana` | 입력 | 마나 바뀜 |
@@ -94,7 +94,7 @@ flowchart TD
   - 참/거짓 하나 : 가장 단순하다. 하지만 두 곳이 잠근 뒤 한 곳만 풀어도 풀려 버린다.
   - 잠금 개수 세기 : 잠그면 1 더하고 풀면 1 뺀다. 0일 때만 회전한다. 짝이 안 맞게 부르면 영영 잠기거나 음수가 된다.
   - 요청자 목록 : 누가 잠갔는지 목록에 넣고 뺀다. 같은 곳이 두 번 불러도 한 번으로 친다. 목록을 관리하는 만큼 코드가 늘어난다.
-- **명상** : 키를 누른 순간 회복을 시작하고, 뗀 순간 멈춘다. 회복 중에는 매 프레임 `초당 회복량 × 지난 시간`만큼 더하고, 최대 마나를 넘지 않게 자른다 (회복량, 최대 마나 미정). 명상 중 이동 가능 여부는 미정이다.
+- **명상** : 키를 누른 순간 회복을 시작하고, 뗀 순간 멈춘다. 회복 중에는 매 프레임 `초당 회복량 × 지난 시간`만큼 더하고, 최대 마나를 넘지 않게 자른다 (회복량, 최대 마나는 임시값. GameDesign.md 결정 기록 2026-11-15). 명상 중에는 이동하지 않는다.
 - **레벨업** : 경험치를 더한 뒤, 필요 경험치를 넘었으면 레벨을 올리고 남는 경험치를 다음 레벨로 넘긴다. 몬스터 한 마리로 두 레벨이 오를 수 있는지에 따라 "한 번만 확인"과 "넘는 동안 반복"이 갈린다 (필요 경험치 표 미정).
 - **바라보는 대상 찾기** : 화면 가운데에서 카메라 앞쪽으로 광선을 쏴 처음 맞은 것이 `IInteractable`인지 본다 (최대 거리 미정). 대상이 바뀌었을 때만 알리면 UI가 매 프레임 다시 그리지 않아도 된다.
 - **추적 방향** : 대상 위치에서 플레이어 위치를 빼면 방향이 나온다. 높이 차이를 뺀 수평 방향만 쓸지, 카메라가 보는 방향과 몇 도 차이인지로 바꿔서 UI에 넘길지 정한다.
@@ -240,6 +240,7 @@ flowchart TD
 
 - UI는 Claude(`ui-designer`) 담당이다. 구조는 `Docs/UI/UI.md`를 따른다 (작성 예정).
 - 게임 로직 쪽에서 정할 것은 "UI가 무엇을 읽어 가고, 무엇을 알림받는가"다. 위 폴더별 "알리는 것" 열이 그 목록의 초안이다.
+- `UI/TitleMenu` : 시작 화면 버튼 3개 (New Game → Game 씬, Continue는 저장 기능 전까지 비활성, Quit → 종료). 버튼 클릭은 코드(`AddListener`)로 연결한다.
 
 ---
 
@@ -312,6 +313,14 @@ flowchart TD
 
 | 날짜 | 질문 번호 | 결정 | 이유 |
 |---|---|---|---|
+| 2026-11-15 | Player 명상 | "명상 중인가"는 `PlayerMana.IsMeditating` 한 곳에서 정하고, `PlayerMover`(이동 정지)와 `PlayerAnimController`(명상 모션)가 읽는다. `PlayerInputHandler`는 R키 상태(`IsMeditateHeld`)만 저장한다 | 나중에 "명상할 수 없는 조건"이 생겨도 한 곳만 고치면 된다 |
+| 2026-11-15 | UI 버튼 연결 | UI 버튼 클릭은 OnEnable에서 `AddListener`로 구독하고 OnDisable에서 해제한다. 인스펙터 OnClick은 쓰지 않는다 | 스크립트만 읽어도 무엇이 연결됐는지 알 수 있고, 이벤트 구독 규칙과 같은 방식이다 |
+| 2026-11-15 | 3번 멈추기, 4번 입력 끄기 | ESC, M 입력은 `Core/GameStateInputHandler`가 받아 `ChangeState`를 요청한다. 시점 잠금은 `PlayerController`(허브)가 상태 변화를 구독해 `PlayerLook`에 요청한다. `GameManager`, `PoolManager`는 `[DefaultExecutionOrder(-100)]` | `GameManager`는 상태만 맡고, 키는 여러 요청자 중 하나다. `PlayerLook`이 `GameManager`를 몰라도 된다. 다른 스크립트의 `OnEnable`에서 `Instance`가 비어 있지 않게 |
+| 2026-11-15 | 6번 | `IDamageable`은 `Core/`에 둔다. 피해량은 `float`. `PlayerHealth`는 사망 시 `GameManager.Instance.ChangeState(Dead)`를 직접 요청한다 | 플레이어와 몬스터가 함께 쓰는 약속이라 특정 기능 폴더에 속하지 않는다. `GameManager`가 플레이어를 구독하면 Core가 Player에 의존하게 된다 |
+| 2026-11-15 | 3번 (C-1, C-2) | `Core` 폴더를 둔다. `GameManager`는 상태(`Playing`, `Map`, `Paused`, `Dead`)와 멈춤만 맡는다. `Playing`이 아니면 시간 배율 0 (사망 포함). 의뢰 정보 팝업(J)은 상태에 넣지 않는다 | 게임 상태와 풀은 특정 기능에 속하지 않는다. J 팝업은 게임을 멈추지 않고 시점 잠금은 `PlayerLook`이 맡는다 |
+| 2026-11-15 | 3번 어디서든 찾기 (C-3) | `GameManager`, `PoolManager` 둘만 싱글톤 | 쓰는 곳이 많아 인스펙터 연결이 많아진다. 싱글톤은 이 둘로 제한한다 |
+| 2026-11-15 | Magic 투사체 만들고 지우기 (C-4) | `UnityEngine.Pool.ObjectPool`, 프리팹마다 풀 하나 (`PoolManager`) | 중복 반납 검사와 최대 개수 제한이 이미 들어 있다 |
+| 2026-11-15 | C-5 | `Core/SpawnManager` 삭제. 몬스터 배치는 몬스터 단계에서 `Monsters/MonsterSpawner`로 만든다 | `Monster`가 없어 지금은 배치 코드를 쓸 수 없고, 역할이 겹친다 |
 | 2026-11-14 | Player 기능 나누기 | `PlayerInputHandler`는 키 입력값만 저장, `PlayerMover`는 Rigidbody 이동, `PlayerAnimController`는 애니메이션 실행, `PlayerController`는 허브(값 없이 연결만). 체력과 마나는 별도 스크립트 | 기능마다 고칠 곳을 나누고, Controller가 커지는 것을 막기 위해 |
 
 ---
