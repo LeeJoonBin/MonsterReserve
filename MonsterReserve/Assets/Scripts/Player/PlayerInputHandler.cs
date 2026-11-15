@@ -7,7 +7,6 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField] private InputActionReference _detectAction; // 탐지, 추적키
     [SerializeField] private InputActionReference _healAction;
     [SerializeField] private InputActionReference _interactAction;
-    [SerializeField] private InputActionReference _jumpAction;
     [SerializeField] private InputActionReference _lookAction; //마우스
     [SerializeField] private InputActionReference _meditateAction;
     [SerializeField] private InputActionReference _moveAction;
@@ -27,7 +26,8 @@ public class PlayerInputHandler : MonoBehaviour
     public Vector2 MoveInput { get; private set; }
     public Vector2 LookInput { get; private set; }
     public bool IsSprinting { get; private set; }
-    public bool IsJumpPressed { get; private set; }
+    // R키를 누르고 있는가. "명상 중인가"의 판단은 PlayerMana가 한다
+    public bool IsMeditateHeld { get; private set; }
     private void OnEnable()
     {
         BindInputEvents();
@@ -36,12 +36,6 @@ public class PlayerInputHandler : MonoBehaviour
     private void OnDisable()
     {
         UnbindInputEvents();
-    }
-
-    // PlayerMover가 점프를 처리했다고 알리는 요청. 한 번 누르면 한 번만 뛰게 하려고 둔다
-    public void ConsumeJump()
-    {
-        IsJumpPressed = false;
     }
 
     private void BindInputEvents()
@@ -61,9 +55,6 @@ public class PlayerInputHandler : MonoBehaviour
         _interactAction.action.performed += OnInteract;
         _interactAction.action.canceled += OnInteract;
 
-        _jumpAction.action.performed += OnJump;
-        _jumpAction.action.canceled += OnJump;
-        
         _lookAction.action.performed += OnLook;
         _lookAction.action.canceled += OnLook;
 
@@ -91,7 +82,6 @@ public class PlayerInputHandler : MonoBehaviour
         _detectAction.action.Enable();
         _healAction.action.Enable();
         _interactAction.action.Enable();
-        _jumpAction.action.Enable();
         _lookAction.action.Enable();
         _meditateAction.action.Enable();
         _moveAction.action.Enable();
@@ -122,9 +112,6 @@ public class PlayerInputHandler : MonoBehaviour
         _interactAction.action.performed -= OnInteract;
         _interactAction.action.canceled -= OnInteract;
 
-        _jumpAction.action.performed -= OnJump;
-        _jumpAction.action.canceled -= OnJump;
-        
         _lookAction.action.performed -= OnLook;
         _lookAction.action.canceled -= OnLook;
 
@@ -152,7 +139,6 @@ public class PlayerInputHandler : MonoBehaviour
         _detectAction.action.Disable();
         _healAction.action.Disable();
         _interactAction.action.Disable();
-        _jumpAction.action.Disable();
         _lookAction.action.Disable();
         _meditateAction.action.Disable();
         _moveAction.action.Disable();
@@ -191,21 +177,16 @@ public class PlayerInputHandler : MonoBehaviour
         
     }
 
-    // 점프는 "한 번 누른 사건"이라, 누른 순간 켜 두고 PlayerMover가 처리할 때 끈다.
-    // Update(입력)와 FixedUpdate(물리)는 도는 횟수가 달라서, 입력 쪽에서 바로 끄면 FixedUpdate가 못 보고 지나칠 수 있다.
-    // 다른 방법 : InputAction.WasPressedThisFrame()을 쓰면 직접 끌 필요는 없지만, 이것도 "프레임" 기준이라 같은 문제를 따져 봐야 한다.
-    private void OnJump(InputAction.CallbackContext context)
-    {
-        if (context.performed) IsJumpPressed = true;
-    }
-
     // canceled는 마우스가 멈출 때 들어오고, 이때 값이 (0,0)이다. 그래서 performed와 같은 코드로 처리해도 된다.
     private void OnLook(InputAction.CallbackContext context)
     {
         LookInput = context.ReadValue<Vector2>();
     }
+    // OnSprint와 같은 방식 : 누르면 performed, 떼면 canceled
     private void OnMeditate(InputAction.CallbackContext context)
-    {}
+    {
+        IsMeditateHeld = context.performed;
+    }
 
     // 키를 모두 떼면 canceled가 (0,0)을 들고 온다
     private void OnMove(InputAction.CallbackContext context)
