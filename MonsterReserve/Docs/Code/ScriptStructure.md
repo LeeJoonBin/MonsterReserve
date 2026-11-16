@@ -313,6 +313,7 @@ flowchart TD
 
 | 날짜 | 질문 번호 | 결정 | 이유 |
 |---|---|---|---|
+| 2026-11-16 | P-3 (자원 쓰기) | "한 번에 시도". `PlayerMana.UseMana(amount)`가 쓸 양을 받아, 충분하면 빼고 알린 뒤 `true`, 부족하면 그대로 두고 `false`를 돌려준다. 돈을 쓸 때도 같은 모양을 쓴다 | 확인과 빼기가 한 메서드 안에 있어, 부르는 쪽이 실수해도 마나가 음수가 되지 않는다 |
 | 2026-11-15 | Player 명상 | "명상 중인가"는 `PlayerMana.IsMeditating` 한 곳에서 정하고, `PlayerMover`(이동 정지)와 `PlayerAnimController`(명상 모션)가 읽는다. `PlayerInputHandler`는 R키 상태(`IsMeditateHeld`)만 저장한다 | 나중에 "명상할 수 없는 조건"이 생겨도 한 곳만 고치면 된다 |
 | 2026-11-15 | UI 버튼 연결 | UI 버튼 클릭은 OnEnable에서 `AddListener`로 구독하고 OnDisable에서 해제한다. 인스펙터 OnClick은 쓰지 않는다 | 스크립트만 읽어도 무엇이 연결됐는지 알 수 있고, 이벤트 구독 규칙과 같은 방식이다 |
 | 2026-11-15 | 3번 멈추기, 4번 입력 끄기 | ESC, M 입력은 `Core/GameStateInputHandler`가 받아 `ChangeState`를 요청한다. 시점 잠금은 `PlayerController`(허브)가 상태 변화를 구독해 `PlayerLook`에 요청한다. `GameManager`, `PoolManager`는 `[DefaultExecutionOrder(-100)]` | `GameManager`는 상태만 맡고, 키는 여러 요청자 중 하나다. `PlayerLook`이 `GameManager`를 몰라도 된다. 다른 스크립트의 `OnEnable`에서 `Instance`가 비어 있지 않게 |
