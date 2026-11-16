@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,6 +8,7 @@ public class MagicProjectile : MonoBehaviour
 
     [SerializeField] private LayerMask LayerMask;
     [SerializeField] private float _bulletSpeed = 450f;
+    [SerializeField] private float _manaCost = 10f;
     // 좌클릭할 때 풀에서 당겨올거니까 여기에서 설정할 필요없고 정보 전달하는 것만 할까? 그럼 public 으로 선언할 필요없잖아.
     
     private float _t;
@@ -17,13 +17,15 @@ public class MagicProjectile : MonoBehaviour
     private Vector3 _currentPosition;
     private Vector3 _currentVelocity;
     
+    public float ManaCost => _manaCost;
+    
     private void OnEnable()
     {
         _t = Time.fixedDeltaTime;
         _currentPosition = transform.position;
         // _position = transform.position; // 시작할 때 현재위치로 설정
         _currentVelocity = _bulletSpeed * transform.forward;
-        
+        StartCoroutine(ReleaseBullet());
     }
      
     private void FixedUpdate()
@@ -45,7 +47,6 @@ public class MagicProjectile : MonoBehaviour
         
         // 현재 포지션 계산
         newPosition = currentPosition + _t * newVelocity;
-        
     }
 
     private void MoveBullet()
@@ -58,7 +59,6 @@ public class MagicProjectile : MonoBehaviour
         _currentVelocity = _newVelocity;
         
         transform.position = _currentPosition;
-        DestroyBullet();
     }
 
     private void CheckHit()
@@ -76,17 +76,13 @@ public class MagicProjectile : MonoBehaviour
         {
             // [시험용] 맞은 구간은 출발점부터 맞은 점까지 빨간 선으로 덮어 그린다
             Debug.DrawLine(_currentPosition, hit.point, Color.red, DebugLineDuration);
-
-            //IDamageable.TakeDamage(_bulletSpeed);
-            Destroy(this);
-            //PoolManager.Instance.GetOrAddComponent<>();
+            PoolManager.Instance.Release(gameObject);
         }
         
     }
-    private IEnumerator DestroyBullet()
+    private IEnumerator ReleaseBullet()
     {
-        Destroy(gameObject);
-
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(5f);
+        PoolManager.Instance.Release(gameObject);
     }
 }
