@@ -25,9 +25,12 @@
 | 애니메이션 | Karate / Mage Warrior Mecanim Animation Pack (ExplosiveLLC) | `ExplosiveLLC/` | 애니메이션만 쓴다. 모델, 머티리얼 (Built-in Standard), 데모 스크립트와 씬은 쓰지 않는다 |
 | 애니메이션 | Human Animations (Kevin Iglesias) | `Kevin Iglesias/Human Animations/` | |
 | 마법 투사체 모양 | LowPoly Planets Pack (iPoly3D) | `iPoly3D/LowPoly Planets Pack/` | URP용 머티리얼을 쓴다 (`BuildIn` 폴더는 쓰지 않는다) |
+| 몬스터 | Infinity PBR 몬스터 번들 20종 (Magic Pig Games) | `Magic Pig Games (Infinity PBR)/` | Built-in용이라 원본 머티리얼을 URP로 변환해 쓴다 (2026-11-17, 아래 참고). 리그는 대부분 Generic (Goblin 등 일부 Humanoid). 데모 씬과 스크립트는 쓰지 않는다. 기본 몬스터는 Skeleton Warrior |
 
 - 가져온 에셋 수정 : `ExplosiveLLC/SuperCharacterController/.../Core/SuperCharacterController.cs`의 struct `Ground`에 붙은 `[SerializeField]`를 지웠다 (CS0592 컴파일 오류, 2026-11-13). 에셋을 다시 가져오면 다시 지운다.
+- 몬스터 번들 URP 변환 (2026-11-17) : `Standard`, `Standard (Specular setup)`, `Autodesk Interactive` 머티리얼 133개를 URP 머티리얼 업그레이더로 변환했다. 아직 Built-in 전용으로 남은 것 : `InfinityPBR/LPColor` 21개 (번들의 `IPBR_LPColor_URP_Unity6.unitypackage`를 임포트하면 해결), `InfinityPBR/IPBR_DiffuseHSL` 23개 (URP 버전 없음, 쓸 때 URP Lit으로 바꾼다), 파티클 머티리얼. `Imports/`는 Git에서 제외되므로 다른 컴퓨터에서 번들을 임포트하면 변환을 다시 한다.
 - 사운드 에셋 : 미정
+- 몬스터 행동 : Unity Behavior (`com.unity.behavior` 1.0.17)의 Behavior Graph로 만든다. 이동은 NavMesh (`com.unity.ai.navigation`, `NavMeshAgent`). (2026-11-17 결정)
 
 ## 성능
 
@@ -85,7 +88,8 @@ Assets/
 기능 폴더
 
 ```
-Core/      게임 전체 상태, 오브젝트 풀, 공통 인터페이스
+Core/      게임 전체 상태, 오브젝트 풀, 공통 구조체 (DamageInfo)
+Interface/ 여러 기능이 함께 쓰는 인터페이스 (IDamageable, IInteractable)
 Player/    이동, 체력, 스킬
 Magic/     마법
 Monsters/
