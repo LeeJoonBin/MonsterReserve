@@ -126,7 +126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MagicProjectile
   _layerMask:
     serializedVersion: 2
-    m_Bits: 16
+    m_Bits: 256
   _bulletSpeed: 450
   _manaCost: 10
   _damage: 30
