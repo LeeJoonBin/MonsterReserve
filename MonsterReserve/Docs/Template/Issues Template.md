@@ -1,7 +1,7 @@
 # Issue Template
 
 > GitHub 이슈 작성 양식. 각 섹션의 작성 규칙은 `Docs/Documentation/Github Issue Rule.md`를 따른다.
-> 이슈의 제목, 라벨, 본문은 모두 영어로 쓴다.
+> 제목과 라벨은 영어로 쓴다. 본문 언어는 작업 주체에 따라 다르다 (`Github Issue Rule.md`의 "언어"). 한글 본문은 섹션 이름도 한글로 쓴다.
 
 ```markdown
 ## Type
