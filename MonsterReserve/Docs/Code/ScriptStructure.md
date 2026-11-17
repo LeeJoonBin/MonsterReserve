@@ -33,7 +33,7 @@ flowchart TD
 
 | 이름 | 뜻 | 쓰는 곳 (후보) |
 |---|---|---|
-| `IDamageable` | 맞을 수 있는 것 | 플레이어, 몬스터 |
+| `IDamageable` | 맞을 수 있는 것. 피해 정보 구조체 `DamageInfo`(피해량, 맞은 위치, 쏜 위치)를 받는다 | 플레이어, 몬스터 |
 | `IInteractable` | E키로 상호작용할 수 있는 것 | 시체, 회복 지점, 의뢰서, 상점 |
 
 - 두 인터페이스를 어느 폴더에 둘지는 미정이다 (`## 5. 생각해 볼 질문` 6번).
@@ -106,7 +106,7 @@ flowchart TD
 | `MagicCaster` | 마우스 왼쪽 클릭 발사. 마나 소모를 요청하고, 성공하면 투사체를 꺼낸다. 시전 간격 관리 (마법 다루기 스킬이 시전 속도에 영향) |
 | `MagicSelector` | 숫자 키 1~5, 마우스 휠로 교체. 가진 마법만 고를 수 있다. 바뀌면 알린다 |
 | `MagicAim` | 마우스 오른쪽 클릭 줌인. 시야각을 배율에 맞게 바꾼다 (배율 미정. 마법 다루기 스킬이 줌인 속도에 영향) |
-| `MagicProjectile` | 탄도 (중력 낙차와 비행 시간). 맞힌 대상의 `IDamageable`에 피해를 준다 |
+| `MagicProjectile` | 탄도 (중력 낙차와 비행 시간). 날아간 거리를 모아 거리별 피해를 계산하고, 맞힌 대상의 `IDamageable`에 `DamageInfo`를 넘긴다. 맞거나 일정 시간이 지나면 풀로 돌아간다 |
 
 **의존 관계**
 
@@ -313,6 +313,10 @@ flowchart TD
 
 | 날짜 | 질문 번호 | 결정 | 이유 |
 |---|---|---|---|
+| 2026-11-17 | M-2 (투사체 움직이기) | 직접 계산한다. `MagicProjectile`이 `FixedUpdate`마다 반암시적 오일러(속도 먼저, 그 속도로 위치)로 다음 위치를 구하고, 이전 위치와 다음 위치 사이를 `Physics.Raycast`로 검사해 맞힘을 판정한다. 맞은 단계는 `hit.distance`, 안 맞은 단계는 한 단계 이동 거리를 더해 날아간 거리를 모은다. 거리별 피해는 `Mathf.InverseLerp` → `Mathf.Lerp`. 풀에서 다시 꺼낼 때 `TrailRenderer.Clear()`로 이전 꼬리를 지운다 | 한 단계에 수 m씩 움직여 얇은 물체를 뚫고 지나가는 문제를 사이 검사로 막는다. 공식을 직접 알아야 나중에 궤적 표시와 조준 보정에 쓸 수 있다 |
+| 2026-11-17 | 6번 변경 (피해 정보) | `IDamageable`이 피해량 `float` 대신 피해 정보 구조체 하나를 받는다. 담는 값은 피해량, 맞은 위치, 공격한 쪽 세 가지. 구조체 이름은 `DamageInfo`. "공격한 쪽"은 쏜 위치(`Vector3`, 탄이 출발한 자리)로 하고, 몬스터는 맞으면 그 위치 쪽으로 이동한다 (플레이어를 계속 따라가지는 않는다). 마법의 피격 이펙트는 맞은 쪽이 아니라 `MagicProjectile`이 띄우므로, 이펙트 방향은 `DamageInfo`에 넣지 않는다 | 맞은 위치는 피격 이펙트에, 쏜 위치는 몬스터가 쏜 쪽으로 이동할 때 필요하다. 탄은 날아온 방향과 `RaycastHit`을 이미 가지고 있어 맞은 쪽에 넘길 필요가 없다. 나중에 값이 늘어도 인터페이스 모양은 그대로다 |
+| 2026-11-16 | 1번 (마법 데이터) | 마법마다 다른 값(마나 소모, 탄속 등)은 마법마다 만든 투사체 프리팹의 필드에 두고 인스펙터에서 조정한다. ScriptableObject와 열거형별 값 표는 쓰지 않는다. 마법 종류를 구분하는 열거형은 `MagicSelector`나 저장을 만들 때 정한다 | 한 마법의 값이 한 곳에 모이고, TechSpec의 "별도 데이터 파일을 만들지 않는다" 규칙과 맞는다. 지금 정해진 마법은 마력탄 하나뿐이다 |
+| 2026-11-16 | P-3 (자원 쓰기) | "한 번에 시도". `PlayerMana.UseMana(amount)`가 쓸 양을 받아, 충분하면 빼고 알린 뒤 `true`, 부족하면 그대로 두고 `false`를 돌려준다. 돈을 쓸 때도 같은 모양을 쓴다 | 확인과 빼기가 한 메서드 안에 있어, 부르는 쪽이 실수해도 마나가 음수가 되지 않는다 |
 | 2026-11-15 | Player 명상 | "명상 중인가"는 `PlayerMana.IsMeditating` 한 곳에서 정하고, `PlayerMover`(이동 정지)와 `PlayerAnimController`(명상 모션)가 읽는다. `PlayerInputHandler`는 R키 상태(`IsMeditateHeld`)만 저장한다 | 나중에 "명상할 수 없는 조건"이 생겨도 한 곳만 고치면 된다 |
 | 2026-11-15 | UI 버튼 연결 | UI 버튼 클릭은 OnEnable에서 `AddListener`로 구독하고 OnDisable에서 해제한다. 인스펙터 OnClick은 쓰지 않는다 | 스크립트만 읽어도 무엇이 연결됐는지 알 수 있고, 이벤트 구독 규칙과 같은 방식이다 |
 | 2026-11-15 | 3번 멈추기, 4번 입력 끄기 | ESC, M 입력은 `Core/GameStateInputHandler`가 받아 `ChangeState`를 요청한다. 시점 잠금은 `PlayerController`(허브)가 상태 변화를 구독해 `PlayerLook`에 요청한다. `GameManager`, `PoolManager`는 `[DefaultExecutionOrder(-100)]` | `GameManager`는 상태만 맡고, 키는 여러 요청자 중 하나다. `PlayerLook`이 `GameManager`를 몰라도 된다. 다른 스크립트의 `OnEnable`에서 `Instance`가 비어 있지 않게 |

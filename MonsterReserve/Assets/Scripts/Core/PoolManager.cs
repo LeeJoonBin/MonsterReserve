@@ -7,7 +7,6 @@ using UnityEngine.Pool;
 [DefaultExecutionOrder(-100)]
 public class PoolManager : MonoBehaviour
 {
-    // 임시값 (GameDesign.md에 확정된 값 없음)
     [SerializeField] private int _defaultCapacity = 10;
     [SerializeField] private int _maxSize = 100;
 

@@ -7,7 +7,7 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private PlayerInputHandler _inputHandler;
     [SerializeField] private PlayerMana _playerMana;
 
-    // 수치는 모두 임시값 (GameDesign.md에 확정된 값 없음. 걷기는 "초속 3~5m 가정"만 있음)
+    // 수치는 모두 변경되는 값 (플레이하며 조정한다. 걷기는 GameDesign.md의 "초속 3~5m 가정" 참고)
     [Header("속도")]
     [SerializeField] private float _walkSpeed = 4f;
     [SerializeField] private float _sprintSpeed = 7f;
