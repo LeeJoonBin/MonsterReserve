@@ -85,8 +85,6 @@ public class MagicProjectile : MonoBehaviour
                 damageable.TakeDamage(new DamageInfo(CalculateDamage(_distance), hit.point, _startPosition));
             }
             // Debug.DrawLine(_currentPosition, hit.point, Color.red, DebugLineDuration);
-            // 시험용 : 날아간 거리와 계산된 데미지 확인 (_damage는 기본값이라 항상 같은 값이 찍힌다)
-            Debug.Log($"[MagicProjectile] 거리 {_distance:F1}m / 데미지 {CalculateDamage(_distance):F1} (맞은 대상 {hit.collider.name})");
             PoolManager.Instance.Release(gameObject);
         }
         else
