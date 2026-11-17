@@ -1,5 +1,7 @@
 using UnityEngine;
+using System;
 using UnityEngine.InputSystem;
+
 public class PlayerInputHandler : MonoBehaviour
 {
     [SerializeField] private InputActionReference _aimAction; // 사격 줌인
@@ -19,7 +21,8 @@ public class PlayerInputHandler : MonoBehaviour
     
     private PlayerAnimController _playerAnimController;
     
-    public static bool IsAiming { get; private set; }
+    public bool IsAiming { get; private set; }
+    public event Action<bool> OnAimChanged;
 
     // PlayerMover, PlayerLook이 읽어 가는 입력값 (값 저장만 하고 판단은 하지 않는다)
     public Vector2 MoveInput { get; private set; }
@@ -102,9 +105,7 @@ public class PlayerInputHandler : MonoBehaviour
         _magic5Action.action.Enable();
         _sprintAction.action.Enable();
     }
-
     
-
     private void UnbindInputEvents()
     {
         _aimAction.action.performed -= OnAim;
@@ -161,9 +162,8 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void OnAim(InputAction.CallbackContext context)
     {
-        IsAiming = true; // 줌인 확인용
-        // 마우스 스피드 감소
-        
+        IsAiming = context.performed;
+        OnAimChanged?.Invoke(IsAiming); // 조준 상태가 바뀌면 알림
     }
     
     private void OnCastMagic(InputAction.CallbackContext context)
@@ -203,7 +203,6 @@ public class PlayerInputHandler : MonoBehaviour
         MoveInput = context.ReadValue<Vector2>();
     }
     private void OnSelectMagic1(InputAction.CallbackContext context){}
-    
     private void OnSelectMagic2(InputAction.CallbackContext context){}
     private void OnSelectMagic3(InputAction.CallbackContext context){}
     private void OnSelectMagic4(InputAction.CallbackContext context){}
