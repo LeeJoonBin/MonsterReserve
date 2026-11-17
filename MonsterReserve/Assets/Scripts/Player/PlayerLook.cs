@@ -9,7 +9,7 @@ public class PlayerLook : MonoBehaviour
     [SerializeField] private PlayerInputHandler _inputHandler;
     [SerializeField] private Transform _cameraTransform;
 
-    // 수치는 모두 임시값 (GameDesign.md에 확정된 값 없음)
+    // 수치는 모두 변경되는 값 (플레이하며 조정한다)
     [Header("회전")]
     [SerializeField] private float _sensitivity = 0.1f;
     [SerializeField] private float _minPitch = -80f;

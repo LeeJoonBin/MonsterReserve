@@ -8,7 +8,7 @@ public class PlayerMana : MonoBehaviour
     [Header("참조")]
     [SerializeField] private PlayerInputHandler _inputHandler;
 
-    // 수치는 모두 임시값 (GameDesign.md에 "미정". 2026-11-15 사용자가 임시값으로 정함)
+    // 수치는 모두 변경되는 값 (플레이하며 조정한다)
     [Header("마나")]
     [SerializeField] private float _maxMana = 100f;
     [SerializeField] private float _meditationRegenPerSecond = 10f;
@@ -32,6 +32,15 @@ public class PlayerMana : MonoBehaviour
         CurrentMana = _maxMana;
     }
 
+    public bool UseMana(float amount)
+    {
+        if (CurrentMana < amount) return false;
+        
+        CurrentMana -= amount;
+        OnManaChanged?.Invoke(CurrentMana, _maxMana);
+        return true;
+    }
+    
     // 초당 회복량 × 지난 시간 : 프레임이 몇 번 돌든 1초에 회복되는 양은 같다.
     // 일시 정지, 맵에서는 시간 배율이 0이라 Time.deltaTime도 0이 되어 저절로 멈춘다.
     // 생각해 볼 것 : 시간 배율이 0일 때도 OnManaChanged는 매 프레임 불린다. 값이 그대로인데 알릴 필요가 있을까?

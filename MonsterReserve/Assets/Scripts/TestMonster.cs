@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class TestMonster : MonoBehaviour, IDamageable
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -12,5 +12,10 @@ public class Projectile : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void TakeDamage(DamageInfo damageInfo)
+    {
+        Debug.Log(damageInfo.Damage);
     }
 }

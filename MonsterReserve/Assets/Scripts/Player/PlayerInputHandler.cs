@@ -20,7 +20,6 @@ public class PlayerInputHandler : MonoBehaviour
     private PlayerAnimController _playerAnimController;
     
     public static bool IsAiming { get; private set; }
-    public static bool IsCasting { get; private set; }
 
     // PlayerMover, PlayerLook이 읽어 가는 입력값 (값 저장만 하고 판단은 하지 않는다)
     public Vector2 MoveInput { get; private set; }
@@ -28,6 +27,8 @@ public class PlayerInputHandler : MonoBehaviour
     public bool IsSprinting { get; private set; }
     // R키를 누르고 있는가. "명상 중인가"의 판단은 PlayerMana가 한다
     public bool IsMeditateHeld { get; private set; }
+    // 클릭은 "누르고 있는 상태"가 아니라 "한 번 일어난 일"이라, 꺼내 가면 비워지도록 따로 둔다 (한 번 클릭에 한 발)
+    private bool _hasCastInput;
     private void OnEnable()
     {
         BindInputEvents();
@@ -38,13 +39,22 @@ public class PlayerInputHandler : MonoBehaviour
         UnbindInputEvents();
     }
 
+    public bool ConsumeCastInput()
+    {
+        if (!_hasCastInput)
+        {
+            return false;
+        }
+        _hasCastInput = false;
+        return true;
+    }
+    
     private void BindInputEvents()
     {
         _aimAction.action.performed += OnAim;
         _aimAction.action.canceled += OnAim;
         
         _castMagicAction.action.performed += OnCastMagic;
-        _castMagicAction.action.canceled += OnCastMagic;
         
         _detectAction.action.performed += OnDetect;
         _detectAction.action.canceled += OnDetect;
@@ -101,7 +111,6 @@ public class PlayerInputHandler : MonoBehaviour
         _aimAction.action.canceled -= OnAim;
         
         _castMagicAction.action.performed -= OnCastMagic;
-        _castMagicAction.action.canceled -= OnCastMagic;
         
         _detectAction.action.performed -= OnDetect;
         _detectAction.action.canceled -= OnDetect;
@@ -159,7 +168,7 @@ public class PlayerInputHandler : MonoBehaviour
     
     private void OnCastMagic(InputAction.CallbackContext context)
     {
-        // _moveAction = context.ReadValue<Vector2>();
+        _hasCastInput = true;
     }
 
     private void OnDetect(InputAction.CallbackContext context)
