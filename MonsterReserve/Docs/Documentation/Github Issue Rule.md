@@ -18,6 +18,15 @@
     - 예 : `[Feature][UI] Build quest info popup`, `[BugFix][Map] Fix gap at east swamp border`
 - 요약은 한 문장, 무엇을 하는지가 드러나게 쓴다. 동사로 시작한다.
 
+## 브랜치 이름 (2026-11-17 결정)
+
+- GitHub 이슈 화면의 Create a branch는 제목 전체를 이름으로 넣어 너무 길어진다. 만들 때 창에서 이름을 아래 형식으로 고친다.
+- 형식 : `유형/이슈번호-짧은-설명`
+    - 유형 : `feature`, `bugfix`
+    - 짧은 설명 : 영어 소문자 2~4단어를 `-`로 잇는다. 한글과 띄어쓰기는 쓰지 않는다.
+    - 예 : `feature/26-basic-monster`, `feature/24-aim-zoom`, `bugfix/30-trail-line`
+- 이슈를 등록하면 Claude가 추천 브랜치 이름을 함께 알린다.
+
 ## 라벨
 
 - 유형 라벨 : `Feature`, `BugFix`
