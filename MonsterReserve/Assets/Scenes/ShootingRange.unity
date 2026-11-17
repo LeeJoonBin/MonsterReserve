@@ -336,7 +336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MagicCaster
   _spawnPoint: {fileID: 1335222513}
-  _projectile: {fileID: 6759492488040165715, guid: 22a3586cec9e56e418036998ea8be28e, type: 3}
+  _projectile: {fileID: -1172795231108927243, guid: f7afc5e10780b2647bc1daeaefd5a234, type: 3}
   _playerInputHandler: {fileID: 408792763}
   _playerMana: {fileID: 408792762}
 --- !u!114 &408792762 stripped
@@ -2023,11 +2023,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f67839ae1d58a0a40a12f49bb81e768a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MagicProjectile
-  LayerMask:
+  _layerMask:
     serializedVersion: 2
-    m_Bits: 16
+    m_Bits: 0
   _bulletSpeed: 450
   _manaCost: 10
+  _damage: 30
+  _minDamage: 10
+  _startDistance: 300
+  _endDistance: 2000
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -2,9 +2,9 @@ using System;
 using UnityEngine;
 
 // 플레이어 체력. 바뀌면 알리고, 0이 되면 사망을 한 번만 알린 뒤 게임 상태를 사망으로 바꿔 달라고 요청한다.
-public class PlayerHealth : MonoBehaviour, IDamageable
+public class PlayerHealth : MonoBehaviour
 {
-    // 임시값 (GameDesign.md에 확정된 값 없음)
+    // 변경되는 값 (플레이하며 조정한다)
     [SerializeField] private float _maxHealth = 100f;
 
     private bool _isDead;
