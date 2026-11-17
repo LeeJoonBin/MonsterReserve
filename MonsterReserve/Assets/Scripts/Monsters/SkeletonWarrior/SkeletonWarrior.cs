@@ -22,13 +22,14 @@ public class SkeletonWarrior : MonoBehaviour, IDamageable
     public void TakeDamage(DamageInfo  damageInfo)
     {
         if(_isDead) return;
-        _currentHealth -= damageInfo.Damage;
-        OnHit?.Invoke(damageInfo);// 맞았다고 알리기
+        
         _currentHealth = Mathf.Max(_currentHealth - damageInfo.Damage, 0f);
         if (_currentHealth <= 0)
         {
             _isDead = true;
             OnDeath?.Invoke();
+            return;
         }
+        OnHit?.Invoke(damageInfo);// 맞았다고 알리기
     }
 }
