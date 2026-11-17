@@ -1,30 +1,40 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class MagicProjectile : MonoBehaviour
 {
-    // [시험용] 레이 검사 선을 Scene 뷰에 남겨 둘 시간 (초). 확인이 끝나면 지운다
+    // 시험용
     private const float DebugLineDuration = 3f;
 
-    [SerializeField] private LayerMask LayerMask;
+    [SerializeField] private LayerMask _layerMask;
     [SerializeField] private float _bulletSpeed = 450f;
     [SerializeField] private float _manaCost = 10f;
-    // 좌클릭할 때 풀에서 당겨올거니까 여기에서 설정할 필요없고 정보 전달하는 것만 할까? 그럼 public 으로 선언할 필요없잖아.
+    [SerializeField] private float _damage = 30f;
+    [SerializeField] private float _minDamage = 10f;
+    [SerializeField] private float _startDistance = 300f;
+    [SerializeField] private float _endDistance = 2000f;
     
     private float _t;
     private Vector3 _newPosition =  Vector3.zero;
     private Vector3 _newVelocity = Vector3.zero;
     private Vector3 _currentPosition;
     private Vector3 _currentVelocity;
+    private Vector3 _startPosition;
+    private float _distance;
+    private TrailRenderer _trailRenderer;
     
     public float ManaCost => _manaCost;
     
+    private void Awake() => _trailRenderer = GetComponent<TrailRenderer>();
     private void OnEnable()
     {
+        _trailRenderer.Clear();
         _t = Time.fixedDeltaTime;
         _currentPosition = transform.position;
-        // _position = transform.position; // 시작할 때 현재위치로 설정
         _currentVelocity = _bulletSpeed * transform.forward;
+        _startPosition = transform.position;
+        _distance = 0f;
         StartCoroutine(ReleaseBullet());
     }
      
@@ -33,6 +43,7 @@ public class MagicProjectile : MonoBehaviour
         MoveBullet();
     }
 
+   //물리엔진
     public static void BackwardEuler(
         float _t,
         Vector3 currentPosition,
@@ -41,10 +52,8 @@ public class MagicProjectile : MonoBehaviour
         out Vector3 newVelocity)
     {
         Vector3 gravity = Physics.gravity;
-        
         // 속도 계산    
         newVelocity = currentVelocity + _t * gravity;
-        
         // 현재 포지션 계산
         newPosition = currentPosition + _t * newVelocity;
     }
@@ -60,29 +69,40 @@ public class MagicProjectile : MonoBehaviour
         
         transform.position = _currentPosition;
     }
-
     private void CheckHit()
     {
         Vector3 fireDirection = (_newPosition - _currentPosition).normalized;
         float fireDistance = Vector3.Distance(_newPosition, _currentPosition);
-        
-        int layerMask = LayerMask.value;
+        int layerMask = _layerMask.value;
         RaycastHit hit;
-
-        // [시험용] 이번 프레임에 검사한 구간을 Scene 뷰에 초록 선으로 그린다. 확인이 끝나면 지운다
-        Debug.DrawLine(_currentPosition, _newPosition, Color.green, DebugLineDuration);
-
+        // Debug.DrawLine(_currentPosition, _newPosition, Color.green, DebugLineDuration);
         if (Physics.Raycast(_currentPosition, fireDirection, out hit, fireDistance, layerMask))
         {
-            // [시험용] 맞은 구간은 출발점부터 맞은 점까지 빨간 선으로 덮어 그린다
-            Debug.DrawLine(_currentPosition, hit.point, Color.red, DebugLineDuration);
+            _distance += hit.distance;
+            if(hit.collider.TryGetComponent<IDamageable>(out IDamageable damageable))
+            {
+                damageable.TakeDamage(new DamageInfo(CalculateDamage(_distance), hit.point, _startPosition));
+            }
+            // Debug.DrawLine(_currentPosition, hit.point, Color.red, DebugLineDuration);
             PoolManager.Instance.Release(gameObject);
         }
-        
+        else
+        {
+            // 안 맞은 단계는 이번 단계에 움직인 거리를 통째로 더한다
+            _distance += fireDistance;
+        }
     }
+    // 거리별 데미지 계산식
+    private float CalculateDamage(float distance)
+    {
+        float distanceRatio = Mathf.InverseLerp(_startDistance, _endDistance, distance);
+        return Mathf.Lerp(_damage, _minDamage, distanceRatio);
+    }
+    
     private IEnumerator ReleaseBullet()
     {
         yield return new WaitForSeconds(5f);
         PoolManager.Instance.Release(gameObject);
     }
+    // 나중에 비동기로 이팩트 끝날 때까지 기다렸다가 총알 나가게 하기로 수정
 }

@@ -8,7 +8,7 @@ public class PlayerMana : MonoBehaviour
     [Header("참조")]
     [SerializeField] private PlayerInputHandler _inputHandler;
 
-    // 수치는 모두 임시값 (GameDesign.md에 "미정". 2026-11-15 사용자가 임시값으로 정함)
+    // 수치는 모두 변경되는 값 (플레이하며 조정한다)
     [Header("마나")]
     [SerializeField] private float _maxMana = 100f;
     [SerializeField] private float _meditationRegenPerSecond = 10f;
