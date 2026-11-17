@@ -1045,6 +1045,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1543447586}
+  - component: {fileID: 1543447587}
   m_Layer: 4
   m_Name: Targets
   m_TagString: Untagged
@@ -1077,6 +1078,18 @@ Transform:
   - {fileID: 1489668123}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1543447587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543447585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7253e98f4129a8468bde1df4984f770, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestMonster
 --- !u!1 &1617675487
 GameObject:
   m_ObjectHideFlags: 0
