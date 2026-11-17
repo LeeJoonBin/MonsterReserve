@@ -207,7 +207,7 @@ GameObject:
   - component: {fileID: 4369439307999198020}
   - component: {fileID: 2590384223760382382}
   m_Layer: 9
-  m_Name: PicoChan
+  m_Name: PlayerPicoChan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
