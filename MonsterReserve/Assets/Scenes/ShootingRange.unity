@@ -119,6 +119,26 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &161743063 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 620461532946887714, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
+  m_PrefabInstance: {fileID: 1290492068}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &161743066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161743063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45982d26648347544af28f6ebda24406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkeletonAttack
+  _monsterDetector: {fileID: 1818508290}
+  _damage: 10
+  _attackRange: 1.5
 --- !u!1 &304600782
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,6 +1075,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SkeletonWarrior_1
       objectReference: {fileID: 0}
+    - target: {fileID: 5939447553829747298, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
+      propertyPath: _targetHeight
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 8295713097537192399, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6
@@ -1095,10 +1119,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8563728678665539303, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
+      propertyPath: _maxHealth
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 620461532946887714, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 161743066}
   m_SourcePrefab: {fileID: 100100000, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
 --- !u!1 &1318183119
 GameObject:
@@ -1723,6 +1754,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1792257678}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1818508290 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7238602243205577673, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
+  m_PrefabInstance: {fileID: 1290492068}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70d8c92ec860b07409438efa1f2379dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterDetector
 --- !u!1 &1819089680
 GameObject:
   m_ObjectHideFlags: 0
@@ -2077,6 +2119,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SkeletonWarrior_2
       objectReference: {fileID: 0}
+    - target: {fileID: 5939447553829747298, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
+      propertyPath: _targetHeight
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 8295713097537192399, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6
@@ -2116,6 +2162,10 @@ PrefabInstance:
     - target: {fileID: 8295713097537192399, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8563728678665539303, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
+      propertyPath: _maxHealth
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
