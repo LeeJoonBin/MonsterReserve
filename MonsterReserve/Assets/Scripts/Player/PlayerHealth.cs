@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
 
-// 플레이어 체력. 바뀌면 알리고, 0이 되면 사망을 한 번만 알린 뒤 게임 상태를 사망으로 바꿔 달라고 요청한다.
-public class PlayerHealth : MonoBehaviour
+
+public class PlayerHealth : MonoBehaviour, IDamageable
 {
     // 변경되는 값 (플레이하며 조정한다)
     [SerializeField] private float _maxHealth = 100f;
@@ -20,17 +20,17 @@ public class PlayerHealth : MonoBehaviour
     // 현재 체력은 저장하지 않으므로 항상 가득 찬 상태로 시작한다 (TechSpec "저장")
     private void Awake() => ResetHealth();
 
-    public void TakeDamage(float amount)
+    public void TakeDamage(DamageInfo damageInfo)
     {
         // 사망 뒤에 들어온 피해를 받으면 OnDied가 또 불릴 수 있으므로 막는다
         if (_isDead) return;
 
-        CurrentHealth = Mathf.Max(CurrentHealth - amount, 0f);
+        CurrentHealth = Mathf.Max(CurrentHealth - damageInfo.Damage, 0f);
         OnHealthChanged?.Invoke(CurrentHealth, _maxHealth);
 
         if (CurrentHealth <= 0f) Die();
     }
-
+    
     private void ResetHealth()
     {
         CurrentHealth = _maxHealth;
