@@ -16,6 +16,7 @@ public class MagicProjectile : MonoBehaviour
     [SerializeField] private float _endDistance = 2000f;
     
     private float _t;
+    private Transform _attacker;
     private Vector3 _newPosition =  Vector3.zero;
     private Vector3 _newVelocity = Vector3.zero;
     private Vector3 _currentPosition;
@@ -25,6 +26,11 @@ public class MagicProjectile : MonoBehaviour
     private TrailRenderer _trailRenderer;
     
     public float ManaCost => _manaCost;
+
+    public void SetAttacker(Transform attacker)
+    {
+        _attacker = attacker;
+    }
     
     private void Awake() => _trailRenderer = GetComponent<TrailRenderer>();
     private void OnEnable()
@@ -44,7 +50,7 @@ public class MagicProjectile : MonoBehaviour
     }
 
    //물리엔진
-    public static void BackwardEuler(
+   private static void BackwardEuler(
         float _t,
         Vector3 currentPosition,
         Vector3 currentVelocity,
@@ -57,6 +63,7 @@ public class MagicProjectile : MonoBehaviour
         // 현재 포지션 계산
         newPosition = currentPosition + _t * newVelocity;
     }
+    
 
     private void MoveBullet()
     {
@@ -82,7 +89,7 @@ public class MagicProjectile : MonoBehaviour
             _distance += hit.distance;
             if(hit.collider.TryGetComponent<IDamageable>(out IDamageable damageable))
             {
-                damageable.TakeDamage(new DamageInfo(CalculateDamage(_distance), hit.point, _startPosition));
+                damageable.TakeDamage(new DamageInfo(CalculateDamage(_distance), hit.point, _startPosition, _attacker));
             }
             // Debug.DrawLine(_currentPosition, hit.point, Color.red, DebugLineDuration);
             PoolManager.Instance.Release(gameObject);
