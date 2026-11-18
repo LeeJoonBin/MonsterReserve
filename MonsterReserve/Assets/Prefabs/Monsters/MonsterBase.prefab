@@ -74,7 +74,7 @@ MonoBehaviour:
     m_Bits: 183
   _viewAngle: 60
   _eyeHeight: 2
-  _targetHeight: 1.4
+  _targetHeight: 0.7
 --- !u!1 &8364119299307342525
 GameObject:
   m_ObjectHideFlags: 0
@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 1925566669600474165}
   - component: {fileID: 2852136205689172632}
   - component: {fileID: 5918568112763696074}
+  - component: {fileID: 7314925806143275561}
   m_Layer: 8
   m_Name: MonsterBase
   m_TagString: Untagged
@@ -209,7 +210,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkeletonWarrior
   _maxHealth: 1000
-  _damage: 0
 --- !u!114 &5918568112763696074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,6 +223,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterBlackboardWriter
   _stealth: 0
+--- !u!114 &7314925806143275561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8364119299307342525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a33962add62d6548a2e93a0f082c1ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterDeath
 --- !u!1001 &6471946867316555925
 PrefabInstance:
   m_ObjectHideFlags: 0

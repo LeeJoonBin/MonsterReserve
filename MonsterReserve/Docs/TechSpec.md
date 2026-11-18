@@ -25,7 +25,7 @@
 | 애니메이션 | Karate / Mage Warrior Mecanim Animation Pack (ExplosiveLLC) | `ExplosiveLLC/` | 애니메이션만 쓴다. 모델, 머티리얼 (Built-in Standard), 데모 스크립트와 씬은 쓰지 않는다 |
 | 애니메이션 | Human Animations (Kevin Iglesias) | `Kevin Iglesias/Human Animations/` | |
 | 마법 투사체 모양 | LowPoly Planets Pack (iPoly3D) | `iPoly3D/LowPoly Planets Pack/` | URP용 머티리얼을 쓴다 (`BuildIn` 폴더는 쓰지 않는다) |
-| 몬스터 | Infinity PBR 몬스터 번들 20종 (Magic Pig Games) | `Magic Pig Games (Infinity PBR)/` | Built-in용이라 원본 머티리얼을 URP로 변환해 쓴다 (2026-11-17, 아래 참고). 리그는 대부분 Generic (Goblin 등 일부 Humanoid). 데모 씬과 스크립트는 쓰지 않는다. 기본 몬스터는 Skeleton Warrior |
+| 몬스터 | Infinity PBR 몬스터 번들 20종 (Magic Pig Games) | `Magic Pig Games (Infinity PBR)/` | Built-in용이라 원본 머티리얼을 URP로 변환해 쓴다 (2026-11-17, 아래 참고). 리그는 대부분 Generic (Goblin 등 일부 Humanoid). 데모 씬과 스크립트는 쓰지 않는다. 기본 몬스터는 Skeleton Warrior. 애니메이션 클립은 fbx에서 `.anim`으로 복제해 `Assets/Animations/Monsters/<종류>/`에 두고 쓴다 (Animation Event를 Git에 남기기 위해, 2026-11-18) |
 
 - 가져온 에셋 수정 : `ExplosiveLLC/SuperCharacterController/.../Core/SuperCharacterController.cs`의 struct `Ground`에 붙은 `[SerializeField]`를 지웠다 (CS0592 컴파일 오류, 2026-11-13). 에셋을 다시 가져오면 다시 지운다.
 - 몬스터 번들 URP 변환 (2026-11-17) : `Standard`, `Standard (Specular setup)`, `Autodesk Interactive` 머티리얼 133개를 URP 머티리얼 업그레이더로 변환했다. 아직 Built-in 전용으로 남은 것 : `InfinityPBR/LPColor` 21개 (번들의 `IPBR_LPColor_URP_Unity6.unitypackage`를 임포트하면 해결), `InfinityPBR/IPBR_DiffuseHSL` 23개 (URP 버전 없음, 쓸 때 URP Lit으로 바꾼다), 파티클 머티리얼. `Imports/`는 Git에서 제외되므로 다른 컴퓨터에서 번들을 임포트하면 변환을 다시 한다.
@@ -80,6 +80,7 @@ Assets/
   Scripts/<기능>/     스크립트 (에디터 전용 코드는 <기능>/Editor/)
   Materials/<기능>/   머티리얼
   Prefabs/<기능>/     프리팹
+  Animations/<기능>/  Animator Controller, 복제한 애니메이션 클립
   Scenes/             씬
   Sounds/             사운드 파일, Audio Mixer
   Imports/            에셋 스토어에서 가져온 에셋 (직접 만든 파일을 두지 않는다)
@@ -92,7 +93,7 @@ Core/      게임 전체 상태, 오브젝트 풀, 공통 구조체 (DamageInfo)
 Interface/ 여러 기능이 함께 쓰는 인터페이스 (IDamageable, IInteractable)
 Player/    이동, 체력, 스킬
 Magic/     마법
-Monsters/
+Monsters/  몬스터 (종류별 하위 폴더, Behavior 노드는 Nodes/)
 Quests/
 Base/      상점, 의뢰 게시판, 회복 지점
 UI/
