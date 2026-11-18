@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5858245338553220223
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2480603805961420208, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2480603805961420208, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.083333336
+      objectReference: {fileID: 0}
+    - target: {fileID: 2480603805961420208, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 2480603805961420208, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.00000004371139
+      objectReference: {fileID: 0}
+    - target: {fileID: 2480603805961420208, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2480603805961420208, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2480603805961420208, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2480603805961420208, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2480603805961420208, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2480603805961420208, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3834821111415064502, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+      propertyPath: _targetHeight
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8364119299307342525, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+      propertyPath: m_Name
+      value: SkeletonWarrior
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6471946867316525149, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 464845856121763447}
+  m_SourcePrefab: {fileID: 100100000, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+--- !u!1 &620461532946887714 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6471946867316525149, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+  m_PrefabInstance: {fileID: 5858245338553220223}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &464845856121763447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620461532946887714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45982d26648347544af28f6ebda24406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkeletonAttack
+  _monsterDetector: {fileID: 7238602243205577673}
+  _damage: 10
+  _attackRange: 2
+--- !u!114 &7238602243205577673 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3834821111415064502, guid: a128e1276fcd66d469e200f3e2affd42, type: 3}
+  m_PrefabInstance: {fileID: 5858245338553220223}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70d8c92ec860b07409438efa1f2379dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterDetector
