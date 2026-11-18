@@ -3,12 +3,12 @@ using System;
 public class SkeletonWarrior : MonoBehaviour, IDamageable
 {
     [SerializeField] private float _maxHealth =1000f;
+    [SerializeField] private float _damage;
 
     private float _currentHealth;
     private bool _isDead = false;
     
     public bool IsDead => _isDead;
-    public float HealthRatio => _currentHealth/_maxHealth;
     
     public event Action OnDeath;
     public event Action<DamageInfo> OnHit;
