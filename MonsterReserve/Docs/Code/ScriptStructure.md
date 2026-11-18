@@ -136,30 +136,36 @@ flowchart TD
 
 ### Monsters
 
-| 후보 스크립트 | 맡는 일 |
+| 스크립트 | 맡는 일 |
 |---|---|
-| `Monster` | 체력, `IDamageable`, `OnDied`. 몬스터 종류 (의뢰 대상 확인용) |
-| `MonsterSenses` | 감지 거리, 피격 시 감지 거리, 은신에 따른 감지 확률. "플레이어를 감지했다"를 알린다 |
-| `MonsterBrain` | 상태 전환 (대기 → 추격 → 공격 → 사망) |
-| `MonsterCorpse` | 시체 확인 (`IInteractable`). 한 번만 확인되게 한다 |
-| `MonsterSpawner` | 서식지 배치, 처치 10분 뒤 다시 나옴 (임시값). 게임을 켤 때 모두 새로 배치 |
+| `SkeletonWarrior` | 체력, `IDamageable`, `OnHit`, `OnDeath`, `HealthRatio`. Behavior Graph를 모른다 |
+| `MonsterDetector` | 감지 Trigger, 시야각, 가림 광선, 마지막 본 위치 |
+| `MonsterBlackboardWriter` | 감지 결과와 피격 정보를 블랙보드에 적는다. 피격 감지 굴림, 도망 시작 |
+| `MonsterDeath` | 사망 시 그래프 정지, 이동 멈춤 (`ResetPath` 다음에 `isStopped`. `ResetPath`가 `isStopped`를 풀기 때문), `Die` 트리거 |
+| `SkeletonAttack` | Attack 1의 Animation Event `AttackEvent`로 공격 거리 안의 플레이어에게 피해 |
+| `ComputeFleePositionAction` | 도망 지점만 계산하는 Behavior 노드 (이동은 기본 Navigate 노드) |
+| Behavior Graph `SkeletonWarriorBehavior` | 우선순위 : 도망 > 추적 + 공격 > 마지막 본 위치 > 쏜 위치 > 대기 |
+| `MonsterCorpse` (다음 이슈) | 시체 확인 (`IInteractable`). 한 번만 확인되게 한다 |
+| `MonsterSpawner` (다음 이슈) | 서식지 배치, 처치 10분 뒤 다시 나옴 (임시값). 게임을 켤 때 모두 새로 배치 |
 
 **의존 관계**
 
 | 스크립트 | 아는 것 | 알리는 것 |
 |---|---|---|
-| `Monster` | 없음 | 맞음, 사망 |
-| `MonsterSenses` | 플레이어 위치, 은신 스킬 수준 (어디서 읽을지는 질문 5번), `Monster` (맞았는지) | 감지함 |
-| `MonsterBrain` | `Monster`, `MonsterSenses`, 플레이어 | 상태 바뀜 (애니메이션용) |
-| `MonsterCorpse` | `Monster` (종류) | 시체 확인됨 (의뢰, 경험치 확인용) |
+| `SkeletonWarrior` | 없음 | 맞음, 사망 |
+| `MonsterDetector` | 플레이어 (Trigger로 들어옴) | 없음 (값을 읽어 가게 둔다) |
+| `MonsterBlackboardWriter` | `SkeletonWarrior`, `MonsterDetector`, `BehaviorGraphAgent` | 블랙보드 변수 |
+| `MonsterDeath` | `SkeletonWarrior`, `BehaviorGraphAgent`, `NavMeshAgent`, `Animator` | 없음 |
+| `SkeletonAttack` | `MonsterDetector` (대상), `IDamageable` | 없음 |
+| `MonsterCorpse` | 몬스터 (종류) | 시체 확인됨 (의뢰, 경험치 확인용) |
 | `MonsterSpawner` | 서식지 위치, 몬스터 프리팹 | 없음 |
 
 **패턴 후보**
 
 | 주제 | 후보 A | 후보 B | 비교할 점 |
 |---|---|---|---|
-| 상태 관리 | 열거형 + `switch` 하나 | 상태마다 클래스를 나누고 들어갈 때, 있는 동안, 나갈 때를 각각 둔다 (State 패턴) | 상태가 4개일 때와 10개일 때 각각 어느 쪽이 읽기 쉬운가. "들어갈 때 한 번만" 할 일을 어디에 적는가 |
-| 추격 이동 | NavMesh (길 찾기) | 플레이어 쪽으로 곧장 이동 | **결정 필요**. 기획 문서에 길 찾기 방식이 없다. 지형 높낮이와 바위가 많은 맵에서 곧장 이동이 버틸 수 있는가 |
+| 상태 관리 | 열거형 + `switch` 하나 | 상태마다 클래스를 나누고 들어갈 때, 있는 동안, 나갈 때를 각각 둔다 (State 패턴) | **결정됨 (MO-1)** : 둘 다 쓰지 않고 Unity Behavior의 Behavior Graph로 만든다 |
+| 추격 이동 | NavMesh (길 찾기) | 플레이어 쪽으로 곧장 이동 | **결정됨 (MO-2)** : NavMesh (`NavMeshAgent`) |
 | 경험치, 의뢰 연결 | 몬스터가 죽을 때 `PlayerLevel`과 `QuestLog`를 직접 부른다 | 몬스터는 알리기만 하고, `PlayerLevel`과 `QuestLog`가 구독한다 | 몬스터 프리팹이 수십 개일 때 인스펙터 연결은 누가 하는가. 구독할 대상(새로 나온 몬스터)을 어떻게 아는가 |
 | 다시 나오기 | 죽은 몬스터를 지우고 새로 만든다 | 꺼 두었다가 다시 켠다 (풀) | 다시 켤 때 체력, 상태, 위치를 무엇까지 처음으로 돌려야 하는가 |
 
@@ -168,8 +174,8 @@ flowchart TD
 - **상태 전환 표** : 각 상태에서 어떤 조건이면 어디로 가는지 표로 먼저 그려 본다. 예를 들어 "대기에서 감지하면 추격", "추격에서 가까워지면 공격", "어느 상태든 체력 0이면 사망". 놓치기 쉬운 칸은 "추격 중에 플레이어가 아주 멀어지면?"이다 (기획 문서에 없다. 결정 필요).
 - **거리 비교** : 거리끼리 비교만 할 때는 제곱한 값끼리 비교해도 결과가 같다. 제곱근 계산을 아끼는 방법이다 (찾아볼 말 : `sqrMagnitude`).
 - **감지 확인 간격** : 몬스터마다 매 프레임 확인할지, 몇 번에 한 번만 확인할지 정한다. 몬스터 수가 많을 때 차이가 난다.
-- **맞았을 때 감지** (GameDesign 3번 표) : 먼저 거리가 피격 시 감지 거리 안인지 본다. 안이면 "기본 100% − 은신 감소값"을 확률로 쓰되 50% 밑으로 내려가지 않게 자른다. 0~1 사이 난수를 뽑아 확률보다 작으면 감지한다.
-- **시야 가림** : 바위 뒤에 있는 플레이어도 감지하는가? 기획 문서에는 거리만 있다 (결정 필요).
+- **맞았을 때 감지** (GameDesign 3번 표) : 몬스터가 플레이어를 보고 있으면 굴리지 않는다. 아니면 "100% − 은신"을 확률로 쓰되 50% 밑으로 내려가지 않게 자른다. 0~1 사이 난수를 뽑아 확률보다 작으면 감지한다 (`MonsterBlackboardWriter`).
+- **시야 가림** : 결정됨 (MO-3). 몬스터 눈 높이에서 플레이어 몸통으로 광선을 쏴 가림을 확인한다. 시야각은 수평으로만 비교한다 (`MonsterDetector`).
 - **다시 나오는 시간** : "게임 중에만 시간이 흐름"이 규칙이다. 시계 시각을 기록하는 방법과 남은 시간을 매 프레임 줄이는 방법이 있다. 일시 정지(시간 배율 0) 동안 어느 쪽이 멈추는지 확인해 본다.
 
 ### Quests
@@ -313,6 +319,10 @@ flowchart TD
 
 | 날짜 | 질문 번호 | 결정 | 이유 |
 |---|---|---|---|
+| 2026-11-18 | MO-1 (몬스터 상태) | 열거형이나 State 패턴 대신 Unity Behavior의 Behavior Graph를 쓴다. 몬스터마다 자기 블랙보드를 갖고, 공통 코드 (`SkeletonWarrior`)는 그래프를 모른다. 둘의 연결은 `MonsterBlackboardWriter`가 맡는다 | TechSpec의 2026-11-17 결정. 몬스터마다 다른 행동은 그래프 에셋만 바꿔 만든다 |
+| 2026-11-18 | MO-2 (추격 이동) | NavMesh (`NavMeshAgent`). 이동은 기본 Navigate 노드가 하고, 도망 지점만 직접 만든 노드 (`ComputeFleePositionAction`)로 구한다 | 기본 노드가 걷기 애니메이션 속도까지 처리한다 |
+| 2026-11-18 | MO-3 (시야 가림, 추격 멈춤) | 시야각과 가림 광선을 넣는다. 플레이어가 감지 범위를 벗어나면 마지막 본 위치까지 가서 멈춘다 | - |
+| 2026-11-18 | 6번 변경 (피해 정보) | `DamageInfo`에 `Attacker`(Transform)를 추가한다. 피격 감지에 성공하면 맞은 순간의 쏜 사람 위치를 "마지막 본 위치"로 넘긴다. 플레이어를 계속 따라가지는 않는다는 결정은 그대로다 | - |
 | 2026-11-17 | 6번 변경 (인터페이스 폴더) | 공통 인터페이스 (`IDamageable`, `IInteractable`)는 `Scripts/Core/`가 아니라 `Scripts/Interface/`에 둔다. `DamageInfo` 구조체는 `Core/`에 그대로 둔다 | 사용자 결정. 여러 기능이 함께 쓰는 약속을 한 폴더에 모아 찾기 쉽게 한다 |
 | 2026-11-17 | 조준 줌인 구조 | `PlayerInputHandler`는 `IsAiming`(누르면 `true`, 떼면 `false`)만 저장하고, 바뀌면 `event Action<bool> OnAimChanged`로 알린다. `MagicAim`은 Player 루트가 아니라 카메라 오브젝트에 붙이고, 이벤트를 받으면 돌던 코루틴을 멈춘 뒤 새 코루틴으로 `Mathf.MoveTowards`를 써 시야각을 옮긴다. 줌인 중 감도는 `PlayerLook`이 매 프레임 `IsAiming`을 읽어 지역 변수로 계산한다 (필드는 바꾸지 않는다). 발사 위치 `SpawnPoint`는 카메라의 자식, 화면 중앙 | 입력은 듣는 쪽을 몰라도 된다. 줌이 바뀌는 동안에만 계산한다 (`Update` 없음). Player 루트에 컴포넌트가 너무 많아 바꿀 대상(카메라) 옆에 둔다. `PlayerLook`은 이미 매 프레임 돌고 있어 이벤트가 필요 없다 |
 | 2026-11-17 | M-2 (투사체 움직이기) | 직접 계산한다. `MagicProjectile`이 `FixedUpdate`마다 반암시적 오일러(속도 먼저, 그 속도로 위치)로 다음 위치를 구하고, 이전 위치와 다음 위치 사이를 `Physics.Raycast`로 검사해 맞힘을 판정한다. 맞은 단계는 `hit.distance`, 안 맞은 단계는 한 단계 이동 거리를 더해 날아간 거리를 모은다. 거리별 피해는 `Mathf.InverseLerp` → `Mathf.Lerp`. 풀에서 다시 꺼낼 때 `TrailRenderer.Clear()`로 이전 꼬리를 지운다 | 한 단계에 수 m씩 움직여 얇은 물체를 뚫고 지나가는 문제를 사이 검사로 막는다. 공식을 직접 알아야 나중에 궤적 표시와 조준 보정에 쓸 수 있다 |
