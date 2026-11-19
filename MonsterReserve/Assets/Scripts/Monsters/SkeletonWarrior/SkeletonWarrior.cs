@@ -2,10 +2,12 @@ using UnityEngine;
 using System;
 public class SkeletonWarrior : Monster, IDamageable
 {
+    [SerializeField] private int _experience;
     [SerializeField] private float _maxHealth = 300f;
     [SerializeField] private float _currentHealth;
     private bool _isDead = false;
     
+    public int experience => _experience;
     public override bool IsDead => _isDead;
     public float HealthRatio => _currentHealth/_maxHealth;
     
@@ -27,6 +29,7 @@ public class SkeletonWarrior : Monster, IDamageable
         {
             _isDead = true;
             OnDeath?.Invoke();
+            NotifyDied();
             return;
         }
         OnHit?.Invoke(damageInfo);// 맞았다고 알리기
