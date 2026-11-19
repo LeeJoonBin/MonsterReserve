@@ -6,7 +6,7 @@ public class MonsterDeath : MonoBehaviour
 {
     private const string DieTrigger = "Die";
 
-    private SkeletonWarrior _skeletonWarrior;
+    private Monster _monster;
     private BehaviorGraphAgent _behaviorGraphAgent;
     private NavMeshAgent _navMeshAgent;
     private Animator _animator;
@@ -14,11 +14,11 @@ public class MonsterDeath : MonoBehaviour
 
     private void Awake() => CacheComponents();
     private void OnEnable() => Bind();
-    private void OnDisable() => _skeletonWarrior.OnDeath -= HandleDeath;
+    private void OnDisable() => _monster.OnDeath -= HandleDeath;
 
     private void Bind()
     {
-        _skeletonWarrior.OnDeath += HandleDeath;
+        _monster.OnDeath += HandleDeath;
         if (_hasDied) Revive();
     }
 
@@ -42,7 +42,7 @@ public class MonsterDeath : MonoBehaviour
 
     private void CacheComponents()
     {
-        _skeletonWarrior = GetComponent<SkeletonWarrior>();
+        _monster = GetComponent<Monster>();
         _behaviorGraphAgent = GetComponent<BehaviorGraphAgent>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _animator = GetComponentInChildren<Animator>();
