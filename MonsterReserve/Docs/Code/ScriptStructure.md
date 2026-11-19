@@ -140,13 +140,13 @@ flowchart TD
 |---|---|
 | `SkeletonWarrior` | 체력, `IDamageable`, `OnHit`, `OnDeath`, `HealthRatio`. Behavior Graph를 모른다 |
 | `MonsterDetector` | 감지 Trigger, 시야각, 가림 광선, 마지막 본 위치 |
-| `MonsterBlackboardWriter` | 감지 결과와 피격 정보를 블랙보드에 적는다. 피격 감지 굴림, 도망 시작 |
-| `MonsterDeath` | 사망 시 그래프 정지, 이동 멈춤 (`ResetPath` 다음에 `isStopped`. `ResetPath`가 `isStopped`를 풀기 때문), `Die` 트리거 |
+| `MonsterBlackboardWriter` | 감지 결과와 피격 정보를 블랙보드에 적는다. 피격 감지 굴림, 도망 시작. 켤 때 블랙보드 변수를 처음 값으로 되돌린다 |
+| `MonsterDeath` | 사망 시 그래프 정지, 이동 멈춤 (`ResetPath` 다음에 `isStopped`. `ResetPath`가 `isStopped`를 풀기 때문), `Die` 트리거. 죽은 뒤 풀에서 다시 켜지면 이동 재개, 그래프 재시작 |
 | `SkeletonAttack` | Attack 1의 Animation Event `AttackEvent`로 공격 거리 안의 플레이어에게 피해 |
 | `ComputeFleePositionAction` | 도망 지점만 계산하는 Behavior 노드 (이동은 기본 Navigate 노드) |
 | Behavior Graph `SkeletonWarriorBehavior` | 우선순위 : 도망 > 추적 + 공격 > 마지막 본 위치 > 쏜 위치 > 대기 |
 | `MonsterCorpse` (다음 이슈) | 시체 확인 (`IInteractable`). 한 번만 확인되게 한다 |
-| `MonsterSpawner` (다음 이슈) | 서식지 배치, 처치 10분 뒤 다시 나옴 (임시값). 게임을 켤 때 모두 새로 배치 |
+| `MonsterSpawner` | 서식지마다 하나. 자리마다 몬스터 하나를 맡는다. 비었거나 죽은 자리는 남은 시간을 줄여 0이 되면 반경 안 NavMesh 위 자리에 `PoolManager`로 꺼낸다. 게임을 켜면 남은 시간이 0이라 바로 모두 배치. 다시 나오는 시간은 600초 (10분, 임시값) |
 
 **의존 관계**
 
@@ -158,7 +158,7 @@ flowchart TD
 | `MonsterDeath` | `SkeletonWarrior`, `BehaviorGraphAgent`, `NavMeshAgent`, `Animator` | 없음 |
 | `SkeletonAttack` | `MonsterDetector` (대상), `IDamageable` | 없음 |
 | `MonsterCorpse` | 몬스터 (종류) | 시체 확인됨 (의뢰, 경험치 확인용) |
-| `MonsterSpawner` | 서식지 위치, 몬스터 프리팹 | 없음 |
+| `MonsterSpawner` | 몬스터 프리팹 (`SkeletonWarrior`), `PoolManager`, NavMesh | 없음 |
 
 **패턴 후보**
 
@@ -167,7 +167,7 @@ flowchart TD
 | 상태 관리 | 열거형 + `switch` 하나 | 상태마다 클래스를 나누고 들어갈 때, 있는 동안, 나갈 때를 각각 둔다 (State 패턴) | **결정됨 (MO-1)** : 둘 다 쓰지 않고 Unity Behavior의 Behavior Graph로 만든다 |
 | 추격 이동 | NavMesh (길 찾기) | 플레이어 쪽으로 곧장 이동 | **결정됨 (MO-2)** : NavMesh (`NavMeshAgent`) |
 | 경험치, 의뢰 연결 | 몬스터가 죽을 때 `PlayerLevel`과 `QuestLog`를 직접 부른다 | 몬스터는 알리기만 하고, `PlayerLevel`과 `QuestLog`가 구독한다 | 몬스터 프리팹이 수십 개일 때 인스펙터 연결은 누가 하는가. 구독할 대상(새로 나온 몬스터)을 어떻게 아는가 |
-| 다시 나오기 | 죽은 몬스터를 지우고 새로 만든다 | 꺼 두었다가 다시 켠다 (풀) | 다시 켤 때 체력, 상태, 위치를 무엇까지 처음으로 돌려야 하는가 |
+| 다시 나오기 | 죽은 몬스터를 지우고 새로 만든다 | 꺼 두었다가 다시 켠다 (풀) | **결정됨** : 후보 B (풀). 다시 켤 때 체력은 `SkeletonWarrior`, 블랙보드 변수는 `MonsterBlackboardWriter`, 이동과 그래프는 `MonsterDeath`가 처음으로 돌리고, 위치는 `MonsterSpawner`가 정한다 |
 
 **알고리즘 메모**
 
@@ -176,7 +176,7 @@ flowchart TD
 - **감지 확인 간격** : 몬스터마다 매 프레임 확인할지, 몇 번에 한 번만 확인할지 정한다. 몬스터 수가 많을 때 차이가 난다.
 - **맞았을 때 감지** (GameDesign 3번 표) : 몬스터가 플레이어를 보고 있으면 굴리지 않는다. 아니면 "100% − 은신"을 확률로 쓰되 50% 밑으로 내려가지 않게 자른다. 0~1 사이 난수를 뽑아 확률보다 작으면 감지한다 (`MonsterBlackboardWriter`).
 - **시야 가림** : 결정됨 (MO-3). 몬스터 눈 높이에서 플레이어 몸통으로 광선을 쏴 가림을 확인한다. 시야각은 수평으로만 비교한다 (`MonsterDetector`).
-- **다시 나오는 시간** : "게임 중에만 시간이 흐름"이 규칙이다. 시계 시각을 기록하는 방법과 남은 시간을 매 프레임 줄이는 방법이 있다. 일시 정지(시간 배율 0) 동안 어느 쪽이 멈추는지 확인해 본다.
+- **다시 나오는 시간** : 결정됨. "게임 중에만 시간이 흐름"이 규칙이다. 남은 시간을 매 프레임 `Time.deltaTime`만큼 줄인다. 시간 배율이 0 (일시 정지, 맵, 사망)이면 줄지 않는다 (`MonsterSpawner`).
 
 ### Quests
 
@@ -319,6 +319,7 @@ flowchart TD
 
 | 날짜 | 질문 번호 | 결정 | 이유 |
 |---|---|---|---|
+| 2026-11-19 | 다시 나오기 (이슈 #28) | 몬스터는 풀에서 꺼내고 반납한다. 서식지마다 `MonsterSpawner` 하나가 자리별 남은 시간을 매 프레임 줄여 다시 꺼낸다 | - |
 | 2026-11-18 | MO-1 (몬스터 상태) | 열거형이나 State 패턴 대신 Unity Behavior의 Behavior Graph를 쓴다. 몬스터마다 자기 블랙보드를 갖고, 공통 코드 (`SkeletonWarrior`)는 그래프를 모른다. 둘의 연결은 `MonsterBlackboardWriter`가 맡는다 | TechSpec의 2026-11-17 결정. 몬스터마다 다른 행동은 그래프 에셋만 바꿔 만든다 |
 | 2026-11-18 | MO-2 (추격 이동) | NavMesh (`NavMeshAgent`). 이동은 기본 Navigate 노드가 하고, 도망 지점만 직접 만든 노드 (`ComputeFleePositionAction`)로 구한다 | 기본 노드가 걷기 애니메이션 속도까지 처리한다 |
 | 2026-11-18 | MO-3 (시야 가림, 추격 멈춤) | 시야각과 가림 광선을 넣는다. 플레이어가 감지 범위를 벗어나면 마지막 본 위치까지 가서 멈춘다 | - |
