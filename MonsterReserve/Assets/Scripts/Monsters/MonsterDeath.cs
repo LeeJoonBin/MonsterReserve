@@ -10,13 +10,28 @@ public class MonsterDeath : MonoBehaviour
     private BehaviorGraphAgent _behaviorGraphAgent;
     private NavMeshAgent _navMeshAgent;
     private Animator _animator;
+    private bool _hasDied;
 
     private void Awake() => CacheComponents();
-    private void OnEnable() => _skeletonWarrior.OnDeath += HandleDeath;
+    private void OnEnable() => Bind();
     private void OnDisable() => _skeletonWarrior.OnDeath -= HandleDeath;
+
+    private void Bind()
+    {
+        _skeletonWarrior.OnDeath += HandleDeath;
+        if (_hasDied) Revive();
+    }
+
+    private void Revive()
+    {
+        _hasDied = false;
+        _navMeshAgent.isStopped = false;
+        _behaviorGraphAgent.Restart();
+    }
 
     private void HandleDeath()
     {
+        _hasDied = true;
         _behaviorGraphAgent.End();
 
         _navMeshAgent.ResetPath();

@@ -35,6 +35,15 @@ public class MonsterBlackboardWriter : MonoBehaviour
      private void BindAction()
      {
           _skeletonWarrior.OnHit += HandleHit;
+          ResetBlackboard();
+     }
+
+     private void ResetBlackboard()
+     {
+          _behaviorGraphAgent.SetVariableValue(IsTargetInSightKey, false);
+          _behaviorGraphAgent.SetVariableValue(HasLastSeenPositionKey, false);
+          _behaviorGraphAgent.SetVariableValue(HasShotPositionKey, false);
+          _behaviorGraphAgent.SetVariableValue(IsFleeingKey, false);
      }
 
      private void UnBindAction()
