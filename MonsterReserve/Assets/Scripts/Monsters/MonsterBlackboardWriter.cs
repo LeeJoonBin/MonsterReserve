@@ -13,7 +13,7 @@ public class MonsterBlackboardWriter : MonoBehaviour
 
      [SerializeField] private float _stealth; // 은신 확률
      private BehaviorGraphAgent _behaviorGraphAgent;
-     private SkeletonWarrior _skeletonWarrior;
+     private Monster _monster;
      private MonsterDetector _monsterDetector;
 
      private void Awake() => CacheComponents();
@@ -34,7 +34,7 @@ public class MonsterBlackboardWriter : MonoBehaviour
      }
      private void BindAction()
      {
-          _skeletonWarrior.OnHit += HandleHit;
+          _monster.OnHit += HandleHit;
           ResetBlackboard();
      }
 
@@ -48,11 +48,11 @@ public class MonsterBlackboardWriter : MonoBehaviour
 
      private void UnBindAction()
      {
-          _skeletonWarrior.OnHit -= HandleHit;
+          _monster.OnHit -= HandleHit;
      }
      private void HandleHit(DamageInfo damageInfo)
      {
-          if (_skeletonWarrior.HealthRatio <= 0.3f) _behaviorGraphAgent.SetVariableValue(IsFleeingKey, true);
+          if (_monster.FleeHealthRatio > 0f && _monster.HealthRatio <= _monster.FleeHealthRatio) _behaviorGraphAgent.SetVariableValue(IsFleeingKey, true);
           if(_monsterDetector.IsTargetInSight) return;
           
           if (damageInfo.Attacker != null && Random.value < Mathf.Max(1f - _stealth, 0.5f))
@@ -68,7 +68,7 @@ public class MonsterBlackboardWriter : MonoBehaviour
      private void CacheComponents()
      {
           _behaviorGraphAgent = GetComponent<BehaviorGraphAgent>();
-          _skeletonWarrior = GetComponent<SkeletonWarrior>();
+          _monster = GetComponent<Monster>();
           _monsterDetector = GetComponentInChildren<MonsterDetector>();
      }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SkeletonAttack : MonoBehaviour
+public class MonsterAttack : MonoBehaviour
 {
     [SerializeField] private MonsterDetector _monsterDetector;
     [SerializeField] private float _damage =10f;
