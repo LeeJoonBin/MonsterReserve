@@ -138,12 +138,13 @@ flowchart TD
 
 | 스크립트 | 맡는 일 |
 |---|---|
-| `Monster` | 몬스터 공통 추상 클래스. `IsDead`, `OnDeath` (추상). 지금은 `MonsterCorpse`만 이 타입으로 몬스터를 안다 |
-| `SkeletonWarrior` | `Monster`를 상속. 체력, `IDamageable`, `OnHit`, `OnDeath`, `HealthRatio`. Behavior Graph를 모른다 |
+| `Monster` | 몬스터 공통 추상 클래스. 체력, 경험치, 종류 (`MonsterType`), 도망 기준은 인스펙터 값. `IDamageable`, `IsDead`, `HealthRatio`, `OnHit`, `OnDeath`, 정적 `OnMonsterDied`. 풀에서 다시 켜지면 체력과 사망 여부를 되돌린다. Behavior Graph를 모른다 |
+| `MonsterType` | 몬스터 종류 열거형 5종. 의뢰 대상 확인에 쓴다 |
+| `SkeletonWarrior` | `Monster`를 상속한 빈 클래스. 종류마다 이런 자식 클래스를 하나씩 둔다 |
 | `MonsterDetector` | 감지 Trigger, 시야각, 가림 광선, 마지막 본 위치 |
-| `MonsterBlackboardWriter` | 감지 결과와 피격 정보를 블랙보드에 적는다. 피격 감지 굴림, 도망 시작. 켤 때 블랙보드 변수를 처음 값으로 되돌린다 |
+| `MonsterBlackboardWriter` | 감지 결과와 피격 정보를 블랙보드에 적는다. 피격 감지 굴림, 도망 시작 (`Monster`의 도망 기준 이하일 때, 0이면 도망가지 않음). 켤 때 블랙보드 변수를 처음 값으로 되돌린다 |
 | `MonsterDeath` | 사망 시 그래프 정지, 이동 멈춤 (`ResetPath` 다음에 `isStopped`. `ResetPath`가 `isStopped`를 풀기 때문), `Die` 트리거. 죽은 뒤 풀에서 다시 켜지면 이동 재개, 그래프 재시작 |
-| `SkeletonAttack` | Attack 1의 Animation Event `AttackEvent`로 공격 거리 안의 플레이어에게 피해 |
+| `MonsterAttack` | Attack 1의 Animation Event `AttackEvent`로 공격 거리 안의 플레이어에게 피해. 피해와 공격 거리는 인스펙터 값 |
 | `ComputeFleePositionAction` | 도망 지점만 계산하는 Behavior 노드 (이동은 기본 Navigate 노드) |
 | Behavior Graph `SkeletonWarriorBehavior` | 우선순위 : 도망 > 추적 + 공격 > 마지막 본 위치 > 쏜 위치 > 대기 |
 | `MonsterCorpse` | 시체 확인 (`IInteractable`). 죽어 있고 아직 확인하지 않았을 때만 확인한다. 로그를 남기고 `OnAnyCorpseChecked` (정적 이벤트)로 알린 뒤 3초 뒤 풀로 반납한다. 다시 켜지면 확인 여부를 되돌린다 |
@@ -153,13 +154,13 @@ flowchart TD
 
 | 스크립트 | 아는 것 | 알리는 것 |
 |---|---|---|
-| `SkeletonWarrior` | 없음 | 맞음, 사망 |
+| `Monster` | 없음 | 맞음, 사망, 모든 몬스터의 사망 (정적) |
 | `MonsterDetector` | 플레이어 (Trigger로 들어옴) | 없음 (값을 읽어 가게 둔다) |
-| `MonsterBlackboardWriter` | `SkeletonWarrior`, `MonsterDetector`, `BehaviorGraphAgent` | 블랙보드 변수 |
-| `MonsterDeath` | `SkeletonWarrior`, `BehaviorGraphAgent`, `NavMeshAgent`, `Animator` | 없음 |
-| `SkeletonAttack` | `MonsterDetector` (대상), `IDamageable` | 없음 |
+| `MonsterBlackboardWriter` | `Monster`, `MonsterDetector`, `BehaviorGraphAgent` | 블랙보드 변수 |
+| `MonsterDeath` | `Monster`, `BehaviorGraphAgent`, `NavMeshAgent`, `Animator` | 없음 |
+| `MonsterAttack` | `MonsterDetector` (대상), `IDamageable` | 없음 |
 | `MonsterCorpse` | `Monster`, `PoolManager` | 시체 확인됨 (정적 이벤트, 의뢰·경험치용) |
-| `MonsterSpawner` | 몬스터 프리팹 (`SkeletonWarrior`), `PoolManager`, NavMesh | 없음 |
+| `MonsterSpawner` | 몬스터 프리팹 (`Monster`), `PoolManager`, NavMesh | 없음 |
 
 **패턴 후보**
 
@@ -168,7 +169,7 @@ flowchart TD
 | 상태 관리 | 열거형 + `switch` 하나 | 상태마다 클래스를 나누고 들어갈 때, 있는 동안, 나갈 때를 각각 둔다 (State 패턴) | **결정됨 (MO-1)** : 둘 다 쓰지 않고 Unity Behavior의 Behavior Graph로 만든다 |
 | 추격 이동 | NavMesh (길 찾기) | 플레이어 쪽으로 곧장 이동 | **결정됨 (MO-2)** : NavMesh (`NavMeshAgent`) |
 | 경험치, 의뢰 연결 | 몬스터가 죽을 때 `PlayerLevel`과 `QuestLog`를 직접 부른다 | 몬스터는 알리기만 하고, `PlayerLevel`과 `QuestLog`가 구독한다 | **결정됨 (MO-4)** : 정적 이벤트. 몬스터는 알리기만 하고, `PlayerLevel`과 `QuestLog`는 한 번만 구독한다 |
-| 다시 나오기 | 죽은 몬스터를 지우고 새로 만든다 | 꺼 두었다가 다시 켠다 (풀) | **결정됨** : 후보 B (풀). 다시 켤 때 체력은 `SkeletonWarrior`, 블랙보드 변수는 `MonsterBlackboardWriter`, 이동과 그래프는 `MonsterDeath`가 처음으로 돌리고, 위치는 `MonsterSpawner`가 정한다 |
+| 다시 나오기 | 죽은 몬스터를 지우고 새로 만든다 | 꺼 두었다가 다시 켠다 (풀) | **결정됨** : 후보 B (풀). 다시 켤 때 체력은 `Monster`, 블랙보드 변수는 `MonsterBlackboardWriter`, 이동과 그래프는 `MonsterDeath`가 처음으로 돌리고, 위치는 `MonsterSpawner`가 정한다 |
 
 **알고리즘 메모**
 
@@ -320,8 +321,9 @@ flowchart TD
 
 | 날짜 | 질문 번호 | 결정 | 이유 |
 |---|---|---|---|
+| 2026-11-19 | `Monster` 공통 구조 (이슈 #34) | 공통 기능 (체력, 피격, 사망, 경험치, 종류, 도망 기준)을 `Monster`로 옮기고 종류마다 빈 자식 클래스를 둔다. 다른 스크립트는 `Monster`만 참조한다. 공격은 `MonsterAttack` 하나를 같이 쓴다. 사망은 `OnMonsterDied` (정적)로도 알린다 | 몬스터가 5종으로 늘어난다. 종류마다 코드를 다시 쓰지 않고 프리팹 값만으로 만들기 위해 |
 | 2026-11-19 | MO-4 (이슈 #27) | 몬스터의 사망, 시체 확인은 정적 이벤트로 알린다 (`MonsterCorpse.OnAnyCorpseChecked`). 듣는 쪽은 한 번만 구독하고 OnDisable에서 해제한다 | 몬스터가 풀에서 계속 새로 나와 인스턴스마다 구독하기 어렵다. 싱글톤은 둘로 제한된다 (C-3). 듣는 쪽이 둘 (경험치, 의뢰)이다 |
-| 2026-11-19 | `Monster` 추상 클래스 (이슈 #27) | 몬스터 공통 기반으로 `Monster` (`IsDead`, `OnDeath` 추상)를 둔다. `MonsterDeath`, `MonsterBlackboardWriter`, `MonsterSpawner`를 `Monster`로 바꿀지는 몬스터 종류를 늘릴 때 정한다 | 인터페이스 필드는 인스펙터에 연결할 수 없다 |
+| 2026-11-19 | `Monster` 추상 클래스 (이슈 #27) | 몬스터 공통 기반으로 `Monster` (`IsDead`, `OnDeath` 추상)를 둔다. `MonsterDeath`, `MonsterBlackboardWriter`, `MonsterSpawner`를 `Monster`로 바꿀지는 몬스터 종류를 늘릴 때 정한다 | 인터페이스 필드는 인스펙터에 연결할 수 없다 → 이슈 #34에서 `Monster`로 바꿈 |
 | 2026-11-19 | 상호작용 (이슈 #27) | `PlayerInteractor`는 카메라 정면 광선 3m, Trigger 무시 | 몬스터의 감지 Trigger (15m)에 광선이 걸리지 않게 |
 | 2026-11-19 | 다시 나오기 (이슈 #28) | 몬스터는 풀에서 꺼내고 반납한다. 서식지마다 `MonsterSpawner` 하나가 자리별 남은 시간을 매 프레임 줄여 다시 꺼낸다 | - |
 | 2026-11-18 | MO-1 (몬스터 상태) | 열거형이나 State 패턴 대신 Unity Behavior의 Behavior Graph를 쓴다. 몬스터마다 자기 블랙보드를 갖고, 공통 코드 (`SkeletonWarrior`)는 그래프를 모른다. 둘의 연결은 `MonsterBlackboardWriter`가 맡는다 | TechSpec의 2026-11-17 결정. 몬스터마다 다른 행동은 그래프 에셋만 바꿔 만든다 |

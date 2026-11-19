@@ -6,24 +6,24 @@ public class MonsterSpawner : MonoBehaviour
     private const int MaxSampleAttempts = 10;
     private const float FullTurnDegrees = 360f;
 
-    [SerializeField] private SkeletonWarrior _monsterPrefab;
+    [SerializeField] private Monster _monsterPrefab;
     [SerializeField] private int _count = 3;
     [SerializeField] private float _radius = 80f;
     [SerializeField] private float _respawnDelay = 600f;
     [SerializeField] private float _sampleDistance = 20f;
 
-    private SkeletonWarrior[] _monsters;
+    private Monster[] _monsters;
     private float[] _remainingTimes;
-    private SkeletonWarrior[] _corpses;
+    private Monster[] _corpses;
 
     private void Awake() => CreateSlots();
     private void Update() => TickSlots();
 
     private void CreateSlots()
     {
-        _monsters = new SkeletonWarrior[_count];
+        _monsters = new Monster[_count];
         _remainingTimes = new float[_count];
-        _corpses =  new SkeletonWarrior[_count];
+        _corpses =  new Monster[_count];
     }
 
     private void TickSlots()
@@ -53,7 +53,7 @@ public class MonsterSpawner : MonoBehaviour
         _corpses[index] = null;
         Quaternion rotation = Quaternion.Euler(0f, Random.Range(0f, FullTurnDegrees), 0f);
         GameObject monster = PoolManager.Instance.Get(_monsterPrefab.gameObject, position, rotation);
-        _monsters[index] = monster.GetComponent<SkeletonWarrior>();
+        _monsters[index] = monster.GetComponent<Monster>();
         _remainingTimes[index] = _respawnDelay;
     }
 
