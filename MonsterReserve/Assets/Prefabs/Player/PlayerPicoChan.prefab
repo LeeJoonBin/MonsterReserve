@@ -207,6 +207,7 @@ GameObject:
   - component: {fileID: 4369439307999198020}
   - component: {fileID: 2590384223760382382}
   - component: {fileID: 8691829702081981614}
+  - component: {fileID: 5095367362059919391}
   m_Layer: 9
   m_Name: PlayerPicoChan
   m_TagString: Untagged
@@ -460,6 +461,19 @@ MonoBehaviour:
   _layerMask:
     serializedVersion: 2
     m_Bits: 385
+--- !u!114 &5095367362059919391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8233497738337257198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0b241b0f485441493fca5f2b020d70f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerLevel
+  _requiredExpTable: 64000000c80000002c01000090010000
 --- !u!1001 &6084260045966955230
 PrefabInstance:
   m_ObjectHideFlags: 0
