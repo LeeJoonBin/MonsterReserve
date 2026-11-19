@@ -420,7 +420,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca986f6b15d5f5d49824853250842e3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkeletonWarrior
+  _type: 2
   _maxHealth: 1000
+  _experience: 0
+  _fleeHealthRatio: 0.3
   _currentHealth: 0
 --- !u!114 &5918568112763696074
 MonoBehaviour:
