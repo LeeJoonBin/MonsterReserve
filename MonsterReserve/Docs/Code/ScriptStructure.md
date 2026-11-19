@@ -62,7 +62,7 @@ flowchart TD
 | `PlayerWallet` | 돈. 의뢰비를 받고, 상점이 돈을 쓰겠다고 요청하면 처리 |
 | `HealSkill` | G키 회복, 남은 횟수. 회복 지점이 횟수를 되돌리는 메서드를 둔다 |
 | `TrackingSkill` | Q키 탐지와 추적. 몇 초 동안 대상 몬스터 방향을 알린다 (표시 시간 미정) |
-| `PlayerInteractor` | E키. 바라보는 `IInteractable`을 찾아 실행하고, 바라보는 대상이 바뀌면 알린다 (UI 안내 표시용) |
+| `PlayerInteractor` | E키. 카메라 정면으로 광선을 쏴 (최대 3m, Trigger 무시, Default·Ground·Monster 레이어) 맞은 것의 `IInteractable`을 실행한다. 바라보는 대상이 바뀔 때 알리기는 UI 안내를 만들 때 추가한다 |
 
 **의존 관계**
 
@@ -76,7 +76,7 @@ flowchart TD
 | `PlayerWallet` | 없음 | 돈 바뀜 |
 | `HealSkill` | `PlayerHealth`, 입력 | 남은 횟수 바뀜 |
 | `TrackingSkill` | 플레이어 위치, 대상 몬스터 (어떻게 찾을지는 질문 P-4) | 추적 시작, 방향 바뀜, 추적 끝 |
-| `PlayerInteractor` | 카메라, 입력 | 바라보는 대상 바뀜 |
+| `PlayerInteractor` | 카메라, 입력 | 없음 (대상 바뀜 알림은 UI 안내 때) |
 
 **패턴 후보**
 
@@ -96,7 +96,7 @@ flowchart TD
   - 요청자 목록 : 누가 잠갔는지 목록에 넣고 뺀다. 같은 곳이 두 번 불러도 한 번으로 친다. 목록을 관리하는 만큼 코드가 늘어난다.
 - **명상** : 키를 누른 순간 회복을 시작하고, 뗀 순간 멈춘다. 회복 중에는 매 프레임 `초당 회복량 × 지난 시간`만큼 더하고, 최대 마나를 넘지 않게 자른다 (회복량, 최대 마나는 임시값. GameDesign.md 결정 기록 2026-11-15). 명상 중에는 이동하지 않는다.
 - **레벨업** : 경험치를 더한 뒤, 필요 경험치를 넘었으면 레벨을 올리고 남는 경험치를 다음 레벨로 넘긴다. 몬스터 한 마리로 두 레벨이 오를 수 있는지에 따라 "한 번만 확인"과 "넘는 동안 반복"이 갈린다 (필요 경험치 표 미정).
-- **바라보는 대상 찾기** : 화면 가운데에서 카메라 앞쪽으로 광선을 쏴 처음 맞은 것이 `IInteractable`인지 본다 (최대 거리 미정). 대상이 바뀌었을 때만 알리면 UI가 매 프레임 다시 그리지 않아도 된다.
+- **바라보는 대상 찾기** : 화면 가운데에서 카메라 앞쪽으로 광선을 쏴 처음 맞은 것이 `IInteractable`인지 본다. 결정됨 : 최대 3m, Trigger 무시. 대상이 바뀌었을 때만 알리면 UI가 매 프레임 다시 그리지 않아도 된다.
 - **추적 방향** : 대상 위치에서 플레이어 위치를 빼면 방향이 나온다. 높이 차이를 뺀 수평 방향만 쓸지, 카메라가 보는 방향과 몇 도 차이인지로 바꿔서 UI에 넘길지 정한다.
 
 ### Magic
@@ -138,15 +138,16 @@ flowchart TD
 
 | 스크립트 | 맡는 일 |
 |---|---|
-| `SkeletonWarrior` | 체력, `IDamageable`, `OnHit`, `OnDeath`, `HealthRatio`. Behavior Graph를 모른다 |
+| `Monster` | 몬스터 공통 추상 클래스. `IsDead`, `OnDeath` (추상). 지금은 `MonsterCorpse`만 이 타입으로 몬스터를 안다 |
+| `SkeletonWarrior` | `Monster`를 상속. 체력, `IDamageable`, `OnHit`, `OnDeath`, `HealthRatio`. Behavior Graph를 모른다 |
 | `MonsterDetector` | 감지 Trigger, 시야각, 가림 광선, 마지막 본 위치 |
 | `MonsterBlackboardWriter` | 감지 결과와 피격 정보를 블랙보드에 적는다. 피격 감지 굴림, 도망 시작. 켤 때 블랙보드 변수를 처음 값으로 되돌린다 |
 | `MonsterDeath` | 사망 시 그래프 정지, 이동 멈춤 (`ResetPath` 다음에 `isStopped`. `ResetPath`가 `isStopped`를 풀기 때문), `Die` 트리거. 죽은 뒤 풀에서 다시 켜지면 이동 재개, 그래프 재시작 |
 | `SkeletonAttack` | Attack 1의 Animation Event `AttackEvent`로 공격 거리 안의 플레이어에게 피해 |
 | `ComputeFleePositionAction` | 도망 지점만 계산하는 Behavior 노드 (이동은 기본 Navigate 노드) |
 | Behavior Graph `SkeletonWarriorBehavior` | 우선순위 : 도망 > 추적 + 공격 > 마지막 본 위치 > 쏜 위치 > 대기 |
-| `MonsterCorpse` (다음 이슈) | 시체 확인 (`IInteractable`). 한 번만 확인되게 한다 |
-| `MonsterSpawner` | 서식지마다 하나. 자리마다 몬스터 하나를 맡는다. 비었거나 죽은 자리는 남은 시간을 줄여 0이 되면 반경 안 NavMesh 위 자리에 `PoolManager`로 꺼낸다. 게임을 켜면 남은 시간이 0이라 바로 모두 배치. 다시 나오는 시간은 600초 (10분, 임시값) |
+| `MonsterCorpse` | 시체 확인 (`IInteractable`). 죽어 있고 아직 확인하지 않았을 때만 확인한다. 로그를 남기고 `OnAnyCorpseChecked` (정적 이벤트)로 알린 뒤 3초 뒤 풀로 반납한다. 다시 켜지면 확인 여부를 되돌린다 |
+| `MonsterSpawner` | 서식지마다 하나. 자리마다 몬스터 하나를 맡는다. 비었거나 죽은 자리는 남은 시간을 줄여 0이 되면 반경 안 NavMesh 위 자리에 `PoolManager`로 꺼낸다. 게임을 켜면 남은 시간이 0이라 바로 모두 배치. 다시 나오는 시간은 600초 (10분, 임시값). 죽은 몬스터는 자리에서 빼 시체 칸 (`_corpses`)에 두고, 다시 꺼낼 때 아직 켜져 있고 죽어 있는 시체만 반납한다 (반납된 오브젝트를 다른 스포너가 다시 써도 이 자리가 막히지 않게) |
 
 **의존 관계**
 
@@ -157,7 +158,7 @@ flowchart TD
 | `MonsterBlackboardWriter` | `SkeletonWarrior`, `MonsterDetector`, `BehaviorGraphAgent` | 블랙보드 변수 |
 | `MonsterDeath` | `SkeletonWarrior`, `BehaviorGraphAgent`, `NavMeshAgent`, `Animator` | 없음 |
 | `SkeletonAttack` | `MonsterDetector` (대상), `IDamageable` | 없음 |
-| `MonsterCorpse` | 몬스터 (종류) | 시체 확인됨 (의뢰, 경험치 확인용) |
+| `MonsterCorpse` | `Monster`, `PoolManager` | 시체 확인됨 (정적 이벤트, 의뢰·경험치용) |
 | `MonsterSpawner` | 몬스터 프리팹 (`SkeletonWarrior`), `PoolManager`, NavMesh | 없음 |
 
 **패턴 후보**
@@ -166,7 +167,7 @@ flowchart TD
 |---|---|---|---|
 | 상태 관리 | 열거형 + `switch` 하나 | 상태마다 클래스를 나누고 들어갈 때, 있는 동안, 나갈 때를 각각 둔다 (State 패턴) | **결정됨 (MO-1)** : 둘 다 쓰지 않고 Unity Behavior의 Behavior Graph로 만든다 |
 | 추격 이동 | NavMesh (길 찾기) | 플레이어 쪽으로 곧장 이동 | **결정됨 (MO-2)** : NavMesh (`NavMeshAgent`) |
-| 경험치, 의뢰 연결 | 몬스터가 죽을 때 `PlayerLevel`과 `QuestLog`를 직접 부른다 | 몬스터는 알리기만 하고, `PlayerLevel`과 `QuestLog`가 구독한다 | 몬스터 프리팹이 수십 개일 때 인스펙터 연결은 누가 하는가. 구독할 대상(새로 나온 몬스터)을 어떻게 아는가 |
+| 경험치, 의뢰 연결 | 몬스터가 죽을 때 `PlayerLevel`과 `QuestLog`를 직접 부른다 | 몬스터는 알리기만 하고, `PlayerLevel`과 `QuestLog`가 구독한다 | **결정됨 (MO-4)** : 정적 이벤트. 몬스터는 알리기만 하고, `PlayerLevel`과 `QuestLog`는 한 번만 구독한다 |
 | 다시 나오기 | 죽은 몬스터를 지우고 새로 만든다 | 꺼 두었다가 다시 켠다 (풀) | **결정됨** : 후보 B (풀). 다시 켤 때 체력은 `SkeletonWarrior`, 블랙보드 변수는 `MonsterBlackboardWriter`, 이동과 그래프는 `MonsterDeath`가 처음으로 돌리고, 위치는 `MonsterSpawner`가 정한다 |
 
 **알고리즘 메모**
@@ -199,7 +200,7 @@ flowchart TD
 | 주제 | 후보 A | 후보 B | 비교할 점 |
 |---|---|---|---|
 | 의뢰 한 건의 모양 | 값만 담은 작은 클래스 (대상 종류, 의뢰비, 방향, 이름, 설명) | 의뢰서 오브젝트(`QuestNote`)가 직접 값을 가진다 | 저장할 때 무엇을 JSON으로 바꾸기 쉬운가. 게시판에서 떼어 `QuestLog`로 옮길 때 무엇이 옮겨 가는가 |
-| 완료 확인 | `MonsterCorpse`가 `QuestLog`를 부른다 | `QuestLog`가 시체 확인 이벤트를 구독한다 | Monsters의 "경험치, 의뢰 연결"과 같은 고민이다. 같은 방식으로 맞출지 정한다 |
+| 완료 확인 | `MonsterCorpse`가 `QuestLog`를 부른다 | `QuestLog`가 시체 확인 이벤트를 구독한다 | **결정됨 (MO-4)** : `QuestLog`가 `MonsterCorpse.OnAnyCorpseChecked`를 구독한다 |
 
 **알고리즘 메모**
 
@@ -319,6 +320,9 @@ flowchart TD
 
 | 날짜 | 질문 번호 | 결정 | 이유 |
 |---|---|---|---|
+| 2026-11-19 | MO-4 (이슈 #27) | 몬스터의 사망, 시체 확인은 정적 이벤트로 알린다 (`MonsterCorpse.OnAnyCorpseChecked`). 듣는 쪽은 한 번만 구독하고 OnDisable에서 해제한다 | 몬스터가 풀에서 계속 새로 나와 인스턴스마다 구독하기 어렵다. 싱글톤은 둘로 제한된다 (C-3). 듣는 쪽이 둘 (경험치, 의뢰)이다 |
+| 2026-11-19 | `Monster` 추상 클래스 (이슈 #27) | 몬스터 공통 기반으로 `Monster` (`IsDead`, `OnDeath` 추상)를 둔다. `MonsterDeath`, `MonsterBlackboardWriter`, `MonsterSpawner`를 `Monster`로 바꿀지는 몬스터 종류를 늘릴 때 정한다 | 인터페이스 필드는 인스펙터에 연결할 수 없다 |
+| 2026-11-19 | 상호작용 (이슈 #27) | `PlayerInteractor`는 카메라 정면 광선 3m, Trigger 무시 | 몬스터의 감지 Trigger (15m)에 광선이 걸리지 않게 |
 | 2026-11-19 | 다시 나오기 (이슈 #28) | 몬스터는 풀에서 꺼내고 반납한다. 서식지마다 `MonsterSpawner` 하나가 자리별 남은 시간을 매 프레임 줄여 다시 꺼낸다 | - |
 | 2026-11-18 | MO-1 (몬스터 상태) | 열거형이나 State 패턴 대신 Unity Behavior의 Behavior Graph를 쓴다. 몬스터마다 자기 블랙보드를 갖고, 공통 코드 (`SkeletonWarrior`)는 그래프를 모른다. 둘의 연결은 `MonsterBlackboardWriter`가 맡는다 | TechSpec의 2026-11-17 결정. 몬스터마다 다른 행동은 그래프 에셋만 바꿔 만든다 |
 | 2026-11-18 | MO-2 (추격 이동) | NavMesh (`NavMeshAgent`). 이동은 기본 Navigate 노드가 하고, 도망 지점만 직접 만든 노드 (`ComputeFleePositionAction`)로 구한다 | 기본 노드가 걷기 애니메이션 속도까지 처리한다 |

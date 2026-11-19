@@ -206,6 +206,7 @@ GameObject:
   - component: {fileID: 3095679445755976103}
   - component: {fileID: 4369439307999198020}
   - component: {fileID: 2590384223760382382}
+  - component: {fileID: 8691829702081981614}
   m_Layer: 9
   m_Name: PlayerPicoChan
   m_TagString: Untagged
@@ -365,6 +366,7 @@ MonoBehaviour:
   _sensitivity: 0.1
   _minPitch: -80
   _maxPitch: 80
+  _aimSensitivityRatio: 0.2
 --- !u!114 &8270049170070682945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,6 +442,24 @@ MonoBehaviour:
   _projectile: {fileID: -1172795231108927243, guid: f7afc5e10780b2647bc1daeaefd5a234, type: 3}
   _playerInputHandler: {fileID: 5741657907404192975}
   _playerMana: {fileID: 4369439307999198020}
+--- !u!114 &8691829702081981614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8233497738337257198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1001a34ccfde4147bdedbf6e3763c168, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractor
+  _playerInputHandler: {fileID: 5741657907404192975}
+  _cameraTransform: {fileID: 1427249362656455969}
+  _maxDistance: 3
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 385
 --- !u!1001 &6084260045966955230
 PrefabInstance:
   m_ObjectHideFlags: 0

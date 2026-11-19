@@ -32,6 +32,7 @@ public class PlayerInputHandler : MonoBehaviour
     public bool IsMeditateHeld { get; private set; }
     // 클릭은 "누르고 있는 상태"가 아니라 "한 번 일어난 일"이라, 꺼내 가면 비워지도록 따로 둔다 (한 번 클릭에 한 발)
     private bool _hasCastInput;
+    private bool _hasInteractInput;
     private void OnEnable()
     {
         BindInputEvents();
@@ -42,6 +43,15 @@ public class PlayerInputHandler : MonoBehaviour
         UnbindInputEvents();
     }
 
+    public bool ConsumeInteractInput()
+    {
+        if (!_hasInteractInput)
+        {
+            return false;
+        }
+        _hasInteractInput = false;
+        return true;
+    }
     public bool ConsumeCastInput()
     {
         if (!_hasCastInput)
@@ -51,7 +61,58 @@ public class PlayerInputHandler : MonoBehaviour
         _hasCastInput = false;
         return true;
     }
+
+    private void OnAim(InputAction.CallbackContext context)
+    {
+        IsAiming = context.performed;
+        OnAimChanged?.Invoke(IsAiming); // 조준 상태가 바뀌면 알림
+    }
     
+    private void OnCastMagic(InputAction.CallbackContext context)
+    {
+        _hasCastInput = true;
+    }
+
+    private void OnDetect(InputAction.CallbackContext context)
+    {
+        
+    }
+
+    private void OnHeal(InputAction.CallbackContext context)
+    {
+        
+    }
+
+    private void OnInteract(InputAction.CallbackContext context)
+    {
+        _hasInteractInput = true;
+    }
+
+    private void OnLook(InputAction.CallbackContext context)
+    {
+        LookInput = context.ReadValue<Vector2>();
+    }
+    // OnSprint와 같은 방식 : 누르면 performed, 떼면 canceled
+    private void OnMeditate(InputAction.CallbackContext context)
+    {
+        IsMeditateHeld = context.performed;
+    }
+
+    // 키를 모두 떼면 canceled가 (0,0)을 들고 온다
+    private void OnMove(InputAction.CallbackContext context)
+    {
+        MoveInput = context.ReadValue<Vector2>();
+    }
+    private void OnSelectMagic1(InputAction.CallbackContext context){}
+    private void OnSelectMagic2(InputAction.CallbackContext context){}
+    private void OnSelectMagic3(InputAction.CallbackContext context){}
+    private void OnSelectMagic4(InputAction.CallbackContext context){}
+    private void OnSelectMagic5(InputAction.CallbackContext context){}
+    // 누를 때는 performed, 뗄 때는 canceled가 오므로 context.performed가 곧 "누르고 있는가"다
+    private void OnSprint(InputAction.CallbackContext context)
+    {
+        IsSprinting = context.performed;
+    }
     private void BindInputEvents()
     {
         _aimAction.action.performed += OnAim;
@@ -66,7 +127,6 @@ public class PlayerInputHandler : MonoBehaviour
         _healAction.action.canceled += OnHeal;
         
         _interactAction.action.performed += OnInteract;
-        _interactAction.action.canceled += OnInteract;
 
         _lookAction.action.performed += OnLook;
         _lookAction.action.canceled += OnLook;
@@ -120,7 +180,6 @@ public class PlayerInputHandler : MonoBehaviour
         _healAction.action.canceled -= OnHeal;
         
         _interactAction.action.performed -= OnInteract;
-        _interactAction.action.canceled -= OnInteract;
 
         _lookAction.action.performed -= OnLook;
         _lookAction.action.canceled -= OnLook;
@@ -158,58 +217,5 @@ public class PlayerInputHandler : MonoBehaviour
         _magic4Action.action.Disable();
         _magic5Action.action.Disable();
         _sprintAction.action.Disable();
-    }
-
-    private void OnAim(InputAction.CallbackContext context)
-    {
-        IsAiming = context.performed;
-        OnAimChanged?.Invoke(IsAiming); // 조준 상태가 바뀌면 알림
-    }
-    
-    private void OnCastMagic(InputAction.CallbackContext context)
-    {
-        _hasCastInput = true;
-    }
-
-    private void OnDetect(InputAction.CallbackContext context)
-    {
-        
-    }
-
-    private void OnHeal(InputAction.CallbackContext context)
-    {
-        
-    }
-
-    private void OnInteract(InputAction.CallbackContext context)
-    {
-        
-    }
-
-    // canceled는 마우스가 멈출 때 들어오고, 이때 값이 (0,0)이다. 그래서 performed와 같은 코드로 처리해도 된다.
-    private void OnLook(InputAction.CallbackContext context)
-    {
-        LookInput = context.ReadValue<Vector2>();
-    }
-    // OnSprint와 같은 방식 : 누르면 performed, 떼면 canceled
-    private void OnMeditate(InputAction.CallbackContext context)
-    {
-        IsMeditateHeld = context.performed;
-    }
-
-    // 키를 모두 떼면 canceled가 (0,0)을 들고 온다
-    private void OnMove(InputAction.CallbackContext context)
-    {
-        MoveInput = context.ReadValue<Vector2>();
-    }
-    private void OnSelectMagic1(InputAction.CallbackContext context){}
-    private void OnSelectMagic2(InputAction.CallbackContext context){}
-    private void OnSelectMagic3(InputAction.CallbackContext context){}
-    private void OnSelectMagic4(InputAction.CallbackContext context){}
-    private void OnSelectMagic5(InputAction.CallbackContext context){}
-    // 누를 때는 performed, 뗄 때는 canceled가 오므로 context.performed가 곧 "누르고 있는가"다
-    private void OnSprint(InputAction.CallbackContext context)
-    {
-        IsSprinting = context.performed;
     }
 }
