@@ -1,16 +1,15 @@
 using UnityEngine;
 using System;
-public class SkeletonWarrior : MonoBehaviour, IDamageable
+public class SkeletonWarrior : Monster, IDamageable
 {
-    [SerializeField] private float _maxHealth =1000f;
-
-    private float _currentHealth;
+    [SerializeField] private float _maxHealth = 300f;
+    [SerializeField] private float _currentHealth;
     private bool _isDead = false;
     
-    public bool IsDead => _isDead;
+    public override bool IsDead => _isDead;
     public float HealthRatio => _currentHealth/_maxHealth;
     
-    public event Action OnDeath;
+    public override event Action OnDeath;
     public event Action<DamageInfo> OnHit;
     
     private void OnEnable()

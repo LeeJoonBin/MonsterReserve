@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 2852136205689172632}
   - component: {fileID: 5918568112763696074}
   - component: {fileID: 7314925806143275561}
+  - component: {fileID: 1719092416995942834}
   m_Layer: 8
   m_Name: MonsterBase
   m_TagString: Untagged
@@ -210,6 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkeletonWarrior
   _maxHealth: 1000
+  _currentHealth: 0
 --- !u!114 &5918568112763696074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +237,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a33962add62d6548a2e93a0f082c1ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterDeath
+--- !u!114 &1719092416995942834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8364119299307342525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4cf1e9af52443548f7404f757082053, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterCorpse
+  _monster: {fileID: 2852136205689172632}
+  _releaseDelay: 3
 --- !u!1001 &6471946867316555925
 PrefabInstance:
   m_ObjectHideFlags: 0
