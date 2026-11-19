@@ -14,6 +14,7 @@ public class MonsterSpawner : MonoBehaviour
 
     private SkeletonWarrior[] _monsters;
     private float[] _remainingTimes;
+    private SkeletonWarrior[] _corpses;
 
     private void Awake() => CreateSlots();
     private void Update() => TickSlots();
@@ -22,28 +23,34 @@ public class MonsterSpawner : MonoBehaviour
     {
         _monsters = new SkeletonWarrior[_count];
         _remainingTimes = new float[_count];
+        _corpses =  new SkeletonWarrior[_count];
     }
 
     private void TickSlots()
     {
         for (int i = 0; i < _count; i++)
         {
-            if (_monsters[i] != null && !_monsters[i].IsDead) continue;
-
+            if (_monsters[i] != null)
+            {
+                if(!_monsters[i].IsDead) continue;
+                _corpses[i] = _monsters[i];
+                _monsters[i] = null;
+            }
             _remainingTimes[i] -= Time.deltaTime;
             if (_remainingTimes[i] > 0f) continue;
 
             Spawn(i);
         }
-    }
+    } 
 
     private void Spawn(int index)
     {
         if (!TryGetSpawnPosition(out Vector3 position)) return;
 
-        if (_monsters[index] != null && _monsters[index].gameObject.activeSelf)
-            PoolManager.Instance.Release(_monsters[index].gameObject);
-
+        if (_corpses[index] && _corpses[index].gameObject.activeSelf && _corpses[index].IsDead)
+            PoolManager.Instance.Release(_corpses[index].gameObject);
+        
+        _corpses[index] = null;
         Quaternion rotation = Quaternion.Euler(0f, Random.Range(0f, FullTurnDegrees), 0f);
         GameObject monster = PoolManager.Instance.Get(_monsterPrefab.gameObject, position, rotation);
         _monsters[index] = monster.GetComponent<SkeletonWarrior>();
@@ -62,7 +69,6 @@ public class MonsterSpawner : MonoBehaviour
                 return true;
             }
         }
-
         position = default;
         return false;
     }
