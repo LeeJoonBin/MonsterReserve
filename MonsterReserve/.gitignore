@@ -111,3 +111,6 @@ InitTestScene*.unity*
 # Custom Ignore - User Imports Folder
 /[Aa]ssets/[Ii]mports/
 /[Aa]ssets/[Ii]mports.meta
+
+# Custom Ignore - Docs Folder
+/[Dd]ocs/
