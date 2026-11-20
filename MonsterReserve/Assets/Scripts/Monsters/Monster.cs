@@ -19,7 +19,6 @@ public abstract class Monster : MonoBehaviour, IDamageable
 
     public event Action<DamageInfo> OnHit;
     public event Action OnDeath;
-    public static event Action<Monster> OnMonsterDied;
 
     private void OnEnable()
     {
@@ -36,7 +35,7 @@ public abstract class Monster : MonoBehaviour, IDamageable
         {
             _isDead = true;
             OnDeath?.Invoke();
-            OnMonsterDied?.Invoke(this);
+            EventBus<MonsterKilledEvent>.Raise(new MonsterKilledEvent(_type, _experience));
             return;
         }
         OnHit?.Invoke(damageInfo);

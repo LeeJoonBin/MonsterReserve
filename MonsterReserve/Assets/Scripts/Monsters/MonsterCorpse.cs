@@ -8,8 +8,6 @@ public class MonsterCorpse : MonoBehaviour, IInteractable
     [SerializeField] private float _releaseDelay = 3f;
 
     private bool _isChecked;
-
-    public static event Action<MonsterCorpse> OnAnyCorpseChecked;
     
     private void OnEnable()
     {
@@ -20,8 +18,7 @@ public class MonsterCorpse : MonoBehaviour, IInteractable
     {
         if(!_monster.IsDead || _isChecked) return;
         _isChecked = true;
-        Debug.Log("시체확인됨");
-        OnAnyCorpseChecked?.Invoke(this);
+        EventBus<CorpseCheckedEvent>.Raise(new CorpseCheckedEvent(_monster.Type));
         StartCoroutine(ReleaseAfterDelay());
     }
 
