@@ -679,6 +679,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 450ecf0f0c8bf4143b31f5b94710b67f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolManager
+  _prewarmList:
+  - Prefab: {fileID: 7808199744431360365, guid: cff3e795364e7df45bacdebafbccb772, type: 3}
+    Count: 1
+  - Prefab: {fileID: 5927197734145262655, guid: 79cc8593a73aea249ad71347a01e2695, type: 3}
+    Count: 1
+  - Prefab: {fileID: 2693145055970555586, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
+    Count: 1
+  - Prefab: {fileID: 3709262621085046653, guid: 8fef9b2a3673d8a48bcd88ce390383e5, type: 3}
+    Count: 1
+  - Prefab: {fileID: 8160876985703788895, guid: b2f1c8763479dd74bb5e461fde821eb6, type: 3}
+    Count: 1
+  - Prefab: {fileID: 6399182624666363754, guid: f7afc5e10780b2647bc1daeaefd5a234, type: 3}
+    Count: 30
   _defaultCapacity: 10
   _maxSize: 100
 --- !u!114 &931544664
