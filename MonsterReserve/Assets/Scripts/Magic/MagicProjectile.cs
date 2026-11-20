@@ -8,7 +8,7 @@ public class MagicProjectile : MonoBehaviour
     private const float DebugLineDuration = 3f;
 
     [SerializeField] private LayerMask _layerMask;
-    [SerializeField] private float _bulletSpeed = 450f;
+    [SerializeField] private float _bulletSpeed;
     [SerializeField] private float _manaCost = 10f;
     [SerializeField] private float _damage = 30f;
     [SerializeField] private float _minDamage = 10f;
