@@ -5,27 +5,54 @@ using UnityEngine;
 public class MagicCaster : MonoBehaviour
 {
     [SerializeField] private Transform _spawnPoint;
-    [SerializeField] private MagicProjectile _projectile;
+    [SerializeField] private MagicProjectile[] _magics;
     [SerializeField] private PlayerInputHandler _playerInputHandler;
     [SerializeField] private PlayerMana _playerMana;
     [SerializeField] private PlayerLook _playerLook;
 
+    private bool[] _owned;
+
+    public int SelectedIndex { get; private set; }
+    public MagicProjectile SelectedMagic => _magics[SelectedIndex];
+
+    private void Awake()
+    {
+        _owned = new bool[_magics.Length];
+        _owned[0] = true;
+    }
+
     private void Update()
     {
+        CheckSelectInput();
+
         if (_playerInputHandler.ConsumeCastInput())
         {
             if (_playerLook.IsLocked) return;
-            if (_playerMana.UseMana(_projectile.ManaCost))
+            if (_playerMana.UseMana(SelectedMagic.ManaCost))
             {
                 TakeObject();
             }
         }
     }
-    
-    
+
+    public MagicProjectile GetMagic(int index) => _magics[index];
+
+    public bool IsOwned(int index) => _owned[index];
+
+    public void Unlock(int index) => _owned[index] = true;
+
+    private void CheckSelectInput()
+    {
+        int index = _playerInputHandler.ConsumeSelectMagicInput();
+        if (index < 0 || index >= _magics.Length || !_owned[index] || index == SelectedIndex) return;
+
+        SelectedIndex = index;
+        EventBus<MagicSelectedEvent>.Raise(new MagicSelectedEvent(index, SelectedMagic.MagicName));
+    }
+
     private void TakeObject()
     {
-        GameObject bolt =  PoolManager.Instance.Get(_projectile.gameObject, _spawnPoint.position, _spawnPoint.rotation);
+        GameObject bolt =  PoolManager.Instance.Get(SelectedMagic.gameObject, _spawnPoint.position, _spawnPoint.rotation);
         bolt.GetComponent<MagicProjectile>().SetAttacker(transform);
     }
 }
