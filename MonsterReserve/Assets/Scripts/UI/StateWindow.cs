@@ -28,6 +28,8 @@ public class StateWindow : MonoBehaviour
 
     private void UnbindStateEvents()
     {
+        if (GameManager.Instance == null) return;
+
         GameManager.Instance.OnStateChanged -= HandleStateChanged;
     }
 

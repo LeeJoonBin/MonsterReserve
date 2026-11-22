@@ -41,6 +41,9 @@ public class PauseMenu : MonoBehaviour
         _settingsButton.onClick.RemoveListener(HandleSettingsClicked);
         _quitButton.onClick.RemoveListener(HandleQuitClicked);
         _backButton.onClick.RemoveListener(HandleBackClicked);
+
+        if (GameManager.Instance == null) return;
+
         GameManager.Instance.OnStateChanged -= HandleStateChanged;
     }
 
