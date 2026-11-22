@@ -441,7 +441,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MagicCaster
   _spawnPoint: {fileID: 8637855267194168176}
-  _projectile: {fileID: -1172795231108927243, guid: f7afc5e10780b2647bc1daeaefd5a234, type: 3}
+  _magics:
+  - {fileID: -1172795231108927243, guid: f7afc5e10780b2647bc1daeaefd5a234, type: 3}
+  - {fileID: -1172795231108927243, guid: 414af838443f4bf49a1d4b326385f37e, type: 3}
   _playerInputHandler: {fileID: 5741657907404192975}
   _playerMana: {fileID: 4369439307999198020}
   _playerLook: {fileID: 6683778619315132334}
