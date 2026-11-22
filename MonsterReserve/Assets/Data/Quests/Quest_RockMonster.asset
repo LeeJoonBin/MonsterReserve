@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec12bb8065704cbeae230e1b86a47687, type: 3}
-  m_Name: QuestData
+  m_Name: Quest_RockMonster
   m_EditorClassIdentifier: Assembly-CSharp::QuestData
-  _id: 0
-  _questName: 
-  _questDescription: 
-  _targetType: 0
-  _requiredMoney: 0
+  _id: 5
+  _questName: "\uBC14\uC704 \uBAAC\uC2A4\uD130 \uC0AC\uB0E5"
+  _questDescription: "\uBC14\uC704 \uBAAC\uC2A4\uD130 1\uB9C8\uB9AC\uB97C \uC0AC\uB0E5\uD558\uC138\uC694."
+  _targetType: 4
+  _requiredMoney: 250
