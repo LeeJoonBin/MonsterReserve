@@ -408,6 +408,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 966fde57959f6e742862632a5ff3d071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MagicCaster
+--- !u!114 &408792761 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5741657907404192975, guid: ccc704b3f5bddb54f82e5c38704b3092, type: 3}
+  m_PrefabInstance: {fileID: 408792758}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5bd27fddd2ce8d4598e8802f7c0714d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputHandler
 --- !u!114 &499058199 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4369439307999198020, guid: ccc704b3f5bddb54f82e5c38704b3092, type: 3}
@@ -1208,6 +1219,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 38978800269369417, guid: cadedf1021f60244bb0ca3cd06ffcf08, type: 3}
+      propertyPath: _playerInputHandler
+      value: 
+      objectReference: {fileID: 408792761}
     - target: {fileID: 399176552880059001, guid: cadedf1021f60244bb0ca3cd06ffcf08, type: 3}
       propertyPath: _playerWallet
       value: 
