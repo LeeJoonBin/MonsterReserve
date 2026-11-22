@@ -8,11 +8,13 @@ public class MagicCaster : MonoBehaviour
     [SerializeField] private MagicProjectile _projectile;
     [SerializeField] private PlayerInputHandler _playerInputHandler;
     [SerializeField] private PlayerMana _playerMana;
-    
+    [SerializeField] private PlayerLook _playerLook;
+
     private void Update()
     {
         if (_playerInputHandler.ConsumeCastInput())
         {
+            if (_playerLook.IsLocked) return;
             if (_playerMana.UseMana(_projectile.ManaCost))
             {
                 TakeObject();
