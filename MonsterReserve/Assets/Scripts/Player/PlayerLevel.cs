@@ -16,14 +16,12 @@ public class PlayerLevel : MonoBehaviour
 
     // HUD가 구독한다 (현재 경험치, 필요 경험치)
     public event Action<int, int> OnExpChanged;
-    // 스킬이 구독한다 (오른 뒤의 레벨)
     public event Action<int> OnLevelUp;
 
-    private void OnEnable() => Monster.OnMonsterDied += HandleMonsterDied;
-    private void OnDisable() => Monster.OnMonsterDied -= HandleMonsterDied;
+    private void OnEnable() => EventBus<MonsterKilledEvent>.Subscribe(HandleMonsterKilled);
+    private void OnDisable() => EventBus<MonsterKilledEvent>.Unsubscribe(HandleMonsterKilled);
 
-    private void HandleMonsterDied(Monster monster) => AddExp(monster.Experience);
-
+    private void HandleMonsterKilled(MonsterKilledEvent killedEvent) => AddExp(killedEvent.Experience);
     private void AddExp(int amount)
     {
         if (amount <= 0 || IsMaxLevel) return;
@@ -34,12 +32,9 @@ public class PlayerLevel : MonoBehaviour
         {
             CurrentExp -= RequiredExp;
             Level++;
-            Debug.Log($"레벨업 : Lv{Level}");
             OnLevelUp?.Invoke(Level);
         }
-
         if (IsMaxLevel) CurrentExp = 0;
-
         Debug.Log($"경험치 +{amount} : {CurrentExp}/{RequiredExp}");
         OnExpChanged?.Invoke(CurrentExp, RequiredExp);
     }

@@ -7,6 +7,8 @@ public class MagicProjectile : MonoBehaviour
     // 시험용
     private const float DebugLineDuration = 3f;
 
+    [SerializeField] private string _magicName;
+    [SerializeField] private int _price;
     [SerializeField] private LayerMask _layerMask;
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private float _manaCost = 10f;
@@ -26,6 +28,8 @@ public class MagicProjectile : MonoBehaviour
     private TrailRenderer _trailRenderer;
     
     public float ManaCost => _manaCost;
+    public string MagicName => _magicName;
+    public int Price => _price;
 
     public void SetAttacker(Transform attacker)
     {

@@ -20,6 +20,8 @@ public class PlayerLook : MonoBehaviour
 
     private Rigidbody _rigidbody;
 
+    public bool IsLocked => _lockRequesters.Count > 0;
+
     private void Awake() => _rigidbody = GetComponent<Rigidbody>();
     private void Start() => ApplyCursorState();
     private void LateUpdate() => UpdateLook();

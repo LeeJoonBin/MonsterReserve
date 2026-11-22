@@ -29,6 +29,7 @@ public class PlayerInputHandler : MonoBehaviour
     public bool IsMeditateHeld { get; private set; }
     private bool _hasCastInput;
     private bool _hasInteractInput;
+    private int _selectMagicIndex = -1;
     private void OnEnable()
     {
         BindInputEvents();
@@ -47,6 +48,12 @@ public class PlayerInputHandler : MonoBehaviour
         }
         _hasInteractInput = false;
         return true;
+    }
+    public int ConsumeSelectMagicInput()
+    {
+        int index = _selectMagicIndex;
+        _selectMagicIndex = -1;
+        return index;
     }
     public bool ConsumeCastInput()
     {
@@ -97,8 +104,8 @@ public class PlayerInputHandler : MonoBehaviour
     {
         MoveInput = context.ReadValue<Vector2>();
     }
-    private void OnSelectMagic1(InputAction.CallbackContext context){}
-    private void OnSelectMagic2(InputAction.CallbackContext context){}
+    private void OnSelectMagic1(InputAction.CallbackContext context) => _selectMagicIndex = 0;
+    private void OnSelectMagic2(InputAction.CallbackContext context) => _selectMagicIndex = 1;
     private void OnSelectMagic3(InputAction.CallbackContext context){}
     private void OnSelectMagic4(InputAction.CallbackContext context){}
     private void OnSelectMagic5(InputAction.CallbackContext context){}
