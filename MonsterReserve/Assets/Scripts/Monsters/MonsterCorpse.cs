@@ -8,7 +8,9 @@ public class MonsterCorpse : MonoBehaviour, IInteractable
     [SerializeField] private float _releaseDelay = 3f;
 
     private bool _isChecked;
-    
+
+    public bool CanInteract => _monster.IsDead && !_isChecked;
+
     private void OnEnable()
     {
         _isChecked = false;
