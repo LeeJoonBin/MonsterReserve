@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec12bb8065704cbeae230e1b86a47687, type: 3}
+  m_Name: Quest_RockMonster
+  m_EditorClassIdentifier: Assembly-CSharp::QuestData
+  _id: 5
+  _questName: "\uBC14\uC704 \uBAAC\uC2A4\uD130 \uC0AC\uB0E5"
+  _questDescription: "\uBC14\uC704 \uBAAC\uC2A4\uD130 1\uB9C8\uB9AC\uB97C \uC0AC\uB0E5\uD558\uC138\uC694."
+  _targetType: 4
+  _requiredMoney: 250

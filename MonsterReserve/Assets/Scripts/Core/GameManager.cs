@@ -1,9 +1,7 @@
 using System;
 using UnityEngine;
 
-// 게임 전체 상태(플레이, 맵, 일시 정지, 사망)와 시간 멈춤을 맡는다.
-// 의뢰 정보 팝업(J)은 게임을 멈추지 않으므로 상태에 넣지 않는다 (시점 잠금은 PlayerLook.RequestLock이 맡는다)
-// 실행 순서를 앞당겨, 다른 스크립트의 OnEnable에서 Instance를 쓸 때 이미 준비돼 있게 한다
+// 실행 순서를 앞당김
 [DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour
 {

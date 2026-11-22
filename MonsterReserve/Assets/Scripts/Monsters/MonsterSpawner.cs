@@ -16,6 +16,8 @@ public class MonsterSpawner : MonoBehaviour
     private float[] _remainingTimes;
     private Monster[] _corpses;
 
+    public MonsterType Type => _monsterPrefab.Type;
+
     private void Awake() => CreateSlots();
     private void Update() => TickSlots();
 

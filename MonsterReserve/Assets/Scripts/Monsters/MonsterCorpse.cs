@@ -9,8 +9,8 @@ public class MonsterCorpse : MonoBehaviour, IInteractable
 
     private bool _isChecked;
 
-    public static event Action<MonsterCorpse> OnAnyCorpseChecked;
-    
+    public bool CanInteract => _monster.IsDead && !_isChecked;
+
     private void OnEnable()
     {
         _isChecked = false;
@@ -20,8 +20,7 @@ public class MonsterCorpse : MonoBehaviour, IInteractable
     {
         if(!_monster.IsDead || _isChecked) return;
         _isChecked = true;
-        Debug.Log("시체확인됨");
-        OnAnyCorpseChecked?.Invoke(this);
+        EventBus<CorpseCheckedEvent>.Raise(new CorpseCheckedEvent(_monster.Type));
         StartCoroutine(ReleaseAfterDelay());
     }
 
