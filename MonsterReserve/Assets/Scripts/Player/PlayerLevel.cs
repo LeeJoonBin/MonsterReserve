@@ -35,7 +35,6 @@ public class PlayerLevel : MonoBehaviour
             OnLevelUp?.Invoke(Level);
         }
         if (IsMaxLevel) CurrentExp = 0;
-        Debug.Log($"경험치 +{amount} : {CurrentExp}/{RequiredExp}");
         OnExpChanged?.Invoke(CurrentExp, RequiredExp);
     }
 }

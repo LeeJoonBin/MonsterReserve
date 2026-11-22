@@ -52,7 +52,6 @@ public class QuestBoard : MonoBehaviour
         CompassDirection direction = GetDirection(PickHabitat(data.TargetType).transform.position);
 
         _slots[slot] = new QuestInstance(data, direction);
-        Debug.Log($"게시판 {slot}번 : {data.QuestName} ({direction})");
         OnSlotChanged?.Invoke(slot);
     }
 

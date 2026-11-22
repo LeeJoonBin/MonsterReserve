@@ -22,7 +22,6 @@ public class QuestManager : MonoBehaviour
 
         quest.Accept();
         _acceptedQuests.Add(quest);
-        Debug.Log($"의뢰 수락 : {quest.Data.QuestName} ({_acceptedQuests.Count}/{MaxAcceptedCount})");
         EventBus<QuestAcceptedEvent>.Raise(new QuestAcceptedEvent(quest));
         return true;
     }
@@ -34,7 +33,6 @@ public class QuestManager : MonoBehaviour
 
         quest.Complete();
         _acceptedQuests.Remove(quest);
-        Debug.Log($"의뢰 완료 : {quest.Data.QuestName} (+{quest.Data.RequiredMoney})");
         EventBus<QuestCompletedEvent>.Raise(new QuestCompletedEvent(quest.Data.RequiredMoney));
     }
 

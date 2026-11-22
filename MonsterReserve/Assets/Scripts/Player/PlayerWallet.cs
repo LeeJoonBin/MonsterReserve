@@ -11,7 +11,6 @@ public class PlayerWallet : MonoBehaviour
    public void AddMoney(int money)
    {
       Money += money;
-      Debug.Log($"돈 +{money} : {Money}");
       EventBus<MoneyChangedEvent>.Raise(new MoneyChangedEvent(Money));
    }
    // 돈 소비 함수
