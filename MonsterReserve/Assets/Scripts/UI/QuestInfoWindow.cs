@@ -97,7 +97,7 @@ public class QuestInfoWindow : MonoBehaviour
         _acceptedCountText.text = $"수락한 의뢰 : {QuestManager.Instance.AcceptedCount} / {QuestManager.MaxAcceptedCount}";
     }
 
-    private static string GetMonsterName(MonsterType type) => type switch
+    public static string GetMonsterName(MonsterType type) => type switch
     {
         MonsterType.Goblin => "고블린",
         MonsterType.MushroomMonster => "버섯 몬스터",

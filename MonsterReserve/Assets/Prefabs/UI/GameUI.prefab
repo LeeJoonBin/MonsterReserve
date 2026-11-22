@@ -4841,7 +4841,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.8}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8210,6 +8210,7 @@ GameObject:
   - component: {fileID: 7535174821022360692}
   - component: {fileID: 9066258302124764676}
   - component: {fileID: 9147367043245768882}
+  - component: {fileID: 1200948091782463037}
   m_Layer: 5
   m_Name: QuestInfoPopup
   m_TagString: Untagged
@@ -8277,6 +8278,25 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1200948091782463037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8003376426715051287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3caf49d04c21d0e418b5d7af00bb2847, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestInfoPopup
+  _toggleAction: {fileID: -4269222185027848359, guid: 1a80b91d461e0cd4e8fcbb5a0d030958, type: 3}
+  _playerController: {fileID: 0}
+  _titleText: {fileID: 293201168498745354}
+  _slotTexts:
+  - {fileID: 2395663335277016124}
+  - {fileID: 5849135642616509031}
+  - {fileID: 9089160514800650097}
 --- !u!1 &8293670560207557699
 GameObject:
   m_ObjectHideFlags: 0

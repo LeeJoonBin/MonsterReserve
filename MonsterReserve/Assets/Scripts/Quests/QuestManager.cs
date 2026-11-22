@@ -9,6 +9,7 @@ public class QuestManager : MonoBehaviour
 
     public static QuestManager Instance { get; private set; }
     public int AcceptedCount => _acceptedQuests.Count;
+    public IReadOnlyList<QuestInstance> AcceptedQuests => _acceptedQuests;
 
     private void Awake() => RegisterInstance();
     private void OnEnable() => EventBus<CorpseCheckedEvent>.Subscribe(HandleCorpseChecked);
