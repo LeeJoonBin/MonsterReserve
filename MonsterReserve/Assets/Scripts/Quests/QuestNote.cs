@@ -9,6 +9,8 @@ public class QuestNote : MonoBehaviour, IInteractable
     private void OnEnable() => _board.OnSlotChanged += HandleSlotChanged;
     private void OnDisable() => _board.OnSlotChanged -= HandleSlotChanged;
 
+    public bool CanInteract => _board.GetQuest(_slot) != null;
+
     public void Interact() => EventBus<QuestNoteInteractedEvent>.Raise(new QuestNoteInteractedEvent(_board, _slot));
 
     private void HandleSlotChanged(int slot)
