@@ -15,7 +15,7 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
   m_Fog: 1
-  m_FogColor: {r: 0.16862744, g: 0.5679085, b: 0.7529412, a: 1}
+  m_FogColor: {r: 0.515, g: 0.568, b: 0.659, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.002
   m_LinearFogStart: 300
@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: ccbf81dff0b396942bf9bcb64b4559bc, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 57aea2cef62c72b418dc35dd58346584, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -31156,7 +31156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MonsterSpawner
   _monsterPrefab: {fileID: 9069520257679479210, guid: b2f1c8763479dd74bb5e461fde821eb6, type: 3}
   _count: 1
-  _radius: 80
+  _radius: 230
   _respawnDelay: 600
   _sampleDistance: 20
 --- !u!1001 &51146257
@@ -61569,8 +61569,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterSpawner
   _monsterPrefab: {fileID: 5395134569740934941, guid: cff3e795364e7df45bacdebafbccb772, type: 3}
-  _count: 2
-  _radius: 80
+  _count: 5
+  _radius: 130
   _respawnDelay: 600
   _sampleDistance: 20
 --- !u!1001 &97861574
@@ -116124,8 +116124,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterSpawner
   _monsterPrefab: {fileID: 7239825038352235339, guid: 79cc8593a73aea249ad71347a01e2695, type: 3}
-  _count: 2
-  _radius: 80
+  _count: 5
+  _radius: 130
   _respawnDelay: 600
   _sampleDistance: 20
 --- !u!1001 &177986885
@@ -150330,6 +150330,59 @@ CapsuleCollider:
   m_Height: 20.4
   m_Direction: 1
   m_Center: {x: 0, y: 9.4, z: 0}
+--- !u!1 &230195329
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 230195330}
+  - component: {fileID: 230195331}
+  m_Layer: 0
+  m_Name: WallWest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &230195330
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230195329}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1255, y: 250, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1505185518}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &230195331
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230195329}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10, y: 700, z: 2520}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &230324610
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -239877,13 +239930,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PoolManager
   _prewarmList:
   - Prefab: {fileID: 7808199744431360365, guid: cff3e795364e7df45bacdebafbccb772, type: 3}
-    Count: 6
+    Count: 15
   - Prefab: {fileID: 5927197734145262655, guid: 79cc8593a73aea249ad71347a01e2695, type: 3}
-    Count: 4
+    Count: 10
   - Prefab: {fileID: 2693145055970555586, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
-    Count: 3
+    Count: 8
   - Prefab: {fileID: 3709262621085046653, guid: 8fef9b2a3673d8a48bcd88ce390383e5, type: 3}
-    Count: 2
+    Count: 5
   - Prefab: {fileID: 8160876985703788895, guid: b2f1c8763479dd74bb5e461fde821eb6, type: 3}
     Count: 1
   - Prefab: {fileID: 6399182624666363754, guid: f7afc5e10780b2647bc1daeaefd5a234, type: 3}
@@ -430415,6 +430468,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3108021456845246889, guid: 1a8487c88876f9e4cbe0d93c42e7b475, type: 3}
   m_PrefabInstance: {fileID: 677272438}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &677287635
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 677287636}
+  - component: {fileID: 677287637}
+  m_Layer: 0
+  m_Name: WallSouth
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &677287636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677287635}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 250, z: -1255}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1505185518}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &677287637
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677287635}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2520, y: 700, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &677728345
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -804319,6 +804425,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9022136661910889722, guid: 139b65ed2b69e3649bea8ada6e2af6fd, type: 3}
   m_PrefabInstance: {fileID: 1266332699}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1266513171
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1266513172}
+  - component: {fileID: 1266513173}
+  m_Layer: 0
+  m_Name: WallNorth
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &1266513172
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266513171}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 250, z: 1255}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1505185518}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1266513173
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266513171}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2520, y: 700, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1266998952
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -807178,8 +807337,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterSpawner
   _monsterPrefab: {fileID: 5395134569740934941, guid: cff3e795364e7df45bacdebafbccb772, type: 3}
-  _count: 2
-  _radius: 80
+  _count: 5
+  _radius: 480
   _respawnDelay: 600
   _sampleDistance: 20
 --- !u!1001 &1270894528
@@ -848020,8 +848179,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterSpawner
   _monsterPrefab: {fileID: 5395134569740934941, guid: cff3e795364e7df45bacdebafbccb772, type: 3}
-  _count: 2
-  _radius: 80
+  _count: 5
+  _radius: 230
   _respawnDelay: 600
   _sampleDistance: 20
 --- !u!1001 &1338332584
@@ -921910,6 +922069,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7316463904911875289, guid: ea2fcd498d189c94abf670de295a682e, type: 3}
   m_PrefabInstance: {fileID: 1462224723}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1462225900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1462225901}
+  - component: {fileID: 1462225902}
+  m_Layer: 0
+  m_Name: WallEast
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &1462225901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462225900}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1255, y: 250, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1505185518}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1462225902
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462225900}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10, y: 700, z: 2520}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1462257418
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -947439,6 +947651,41 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7316463904911875289, guid: ea2fcd498d189c94abf670de295a682e, type: 3}
   m_PrefabInstance: {fileID: 1505102725}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1505185517
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1505185518}
+  m_Layer: 0
+  m_Name: MapBoundary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &1505185518
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1505185517}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1266513172}
+  - {fileID: 677287636}
+  - {fileID: 1462225901}
+  - {fileID: 230195330}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1505547937
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1100897,6 +1101144,10 @@ PrefabInstance:
       propertyPath: m_TextStyleHashCode
       value: -1183493901
       objectReference: {fileID: 0}
+    - target: {fileID: 1020337265215528754, guid: cadedf1021f60244bb0ca3cd06ffcf08, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1103071840781407257, guid: cadedf1021f60244bb0ca3cd06ffcf08, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1131321,8 +1131572,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterSpawner
   _monsterPrefab: {fileID: 8563728678665539303, guid: 76092f9846e5c724c84c182811b5cc07, type: 3}
-  _count: 3
-  _radius: 80
+  _count: 8
+  _radius: 110
   _respawnDelay: 600
   _sampleDistance: 20
 --- !u!1001 &1796847641
@@ -1212169,7 +1212420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterSpawner
   _monsterPrefab: {fileID: 7239825038352235339, guid: 79cc8593a73aea249ad71347a01e2695, type: 3}
-  _count: 2
+  _count: 5
   _radius: 80
   _respawnDelay: 600
   _sampleDistance: 20
@@ -1284169,8 +1284420,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterSpawner
   _monsterPrefab: {fileID: 4832129141345848136, guid: 8fef9b2a3673d8a48bcd88ce390383e5, type: 3}
-  _count: 2
-  _radius: 80
+  _count: 5
+  _radius: 480
   _respawnDelay: 600
   _sampleDistance: 20
 --- !u!1001 &2046366843
@@ -1346243,3 +1346494,4 @@ SceneRoots:
   - {fileID: 1753220119}
   - {fileID: 1316185556}
   - {fileID: 2086017288}
+  - {fileID: 1505185518}
