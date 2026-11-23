@@ -4,6 +4,7 @@ using UnityEngine;
 // 마우스 왼쪽 클릭으로 마법을 발사한다. 마나 소모를 요청하고, 성공하면 투사체를 풀에서 꺼낸다.
 public class MagicCaster : MonoBehaviour
 {
+    [SerializeField] private Transform _muzzlePoint;
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private MagicProjectile[] _magics;
     [SerializeField] private PlayerInputHandler _playerInputHandler;
@@ -53,6 +54,8 @@ public class MagicCaster : MonoBehaviour
     private void TakeObject()
     {
         GameObject bolt =  PoolManager.Instance.Get(SelectedMagic.gameObject, _spawnPoint.position, _spawnPoint.rotation);
-        bolt.GetComponent<MagicProjectile>().SetAttacker(transform);
+        MagicProjectile projectile = bolt.GetComponent<MagicProjectile>();
+        projectile.SetAttacker(transform);
+        projectile.SetVisualOffset(_muzzlePoint.position - _spawnPoint.position);
     }
 }

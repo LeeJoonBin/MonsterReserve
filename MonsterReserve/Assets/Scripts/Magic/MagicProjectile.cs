@@ -16,7 +16,10 @@ public class MagicProjectile : MonoBehaviour
     [SerializeField] private float _minDamage = 10f;
     [SerializeField] private float _startDistance = 300f;
     [SerializeField] private float _endDistance = 2000f;
-    
+    [SerializeField] private float _convergeDistance;
+    [SerializeField] private float _zoomFieldOfView = 20f;
+
+    private Vector3 _visualOffset;
     private float _t;
     private Transform _attacker;
     private Vector3 _newPosition =  Vector3.zero;
@@ -30,6 +33,7 @@ public class MagicProjectile : MonoBehaviour
     public float ManaCost => _manaCost;
     public string MagicName => _magicName;
     public int Price => _price;
+    public float ZoomFieldOfView => _zoomFieldOfView;
 
     public void SetAttacker(Transform attacker)
     {
@@ -45,12 +49,20 @@ public class MagicProjectile : MonoBehaviour
         _currentVelocity = _bulletSpeed * transform.forward;
         _startPosition = transform.position;
         _distance = 0f;
+        _visualOffset = Vector3.zero;
         StartCoroutine(ReleaseBullet());
     }
      
     private void FixedUpdate()
     {
         MoveBullet();
+    }
+
+    public void SetVisualOffset(Vector3 offset)
+    {
+        _visualOffset = offset;
+        transform.position = _currentPosition +  _visualOffset;
+        _trailRenderer.Clear();
     }
 
    //물리엔진
@@ -78,7 +90,8 @@ public class MagicProjectile : MonoBehaviour
         _currentPosition = _newPosition;
         _currentVelocity = _newVelocity;
         
-        transform.position = _currentPosition;
+        float blend = 1f - Mathf.Clamp01(_distance / _convergeDistance);
+        transform.position = _currentPosition + _visualOffset *  blend;
     }
     private void CheckHit()
     {
