@@ -834445,6 +834445,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6340138911164758438, guid: ffeb589f387a3754eb7993a2aef0c7cc, type: 3}
+      propertyPath: m_text
+      value: QuestBoard
+      objectReference: {fileID: 0}
     - target: {fileID: 8285311406050861579, guid: ffeb589f387a3754eb7993a2aef0c7cc, type: 3}
       propertyPath: m_Name
       value: QuestBoard
