@@ -79,8 +79,6 @@ public class MagicProjectile : MonoBehaviour
         // 현재 포지션 계산
         newPosition = currentPosition + _t * newVelocity;
     }
-    
-
     private void MoveBullet()
     {
         BackwardEuler(_t, _currentPosition, _currentVelocity, out _newPosition, out _newVelocity);
