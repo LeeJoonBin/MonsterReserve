@@ -10,12 +10,12 @@ public class MagicProjectile : MonoBehaviour
     [SerializeField] private string _magicName;
     [SerializeField] private int _price;
     [SerializeField] private LayerMask _layerMask;
+    [SerializeField] private float _mass = 0.004f;
+    [SerializeField] private float _drag = 0.0000047f;
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private float _manaCost = 10f;
     [SerializeField] private float _damage = 30f;
     [SerializeField] private float _minDamage = 10f;
-    [SerializeField] private float _startDistance = 300f;
-    [SerializeField] private float _endDistance = 2000f;
     [SerializeField] private float _convergeDistance;
     [SerializeField] private float _zoomFieldOfView = 20f;
 
@@ -68,20 +68,24 @@ public class MagicProjectile : MonoBehaviour
    //물리엔진
    private static void BackwardEuler(
         float _t,
+        float mass,
+        float drag,
         Vector3 currentPosition,
         Vector3 currentVelocity,
         out Vector3 newPosition,
         out Vector3 newVelocity)
     {
         Vector3 gravity = Physics.gravity;
+        Vector3 dragAcceleration = -(drag / mass) * currentVelocity.magnitude * currentVelocity ;
+             
         // 속도 계산    
-        newVelocity = currentVelocity + _t * gravity;
+        newVelocity = currentVelocity + _t * (gravity + dragAcceleration);
         // 현재 포지션 계산
         newPosition = currentPosition + _t * newVelocity;
     }
     private void MoveBullet()
     {
-        BackwardEuler(_t, _currentPosition, _currentVelocity, out _newPosition, out _newVelocity);
+        BackwardEuler(_t, _mass, _drag,_currentPosition, _currentVelocity, out _newPosition, out _newVelocity);
         
         CheckHit();
         
@@ -104,7 +108,7 @@ public class MagicProjectile : MonoBehaviour
             _distance += hit.distance;
             if(hit.collider.TryGetComponent<IDamageable>(out IDamageable damageable))
             {
-                damageable.TakeDamage(new DamageInfo(CalculateDamage(_distance), hit.point, _startPosition, _attacker));
+                damageable.TakeDamage(new DamageInfo(CalculateDamage(), hit.point, _startPosition, _attacker));
             }
             // Debug.DrawLine(_currentPosition, hit.point, Color.red, DebugLineDuration);
             PoolManager.Instance.Release(gameObject);
@@ -115,11 +119,12 @@ public class MagicProjectile : MonoBehaviour
             _distance += fireDistance;
         }
     }
-    // 거리별 데미지 계산식
-    private float CalculateDamage(float distance)
+    
+    private float CalculateDamage()
     {
-        float distanceRatio = Mathf.InverseLerp(_startDistance, _endDistance, distance);
-        return Mathf.Lerp(_damage, _minDamage, distanceRatio);
+        float energyRatio = _currentVelocity.sqrMagnitude / (_bulletSpeed*_bulletSpeed);
+        float newDamage = _damage * energyRatio;
+        return Mathf.Max(newDamage, _minDamage);
     }
     
     private IEnumerator ReleaseBullet()
@@ -127,5 +132,4 @@ public class MagicProjectile : MonoBehaviour
         yield return new WaitForSeconds(5f);
         PoolManager.Instance.Release(gameObject);
     }
-    // 나중에 비동기로 이팩트 끝날 때까지 기다렸다가 총알 나가게 하기로 수정
 }
