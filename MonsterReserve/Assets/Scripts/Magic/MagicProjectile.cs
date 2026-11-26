@@ -41,6 +41,7 @@ public class MagicProjectile : MonoBehaviour
     }
     
     private void Awake() => _trailRenderer = GetComponent<TrailRenderer>();
+    
     private void OnEnable()
     {
         _trailRenderer.Clear();
@@ -72,11 +73,13 @@ public class MagicProjectile : MonoBehaviour
         float drag,
         Vector3 currentPosition,
         Vector3 currentVelocity,
+        Vector3 wind,
         out Vector3 newPosition,
         out Vector3 newVelocity)
     {
         Vector3 gravity = Physics.gravity;
-        Vector3 dragAcceleration = -(drag / mass) * currentVelocity.magnitude * currentVelocity ;
+        Vector3 relativeVelocity = currentVelocity - wind;
+        Vector3 dragAcceleration = -(drag / mass) * relativeVelocity.magnitude * relativeVelocity;
              
         // 속도 계산    
         newVelocity = currentVelocity + _t * (gravity + dragAcceleration);
@@ -85,7 +88,7 @@ public class MagicProjectile : MonoBehaviour
     }
     private void MoveBullet()
     {
-        BackwardEuler(_t, _mass, _drag,_currentPosition, _currentVelocity, out _newPosition, out _newVelocity);
+        BackwardEuler(_t, _mass, _drag,_currentPosition, _currentVelocity, WindManager.Instance.Wind, out _newPosition, out _newVelocity);
         
         CheckHit();
         
